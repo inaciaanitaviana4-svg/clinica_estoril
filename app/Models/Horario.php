@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Horario extends Model
+{
+    protected $primaryKey = "id_horaro";
+    public $timestamps = false;
+
+    protected $table = "horarios";
+    protected $fillable = [
+        "hora",
+        "activo",
+        "id_medico",
+
+
+    ];
+}
