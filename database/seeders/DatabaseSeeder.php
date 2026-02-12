@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             "nif" => "1113",
             "localizacao" => "municipio do kilambakiaxi'luanda, golf2'vilaestoril",
             "nome" => "Clinica Estoril",
-            'id_admi' => $admin->id_admin,
+            'id_admi' => $admin->id_admi,
 
         ]);
         Utilizador::create([
@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
             'genero' => 'F',
             'email' => 'inaciaanita.viana4@gmail.com',
             "nivel_acesso" => 0,
-            'id_admi' => $admin->id_admin,
+            'id_admi' => $admin->id_admi,
         ]);
     }
 }
