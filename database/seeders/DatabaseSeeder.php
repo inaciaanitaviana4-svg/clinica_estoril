@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Admi;
 use App\Models\Clinica;
+use App\Models\MetodoPagamento;
 use App\Models\User;
 use App\Models\Utilizador;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -19,9 +20,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        $admin = Admi::create([
+        $admin = Admi::firstOrCreate([
             "morada" => "luanda sul",
             "num_telefone" => "934712111",
             "senha" => Hash::make('Anyangel04'),
@@ -29,14 +28,14 @@ class DatabaseSeeder extends Seeder
             'genero' => 'F',
             'email' => 'inaciaanita.viana4@gmail.com',
         ]);
-        Clinica::create([
+        Clinica::firstOrCreate([
             "nif" => "1113",
             "localizacao" => "municipio do kilambakiaxi'luanda, golf2'vilaestoril",
             "nome" => "Clinica Estoril",
             'id_admi' => $admin->id_admi,
 
         ]);
-        Utilizador::create([
+        Utilizador::firstOrCreate([
             "num_telefone" => "934712111",
             "senha" => Hash::make('Anyangel04'),
             'nome' => 'inaciaanita',
@@ -45,5 +44,16 @@ class DatabaseSeeder extends Seeder
             "nivel_acesso" => 0,
             'id_admi' => $admin->id_admi,
         ]);
+
+        $metodos = [
+            ['nome' => 'Dinheiro'],
+            ['nome' => 'Multicaixa'],
+            ['nome' => 'Express'],
+            ['nome' => 'Código QR'],
+        ];
+
+        foreach ($metodos as $metodo) {
+            MetodoPagamento::firstOrCreate($metodo);
+        }
     }
 }
