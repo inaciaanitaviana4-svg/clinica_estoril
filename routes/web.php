@@ -43,6 +43,8 @@ Route::get('/painel-recepcionista/triagens', [ConsultaController::class, 'mostra
 Route::get('/painel-recepcionista/pacientes', [PacienteController::class, 'mostrar_pacientes_recepcionista'])->name("mostrar_pacientes_recepcionista");
 Route::get('/painel-recepcionista/atendimento', [ConsultaController::class, 'mostrar_atendimento_recepcionista'])->name("mostrar_atendimento_recepcionista");
 Route::post('/painel-recepcionista/atendimento', [ConsultaController::class, 'salvar_atendimento_recepcionista'])->name("salvar_atendimento_recepcionista");
+Route::post('/painel-recepcionista/associar-medico/{id_consulta}', [ConsultaController::class, 'associar_medico_consulta_recepcionista'])->name("associar_medico_consulta_recepcionista");
+Route::post('/painel-recepcionista/desassociar-medico/{id_consulta}', [ConsultaController::class, 'desassociar_medico_consulta_recepcionista'])->name("desassociar_medico_consulta_recepcionista");
 Route::get('/painel-recepcionista/atendimento/{id_consulta}', [ConsultaController::class, 'detalhes_consulta_recepcionista'])->name("detalhes_consulta_recepcionista");
 
 // rotas dos medicos
