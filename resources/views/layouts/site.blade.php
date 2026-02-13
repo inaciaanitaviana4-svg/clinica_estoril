@@ -110,10 +110,8 @@
                         Cuidamos de você e da sua família.
                     </p>
                     <div class="social-links">
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="https://www.facebook.com/c.estoril/" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/clinica_estoril?igsh=cXRuMzBwYW5oM2ti" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
 
@@ -187,37 +185,6 @@
     <script src="/chatbot.js"></script>
     <script src="/auth.js"></script>
     <script src="/main.js"></script>
-
-
-     <script type="text/javascript" src="/toastify-js.js"></script>
-    <script>
-      Toastify({
-        text: "Mensagem de sucesso!",
-        close: true,
-        gravity: "top",
-        position: "right", 
-        stopOnFocus: true, 
-        backgroundColor: "#4BB543", // verde de sucesso
-      }).showToast();
-
-      Toastify({
-        text: "Mensagem de erro!",
-        close: true,
-        gravity: "top",
-        position: "right", 
-        stopOnFocus: true, 
-        backgroundColor: "#FF3333", // vermelho de erro
-      }).showToast();
-
-      Toastify({
-        text: "Mensagem de informação!",
-        close: true,
-        gravity: "top",
-        position: "right", 
-        stopOnFocus: true, 
-        backgroundColor: "#3498db", // azul de informação
-      }).showToast();
-    </script>
 </body>
 
 </html>

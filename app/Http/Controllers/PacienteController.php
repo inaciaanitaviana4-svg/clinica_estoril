@@ -11,6 +11,7 @@ use App\Models\ServicoClinico;
 use App\Models\TipoConsulta;
 use App\Models\User;
 use App\Models\Utilizador;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -28,6 +29,8 @@ class PacienteController extends Controller
     }
     public function consultas_paciente()
     {
+        print_r(Session::all());
+        exit;
         $utilizadorid = session("id_utilizador");
         $utilizador = Utilizador::find($utilizadorid);
         if (!session("id_utilizador")) {

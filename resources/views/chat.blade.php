@@ -29,7 +29,8 @@
         .chat-header {
             background: linear-gradient(to right, #2563eb, #1d4ed8);
             color: white;
-            padding: 24px;
+            padding: 100px;
+            height: 5vh;
             display: flex;
             align-items: center;
             gap: 16px;

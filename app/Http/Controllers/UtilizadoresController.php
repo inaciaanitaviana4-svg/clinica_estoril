@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Session;
 class UtilizadoresController extends Controller
 {
 
@@ -62,21 +63,20 @@ class UtilizadoresController extends Controller
                 //  flash()->success('login efectuado com sucesso');
                 if ($utilizador->nivel_acesso==0) {
                     session(["tipo_utilizador" => "admi"]);
-                    return redirect('/admin/dashboard');
+                  //   return redirect('/admin/dashboard');
                 }
                 if ($utilizador->nivel_acesso== 1) {
                     session(["tipo_utilizador" => "recepcionista"]);
-                    return redirect(route('mostrar_consultas_recepcionista'));
+                    // return redirect(route('mostrar_consultas_recepcionista'));
                 }
                 if ($utilizador->nivel_acesso== 2) {
                     session(["tipo_utilizador" => "medico"]);
-                    return redirect(route('mostrar_consultas_medico'));
+                    // return redirect(route('mostrar_consultas_medico'));
 
                 }
-                session(["tipo_utilizador" => "paciente"]);
-                return redirect("/consultas-paciente");
+                Session::put("tipo_utilizador" , "paciente");
+             return redirect("/consultas-paciente");
             }
-
         }
 
 
