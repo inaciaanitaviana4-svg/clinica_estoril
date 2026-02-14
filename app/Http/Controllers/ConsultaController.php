@@ -11,6 +11,7 @@ use App\Models\Paciente;
 use App\Models\ServicoClinico;
 use App\Models\TipoConsulta;
 use App\Models\Utilizador;
+use App\Models\MetodoPagamento;  
 use Illuminate\Http\Request;
 
 class ConsultaController extends Controller
@@ -214,9 +215,10 @@ class ConsultaController extends Controller
         $medico = $consulta->id_medico ? Medico::select('medico.nome', 'medico.email', 'medico.num_telefone', 'medico.especialidade')
             ->where('id_medico', $consulta->id_medico)->first() : null;
         $medicos = !$consulta->id_medico ? Medico::select('id_medico', 'nome', 'especialidade')->get() : [];
+        $metodos_pagamento = MetodoPagamento::select('id_metodo_pagamento', 'nome')->get();
         $pagamentos = [];
 
-        return view('consultas.detalhes_recepcionista', compact('consulta', 'paciente', 'medico', 'pagamentos', 'medicos'));
+        return view('consultas.detalhes_recepcionista', compact('consulta', 'paciente', 'medico', 'pagamentos', 'medicos', 'metodos_pagamento'));
     }
 
     public function associar_medico_consulta_recepcionista(Request $request, $id_consulta)

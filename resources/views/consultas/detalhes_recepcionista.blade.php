@@ -108,7 +108,29 @@
                         <span class="editar-perfil-section-icon"></span>
                         Informações de pagamento
                     </h2>
-
+                    <form class=""
+                        action="{{ route('associar_medico_consulta_recepcionista', $consulta->id_consulta) }}"
+                        method="POST">
+                        {{ csrf_field() }}
+                        <div class="row">
+                            <div class="col form-group">
+                                <label for="id_metodo_pagamento">Método de pagamento</label>
+                                <select class="w-100" id="id_metodo_pagamento" name="id_metodo_pagamento">
+                                    <option value="">Selecione um método de pagamento</option>
+                                    @foreach ($metodos_pagamento as $metodo)
+                                        <option value="{{ $metodo->id_metodo_pagamento }}">{{ $metodo->nome }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col form-group">
+                                <label for="valor_pago">Valor pago</label>
+                                <input type="number" id="valor_pago" name="valor_pago" min="0" step="0.01">
+                            </div>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Fazer pagamento</button>
+                        </div>
+                    </form>
                 </div>
 
             </div>
