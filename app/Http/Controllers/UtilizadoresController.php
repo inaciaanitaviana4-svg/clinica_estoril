@@ -80,10 +80,10 @@ class UtilizadoresController extends Controller
         }
 
 
-        // flash()->error('erro ao entrar, verfique suas credenciais');
+        // flash()->error('Credenciais inválidas');
         return back()->with(
             'erro',
-            'erro ao entrar, verfique suas credenciais ',
+            'Email ou senha incorretos. Verifique suas credenciais e tente novamente.',
         );
     }
 
@@ -100,12 +100,12 @@ class UtilizadoresController extends Controller
         $emailexiste = Paciente::where('email', $request->email)->first();
         $emailexisteutilizador = Utilizador::where('email', $request->email)->first();
         if ($emailexiste || $emailexisteutilizador) {
-            return back()->with('erro', 'email já existe');
+            return back()->with('erro', 'Este email já está cadastrado no sistema. Use um email diferente ou faça login se já possui uma conta.');
         }
         $num_telefoneexiste = Paciente::where('num_telefone', $request->num_telefone)->first();
         $num_telefoneexisteutilizador = Utilizador::where('num_telefone', $request->num_telefone)->first();
         if ($num_telefoneexiste || $num_telefoneexisteutilizador) {
-            return back()->with('erro', ' telefone já existe');
+            return back()->with('erro', 'Este número de telefone já está registrado no sistema. Use um número diferente.');
         }
         $paciente = Paciente::create([
             'nome' => $request['nome'],
@@ -136,7 +136,7 @@ class UtilizadoresController extends Controller
             session(["tipo_utilizador" => "paciente"]);
             return redirect("/");
         }
-        return back()->with("erro", "não foi posssivel fazer o cadastro");
+        return back()->with("erro", "Desculpe, não foi possível completar o cadastro. Tente novamente mais tarde ou contate o suporte.");
     }
     public function criar_conta_paciente()
     {
@@ -216,7 +216,7 @@ class UtilizadoresController extends Controller
         }
         $utilizador = Utilizador::find(session("id_utilizador"));
         if (!$utilizador) {
-            return back()->with("erro", "utilizador não encontrado");
+            return back()->with("erro", "Usuário não encontrado. Verifique o ID e tente novamente.");
         }
 
         $paciente = null;
@@ -286,15 +286,15 @@ class UtilizadoresController extends Controller
     public function remover_utilizador_admin($id_util)
     {
         if (!$this->verificar_admin()) {
-            return response()->json(["erro" => "não tem permissao para remover utilizador",], 401);
+            return response()->json(["erro" => "Você não tem permissão para remover usuários. Apenas administradores podem realizar esta ação.",], 401);
 
         }
         if (session("id_utilizador") == $id_util) {
-            return response()->json(["erro" => "não podes apagar o seu proprio usuário",], 401);
+            return response()->json(["erro" => "Você não pode remover sua própria conta. Contacte outro administrador para esta ação.",], 401);
         }
         $utilizador = Utilizador::find($id_util);
         if (!$utilizador) {
-            return response()->json(["erro" => "utilizador não encontrado",], 404);
+            return response()->json(["erro" => "Usuário não encontrado. Verifique o ID e tente novamente.",], 404);
         }
         if ($utilizador->id_paciente)
             Paciente::destroy($utilizador->id_paciente);
@@ -307,7 +307,7 @@ class UtilizadoresController extends Controller
 
         Utilizador::destroy($id_util);
 
-        return response()->json(["mensagem" => "utilizador removido com sucesso",], 200);
+        return response()->json(["mensagem" => "Usuário removido com sucesso do sistema.",], 200);
     }
     public function mostrar_registro_utilizador_admin($id_util = null)
     {
@@ -369,11 +369,11 @@ class UtilizadoresController extends Controller
 
         $emailexisteutilizador = Utilizador::where('email', $request->email)->first();
         if (($id_util && $emailexisteutilizador && $emailexisteutilizador->id_util != $id_util) || (!$id_util && $emailexisteutilizador)) {
-            return back()->with('erro', 'email já existe');
+            return back()->with('erro', 'Este email já está cadastrado no sistema. Use um email diferente.');
         }
         $num_telefoneexisteutilizador = Utilizador::where('num_telefone', $request->num_telefone)->first();
-        if (($id_util && $num_telefoneexisteutilizador && $emailexisteutilizador->id_util != $id_util) || (!$id_util && $num_telefoneexisteutilizador)) {
-            return back()->with('erro', ' telefone já existe');
+        if (($id_util && $num_telefoneexisteutilizador && $num_telefoneexisteutilizador->id_util != $id_util) || (!$id_util && $num_telefoneexisteutilizador)) {
+            return back()->with('erro', 'Este número de telefone já está registrado. Use um número diferente.');
         }
         if ($utilizador->id_admi ?? null) {
             $admin = Admi::find($utilizador->id_admi);
