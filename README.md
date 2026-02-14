@@ -1,59 +1,134 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Clínica Estoril
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> Projeto PAP — Sistema de gestão e agendamento de consultas para uma clínica (Trabalho de fim de curso).
 
-## About Laravel
+Este repositório contém a aplicação web "Clínica Estoril", desenvolvida em PHP (Laravel) para facilitar o registo de pacientes, gestão de utilizadores (administrador, recepcionista, médico) e o agendamento de consultas. O README foi preparado tendo em conta que este projecto é uma Prova de Aptidão Profissional (PAP), pelo que inclui informação para avaliação, execução local e pontos técnicos a destacar na defesa.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Sumário
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Visão geral
+- Funcionalidades principais
+- Tecnologias usadas
+- Estrutura do projeto (destacando views importantes)
+- Instalação e execução (local)
+- Rotas / pontos de navegação importantes
+- Como apresentar no PAP (o que demonstrar)
+- Sugestões de melhorias
+- Créditos
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Visão geral
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Clínica Estoril é uma aplicação web que simula o portal de uma clínica médica: página pública com informações (serviços, especialidades, equipa), registo de pacientes, autenticação de vários tipos de utilizador, e um fluxo de agendamento/gestão de consultas. A interface usa templates Blade e um conjunto de assets (CSS/JS) incluídos em `public/`.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+O objetivo do PAP foi construir um sistema funcional que mostre conhecimentos de arquitetura MVC, persistência em base de dados, autenticação/autorização simples por tipo de utilizador, e interface responsiva básica.
 
-## Laravel Sponsors
+## Funcionalidades principais
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- Página pública com: Início, Sobre, Serviços, Especialidades, Equipa, Contacto e Blog.
+- Registo de paciente (formulário com dados pessoais, BI, contacto). 
+- Login / sessão para utilizadores (tipos: `admi`, `recepcionista`, `medico`, `paciente`).
+- Agendamento de consulta (pacientes) via formulário público ou painel.
+- Painéis (layouts/painel) para administração e para médicos/recepcionistas: ver e gerir consultas, pagamentos, cadastros, prontuários.
+- Layouts reutilizáveis com `resources/views/layouts`.
 
-### Premium Partners
+## Tecnologias
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- PHP 8.x
+- Laravel (estrutura de pastas e Blade templates)
+- Composer (dependências PHP)
+- Front-end: CSS personalizado e Bootstrap (algumas vistas de painel usam bootstrap)
+- Banco de dados: MySQL/MariaDB (migrations estão dentro de `database/migrations`).
+- Testes: PHPUnit/Pest (configuração básica presente no repositório)
 
-## Contributing
+## Estrutura relevante do projeto
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- `app/Models/` — modelos principais: `Medico`, `Paciente`, `Consulta`, `Especialidade`, `Pagamento`, `Utilizador`, etc.
+- `app/Http/Controllers/` — controladores que recebem as requests (verificar neste diretório para a lista completa).
+- `resources/views/` — templates Blade. Páginas importantes:
+	- `layouts/site.blade.php` — layout público (header, footer, menu)
+	- `layouts/admin.blade.php` / `layouts/painel.blade.php` — layouts do painel administrativo
+	- `index.blade.php` / `welcome.blade.php` — homepage e landing
+	- `agendar_consulta.blade.php` — formulário de agendamento
+	- `criar_conta_paciente.blade.php` — registo de paciente
+	- `painel_medico.blade.php`, `painel_recepcionista.blade.php` — entradas para interfaces internas
+	- pastas: `especialidades/`, `medicos/`, `pacientes/`, `consultas/`, `recepcionistas/`, `utilizadores/` — views organizadas por módulo
 
-## Code of Conduct
+## Instalação e execução (local)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+As instruções abaixo assumem um ambiente Windows com PowerShell (pwsh). Tenha PHP, Composer e um servidor de BD (MySQL/MariaDB) instalados.
 
-## Security Vulnerabilities
+1. Copiar repositório (já deve estar no seu workspace)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+2. Instalar dependências PHP
 
-## License
+```powershell
+composer install
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+3. Configurar ficheiro de ambiente (.env)
+
+```powershell
+copy .env.example .env
+php artisan key:generate
+# Editar .env e definir DB_CONNECTION, DB_DATABASE, DB_USERNAME, DB_PASSWORD
+```
+
+4. Executar migrations e (opcional) seeders
+
+```powershell
+php artisan migrate
+# php artisan db:seed    # se existirem seeders úteis
+```
+
+5. Iniciar servidor local
+
+```powershell
+php artisan serve --host=127.0.0.1 --port=8000
+# Aceder: http://127.0.0.1:8000
+```
+
+6. (Opcional) Executar testes
+
+```powershell
+./vendor/bin/pest
+# ou
+./vendor/bin/phpunit
+```
+
+## Rotas / pontos de navegação (úteis para demo)
+
+- `/` — Página inicial
+- `/sobre`, `/servicos`, `/especialidades`, `/equipa`, `/contacto` — páginas públicas
+- `/login`, `/cadastrar-paciente` — autenticação e registo
+- `/agendar-consulta-paciente` — formulário de agendamento
+- `/admin/dashboard`, `/admin/consultas`, `/admin/pagamentos` — painel administrativo (requer sessão tipo `admi`)
+- `/visualizar-perfil` — perfil do utilizador (após login)
+- Rotas de API/ações estão definidas nos controladores (ver `routes/web.php`)
+
+## Como apresentar este projeto no PAP (pontos a demonstrar)
+
+1. Objetivo do projeto: explicar requisitos funcionais propostos e público-alvo (ex.: gestão de consultas em clínica local).
+2. Arquitetura: mostrar a separação MVC (Model — Eloquent models; View — Blade; Controller — lógica e rotas).
+3. Demonstração funcional: registar um paciente, fazer login, agendar uma consulta e abrir o painel (mostrar permissões por tipo).
+4. Código: abrir os templates em `resources/views` para explicar como os layouts e partials são reutilizados.
+5. Banco de dados: explicar o modelo das tabelas principais (Consulta, Paciente, Medico, Utilizador). Mostrar migrations em `database/migrations`.
+6. Segurança e validação: mostrar validações nos controllers (e CSRF tokens nos formulários Blade).
+7. Testes e qualidade: apresentar qualquer teste automatizado existente (ou explicar falta dos mesmos e como adicioná-los).
+
+Dica para a apresentação: prepare 3-5 telas/fluxos prontos (ex.: homepage → registo → agendamento → painel médico) para uma demo fluida.
+
+## Sugestões de melhorias (para mencionar como trabalho futuro)
+
+- Implementar testes automáticos cobrindo fluxos críticos (registo, login, agendamento).
+- Melhorar a gestão de permissões com Gates/Policies do Laravel.
+- Implementar internacionalização (i18n) se for necessário suporte a várias línguas.
+- Separar assets com Vite e otimizar ficheiros CSS/JS.
+- Registo de ações (logs) e auditoria de alterações em prontuários/consultas.
+
+## Créditos
+
+- Autor: (colocar aqui o nome do(s) aluno(s) que apresentarão a PAP)
+- Orientador: (colocar o nome do professor/orientador)
+- Outros: (colocar o nome de outras pessoas que ajudaram directamente ou indirectamente no projecto)
