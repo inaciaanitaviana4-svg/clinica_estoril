@@ -26,7 +26,7 @@ O objetivo do PAP foi construir um sistema funcional que mostre conhecimentos de
 
 ## Funcionalidades principais
 
-- Página pública com: Início, Sobre, Serviços, Especialidades, Equipa, Contacto e Blog.
+- Página pública com: Início, Sobre, Serviços, Especialidades, Equipa, Contacto,Blog e chat bot.
 - Registo de paciente (formulário com dados pessoais, BI, contacto). 
 - Login / sessão para utilizadores (tipos: `admi`, `recepcionista`, `medico`, `paciente`).
 - Agendamento de consulta (pacientes) via formulário público ou painel.

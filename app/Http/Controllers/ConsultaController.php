@@ -216,9 +216,10 @@ class ConsultaController extends Controller
             ->where('id_medico', $consulta->id_medico)->first() : null;
         $medicos = !$consulta->id_medico ? Medico::select('id_medico', 'nome', 'especialidade')->get() : [];
         $metodos_pagamento = MetodoPagamento::select('id_metodo_pagamento', 'nome')->get();
+        $servicos_clinicos = ServicoClinico::where('activo', true)->get();
         $pagamentos = [];
 
-        return view('consultas.detalhes_recepcionista', compact('consulta', 'paciente', 'medico', 'pagamentos', 'medicos', 'metodos_pagamento'));
+        return view('consultas.detalhes_recepcionista', compact('consulta', 'paciente', 'medico', 'pagamentos', 'medicos', 'metodos_pagamento' , 'servicos_clinicos'));
     }
 
     public function associar_medico_consulta_recepcionista(Request $request, $id_consulta)

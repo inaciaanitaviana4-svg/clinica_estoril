@@ -113,6 +113,15 @@
                         method="POST">
                         {{ csrf_field() }}
                         <div class="row">
+                             <div class="col form-group">
+                            <label for="id_servico_clinico">Serviços clínicos</label>
+                            <select class="w-100" id="id_servico_clinico" name="id_servico_clinico">
+                                <option value="">Selecione o serviço clínico</option>
+                                @foreach ($servicos_clinicos as $servico)
+                                    <option value="{{ $servico->id_servico_clinico }}">{{ $servico->nome }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                             <div class="col form-group">
                                 <label for="id_metodo_pagamento">Método de pagamento</label>
                                 <select class="w-100" id="id_metodo_pagamento" name="id_metodo_pagamento">
