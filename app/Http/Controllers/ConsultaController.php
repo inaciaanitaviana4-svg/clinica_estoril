@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Consulta;
 use App\Models\Especialidade;
 use App\Models\Horario;
+use App\Models\ItemPagamento;
 use App\Models\Medico;
 use App\Models\Notificacao;
 use App\Models\Paciente;
 use App\Models\ServicoClinico;
 use App\Models\TipoConsulta;
 use App\Models\Utilizador;
-use App\Models\MetodoPagamento;  
+use App\Models\MetodoPagamento;
 use Illuminate\Http\Request;
 
 class ConsultaController extends Controller
@@ -33,7 +34,6 @@ class ConsultaController extends Controller
         }
 
         return $utilizador;
-
     }
 
     private function verificar_recepcionista()
@@ -53,7 +53,6 @@ class ConsultaController extends Controller
         }
 
         return $utilizador;
-
     }
 
     //
@@ -199,11 +198,13 @@ class ConsultaController extends Controller
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
-        $consulta = Consulta::select('consultas.*',
+        $consulta = Consulta::select(
+            'consultas.*',
             'tipos_consultas.nome as nome_tipo_consulta',
             'servicos_clinicos.nome as nome_servico_clinico',
             'servicos_clinicos.preco as preco_servico_clinico',
-            'recepcionista.nome as nome_recepcionista')
+            'recepcionista.nome as nome_recepcionista'
+        )
             ->leftJoin('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
             ->leftJoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
             ->leftJoin('recepcionista', 'consultas.id_recepcionista', '=', 'recepcionista.id_recepcionista')
@@ -217,9 +218,19 @@ class ConsultaController extends Controller
         $medicos = !$consulta->id_medico ? Medico::select('id_medico', 'nome', 'especialidade')->get() : [];
         $metodos_pagamento = MetodoPagamento::select('id_metodo_pagamento', 'nome')->get();
         $servicos_clinicos = ServicoClinico::where('activo', true)->get();
-        $pagamentos = [];
+        $pagamentos = ItemPagamento::select(
+            "items_pagamentos.*",
+            "pagamentos.total_pago",
+            "servicos_clinicos.nome as nome_servico_clinico",
+            "metodos_pagamentos.nome as nome_metodo_pagamento"
+        )
+            ->leftJoin('pagamentos', 'items_pagamentos.id_pagamento', '=', 'pagamentos.id_pagamento')
+            ->leftJoin('servicos_clinicos', 'pagamentos.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+            ->leftJoin('metodos_pagamentos', 'pagamentos.id_metodo_pagamento', '=', 'metodos_pagamentos.id_metodo_pagamento')
+            ->where('pagamentos.id_consulta', $id_consulta)
+            ->get();
 
-        return view('consultas.detalhes_recepcionista', compact('consulta', 'paciente', 'medico', 'pagamentos', 'medicos', 'metodos_pagamento' , 'servicos_clinicos'));
+        return view('consultas.detalhes_recepcionista', compact('consulta', 'paciente', 'medico', 'pagamentos', 'medicos', 'metodos_pagamento', 'servicos_clinicos'));
     }
 
     public function associar_medico_consulta_recepcionista(Request $request, $id_consulta)

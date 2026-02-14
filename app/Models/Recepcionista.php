@@ -1,15 +1,16 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 
 class recepcionista extends Model
 {
-protected $primaryKey = "id_recepcionista";
-	protected $table = "recepcionista";
-	
+    protected $primaryKey = "id_recepcionista";
+    protected $table = "recepcionista";
+
     public $timestamps = false;
-        protected $fillable = [
+    protected $fillable = [
         "morada",
         "num_telefone",
         "senha",
@@ -17,7 +18,5 @@ protected $primaryKey = "id_recepcionista";
         "genero",
         "email",
         "id_clinica",
-        ];
-     
-       
+    ];
 }
