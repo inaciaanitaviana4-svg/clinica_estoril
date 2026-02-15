@@ -35,7 +35,7 @@
                     <div class="row ">
                         <div class=" col form-group ">
                             <label for="id_tipo_consulta">Tipo de consulta</label>
-                            <select  class="w-100" id="id_tipo_consulta" name="tipo_consulta">
+                            <select  class="w-100" id="id_tipo_consulta" name="id_tipo_consulta">
                                 <option value="">Selecione</option>
                                @foreach ($tipos_consultas as $tipo)
                                     <option value="{{ $tipo->id_tipo_consulta }}">{{ $tipo->nome }}</option>

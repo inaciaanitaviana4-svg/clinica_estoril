@@ -3,24 +3,33 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Model Medico - Representa um profissional médico do sistema
+ * Contém qualificações profissionais como especialidade e experiência
+ * Está associado a uma clínica específica
+ */
 class Medico extends Model
 {
-protected $primaryKey = "id_medico";
-	protected $table = "medico";
+    // Define a chave primária customizada
+    protected $primaryKey = "id_medico";
     
+    // Define o nome da tabela no banco de dados
+    protected $table = "medico";
+    
+    // Desativa timestamps automáticos
     public $timestamps = false;
-	
-        protected $fillable = [
-        "morada",
-        "num_telefone",
-        "senha",
-        "nome",
-        "genero",
-        "email",
-        "especialiadade",
-        "ano_experiencia",
-        "id_clinica",
-        ];
-     
-       
+    
+    // Define colunas editáveis
+    protected $fillable = [
+        "morada",               // Endereço completo
+        "num_telefone",         // Telefone para contato
+        "senha",                // Senha (com hash)
+        "nome",                 // Nome completo
+        "genero",               // Gênero (M ou F)
+        "email",                // Email profissional
+        "especialidade",        // Área de especialização (cardiologia, pediatria, etc)
+        "ano_experiencia",      // Anos de experiência profissional
+        "id_clinica",           // FK: relacionamento com clínica
+    ];
 }
+
