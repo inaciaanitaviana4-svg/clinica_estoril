@@ -33,7 +33,7 @@ Route::middleware(["web"])->group(function () {
     Route::get('/criar-conta-paciente', [UtilizadoresController::class, 'criar_conta_paciente']);
 
     // ===== ROTAS DE PERFIL (para todos os utilizadores) =====
-    Route::get('/visualizar-perfil', [UtilizadoresController::class, 'visualizar_perfil']);
+    Route::get('/visualizar-perfil', [UtilizadoresController::class, 'visualizar_perfil'])->name('visualizar_perfil');
     Route::get('/editar-perfil', [UtilizadoresController::class, 'editar_perfil']);
     Route::post('/editar-perfil', [UtilizadoresController::class, 'editar_perfil_salvar']);
 
@@ -53,6 +53,8 @@ Route::middleware(["web"])->group(function () {
     // ===== ROTAS DA RECEPCIONISTA =====
     Route::get('/painel-recepcionista/agendamentos', [ConsultaController::class, 'mostrar_consultas_recepcionista'])->name("mostrar_consultas_recepcionista");
     Route::get('/painel-recepcionista/pagamentos', [PagamentosController::class, 'mostrar_pagamentos_recepcionista'])->name("mostrar_pagamentos_recepcionista");
+    Route::get('/painel-recepcionista/pagamentos/fazer', [PagamentosController::class, 'mostrar_fazer_pagamento_recepcionista'])->name("mostrar_fazer_pagamento_recepcionista");
+    Route::get('/painel-recepcionista/pagamentos/{id_pagamento}', [PagamentosController::class, 'detalhes_pagamento_recepcionista'])->name("detalhes_pagamento_recepcionista");
     Route::get('/painel-recepcionista/triagens', [ConsultaController::class, 'mostrar_triagens_recepcionista'])->name("mostrar_triagens_recepcionista");
     Route::get('/painel-recepcionista/pacientes', [PacienteController::class, 'mostrar_pacientes_recepcionista'])->name("mostrar_pacientes_recepcionista");
     Route::get('/painel-recepcionista/atendimento', [ConsultaController::class, 'mostrar_atendimento_recepcionista'])->name("mostrar_atendimento_recepcionista");

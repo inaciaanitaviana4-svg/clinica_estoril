@@ -154,5 +154,47 @@ if (! function_exists('link_ativo')) {
     }
 
 }
+if (! function_exists('badge_estados')) {
+    function badge_estados($estado)
+    {
+        $cor = '#000000'; // Cor padrão
+       $estado_nome = '';
+        switch ($estado) {
+            case 'pendente':
+                $cor = '#f59e0b';
+                $estado_nome = 'Pendente';
+                break;
+            case 'agendada':
+                $cor = '#6366f1';
+                $estado_nome = 'Agendada';
+                break;
+            case 'confirmada':
+                $cor = '#3b82f6';
+                $estado_nome = 'Confirmada';
+                break;
+            case 'cancelada':
+            case 'cancelado':
+                $cor = '#ef4444';
+                $estado_nome = 'Cancelada';
+                break;
+            
+            case 'em_andamento':
+                $cor = '#8b5cf6';
+                $estado_nome = 'Em Andamento';
+                break;
+            case 'em_espera':
+                $cor = '#6b7280';
+                $estado_nome = 'Em Espera';
+                break;
+            case 'sucesso':
+                $cor = '#10b981';
+                $estado_nome = 'Sucesso';
+                break;
+            
+        }
+
+        echo "<span style='padding: 4px 8px; background-color: $cor; color: white; border-radius: 4px;'>$estado_nome</span>";
+    }
+}
 
 ?>
