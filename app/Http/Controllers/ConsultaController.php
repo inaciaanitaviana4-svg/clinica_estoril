@@ -7,54 +7,16 @@ use App\Models\Especialidade;
 use App\Models\Horario;
 use App\Models\ItemPagamento;
 use App\Models\Medico;
+use App\Models\MetodoPagamento;
 use App\Models\Notificacao;
 use App\Models\Paciente;
 use App\Models\ServicoClinico;
 use App\Models\TipoConsulta;
 use App\Models\Utilizador;
-use App\Models\MetodoPagamento;
 use Illuminate\Http\Request;
 
 class ConsultaController extends Controller
 {
-    private function verificar_medico()
-    {
-        if (! session('id_utilizador')) {
-            return false;
-        }
-        $utilizador = Utilizador::find(session('id_utilizador'));
-        if (! $utilizador) {
-            return false;
-        }
-        if (! $utilizador->id_medico) {
-            return false;
-        }
-        if ($utilizador->nivel_acesso != 2) {
-            return false;
-        }
-
-        return $utilizador;
-    }
-
-    private function verificar_recepcionista()
-    {
-        if (! session('id_utilizador')) {
-            return false;
-        }
-        $utilizador = Utilizador::find(session('id_utilizador'));
-        if (! $utilizador) {
-            return false;
-        }
-        if (! $utilizador->id_recepcionista) {
-            return false;
-        }
-        if ($utilizador->nivel_acesso != 1) {
-            return false;
-        }
-
-        return $utilizador;
-    }
-
     //
     public function agendarconsulta()
     {
@@ -67,7 +29,7 @@ class ConsultaController extends Controller
 
     public function mostrar_consultas_medico()
     {
-        $utilizador = $this->verificar_medico();
+        $utilizador = verificar_medico();
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
@@ -96,7 +58,7 @@ class ConsultaController extends Controller
 
     public function mostrar_consultas_recepcionista()
     {
-        $utilizador = $this->verificar_recepcionista();
+        $utilizador = verificar_recepcionista();
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
@@ -130,7 +92,7 @@ class ConsultaController extends Controller
 
     public function mostrar_atendimento_recepcionista()
     {
-        $utilizador = $this->verificar_recepcionista();
+        $utilizador = verificar_recepcionista();
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
@@ -146,7 +108,7 @@ class ConsultaController extends Controller
 
     public function salvar_atendimento_recepcionista(Request $request)
     {
-        $utilizador = $this->verificar_recepcionista();
+        $utilizador = verificar_recepcionista();
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
@@ -194,7 +156,7 @@ class ConsultaController extends Controller
 
     public function detalhes_consulta_recepcionista($id_consulta)
     {
-        $utilizador = $this->verificar_recepcionista();
+        $utilizador = verificar_recepcionista();
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
@@ -215,27 +177,43 @@ class ConsultaController extends Controller
         $paciente = Paciente::find($consulta->id_paciente);
         $medico = $consulta->id_medico ? Medico::select('medico.nome', 'medico.email', 'medico.num_telefone', 'medico.especialidade')
             ->where('id_medico', $consulta->id_medico)->first() : null;
-        $medicos = !$consulta->id_medico ? Medico::select('id_medico', 'nome', 'especialidade')->get() : [];
+        $medicos = ! $consulta->id_medico ? Medico::select('id_medico', 'nome', 'especialidade')->get() : [];
         $metodos_pagamento = MetodoPagamento::select('id_metodo_pagamento', 'nome')->get();
         $servicos_clinicos = ServicoClinico::where('activo', true)->get();
         $pagamentos = ItemPagamento::select(
-            "items_pagamentos.*",
-            "pagamentos.total_pago",
-            "servicos_clinicos.nome as nome_servico_clinico",
-            "metodos_pagamentos.nome as nome_metodo_pagamento"
+            'items_pagamentos.*',
+            'pagamentos.total_pago',
+            'pagamentos.estado',
+            'servicos_clinicos.nome as nome_servico_clinico',
+            'servicos_clinicos.preco as preco_servico_clinico',
+            'metodos_pagamentos.nome as nome_metodo_pagamento'
         )
             ->leftJoin('pagamentos', 'items_pagamentos.id_pagamento', '=', 'pagamentos.id_pagamento')
-            ->leftJoin('servicos_clinicos', 'pagamentos.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+            ->leftJoin('servicos_clinicos', 'items_pagamentos.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
             ->leftJoin('metodos_pagamentos', 'pagamentos.id_metodo_pagamento', '=', 'metodos_pagamentos.id_metodo_pagamento')
             ->where('pagamentos.id_consulta', $id_consulta)
             ->get();
+        $total_pago= 0;
+        $total_servicos = 0;
+        foreach($pagamentos as $pagamento){
+            if($pagamento->estado == 'sucesso'){
+                $total_pago += $pagamento->total_pago;
+                $total_servicos += $pagamento->total;
+            }
+        }
+        $saldo_total = $total_servicos - $total_pago;
+        $resumo = [
+            'total_pago' => $total_pago,
+            'total_servicos' => $total_servicos,
+            'saldo_total' => $saldo_total,
+        ];
 
-        return view('consultas.detalhes_recepcionista', compact('consulta', 'paciente', 'medico', 'pagamentos', 'medicos', 'metodos_pagamento', 'servicos_clinicos'));
+        return view('consultas.detalhes_recepcionista', compact('consulta', 'paciente', 'medico', 'pagamentos', 'medicos', 'metodos_pagamento', 'servicos_clinicos', 'resumo'));
     }
 
     public function associar_medico_consulta_recepcionista(Request $request, $id_consulta)
     {
-        $utilizador = $this->verificar_recepcionista();
+        $utilizador = verificar_recepcionista();
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
@@ -252,9 +230,10 @@ class ConsultaController extends Controller
 
         return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
     }
+
     public function desassociar_medico_consulta_recepcionista(Request $request, $id_consulta)
     {
-        $utilizador = $this->verificar_recepcionista();
+        $utilizador = verificar_recepcionista();
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
@@ -262,6 +241,7 @@ class ConsultaController extends Controller
         if (! $consulta) {
             return back()->with('erro', 'Consulta não encontrada');
         }
+
         $consulta->id_medico = null;
         $consulta->save();
 

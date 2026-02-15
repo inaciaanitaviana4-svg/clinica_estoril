@@ -109,7 +109,7 @@
                     Informações de pagamento
                 </h2>
                 <form class=""
-                    action="{{ route('associar_medico_consulta_recepcionista', $consulta->id_consulta) }}"
+                    action="{{ route('fazer_pagamento_consulta_recepcionista', $consulta->id_consulta) }}"
                     method="POST">
                     {{ csrf_field() }}
                     <div class="row">
@@ -118,7 +118,7 @@
                             <select class="w-100" id="id_servico_clinico" name="id_servico_clinico">
                                 <option value="">Selecione o serviço clínico</option>
                                 @foreach ($servicos_clinicos as $servico)
-                                <option value="{{ $servico->id_servico_clinico }}">{{ $servico->nome }}</option>
+                                <option value="{{ $servico->id_servico_clinico }}">{{ $servico->nome }} -> {{ number_format($servico->preco, 2, ',', '.') }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -141,14 +141,16 @@
                     </div>
                 </form>
 
-                <div class="table-responsive-sm">
-                    <table class="table">
+                <div class="table-responsive-sm mt-4">
+                    <table class="table" >
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Serviço clínico</th>
                                 <th scope="col">Método de pagamento</th>
                                 <th scope="col">Valor pago</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -158,9 +160,25 @@
                                 <td>{{ $pagamento->nome_servico_clinico }}</td>
                                 <td>{{ $pagamento->nome_metodo_pagamento }}</td>
                                 <td>{{ number_format($pagamento->total_pago, 2, ',', '.') }}</td>
+                                <td>{{ $pagamento->estado }}</td>
+                                <td>
+                                    <a href="{{ route('cancelar_pagamento_consulta_recepcionista', $pagamento->id_pagamento) }}" class="btn btn-sm btn-outline-danger">Cancelar</a>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th scope="row" colspan="4"></th>
+                                <th scope="row" colspan="">Total pago:</th>
+                                <th scope="row" colspan="">Saldo total:</th>
+                            </tr>
+                            <tr>
+                                <td scope="row" colspan="4"></td>
+                                <td scope="row">{{ number_format($resumo['total_pago'], 2, ',', '.') }}</td>
+                                <td scope="row">{{ number_format($resumo['saldo_total'], 2, ',', '.') }}</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

@@ -31,32 +31,27 @@
 
                 <!-- Navegação Desktop   active -->
                 <nav class="nav-menu">
-                    @if(session("tipo_utilizador") == "admi")
-                        <a href="/pagamentos" class="nav-link">Pagamentos</a>
-                        <a href="/cadastros" class="nav-link">Cadastros</a>
-                        <a href="/consulta" class="nav-link">Consulta</a>
-                        <a href="/prontuarios" class="nav-link">Prontuarios</a>
-                        <a href="/exame" class="nav-link">Exame</a>
-
-                    @endif
                     @if(session("tipo_utilizador") == "paciente")
                         <a href="/consultas-paciente" class="nav-link">Consultas</a>
                         <a href="/listar-minhas-notificacoes" class="nav-link">Notificações</a>
                         <a href="/visualizar-perfil" class="nav-link">Perfil</a>
                     @endif
                     @if(session("tipo_utilizador") == "medico")
+                    <a href="{{ route("mostrar_triagens_recepcionista") }}" class="nav-link">Triagens</a>
                         <a href="/prontuarios" class="nav-link">Prontuarios</a>
                         <a href="/consulta" class="nav-link">Consultas</a>
                         <a href="/exames" class="nav-link">Exames</a>
                         <a href="/horarios" class="nav-link">Horarios</a>
+                        <a href="/relatorio_medico" class="nav-link">Relatórios</a>
+                        <a href="/visualizar-perfil" class="nav-link">Perfil</a>
 
                     @endif
                     @if(session("tipo_utilizador") == "recepcionista")
 
-                        <a href="{{ route('mostrar_consultas_recepcionista') }}" class="nav-link">Consultas/Agendamentos</a>
-                        <a href="{{ route("mostrar_pagamentos_recepcionista") }}" class="nav-link">Pagamentos</a>
-                        <a href="{{ route("mostrar_triagens_recepcionista") }}" class="nav-link">Triagens</a>
-                        <a href="{{ route("mostrar_pacientes_recepcionista") }}" class="nav-link">Pacientes</a>
+                        <a href="{{ route('mostrar_consultas_recepcionista') }}" class="nav-link {{ link_ativo('mostrar_consultas_recepcionista') }}">Consultas/Agendamentos</a>
+                        <a href="{{ route("mostrar_pagamentos_recepcionista") }}" class="nav-link {{ link_ativo('mostrar_pagamentos_recepcionista') }}">Pagamentos</a>
+                        <a href="{{ route("mostrar_pacientes_recepcionista") }}" class="nav-link {{ link_ativo('mostrar_pacientes_recepcionista') }}">Pacientes</a>
+                        <a href="/visualizar-perfil" class="nav-link">Perfil</a>
                     @endif
                     <a class="nav-link" style=" font-weight: 500; color:red;"
                         href="/sair"><strong>Sair</strong></a>
@@ -80,6 +75,7 @@
         <i class="fas fa-arrow-up"></i>
     </button>
     @yield("script")
+     
     <script src="/script.js"></script>
     <script src="/chatbot.js"></script>
     <script src="/auth.js"></script>
