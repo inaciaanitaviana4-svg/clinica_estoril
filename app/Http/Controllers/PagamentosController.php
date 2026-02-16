@@ -55,7 +55,7 @@ class PagamentosController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return redirect()->back()->with('erro', 'Ocorreu um erro ao realizar o pagamento: '.$e->getMessage());
+            return redirect()->back()->with('erro', 'Ocorreu um erro ao realizar o pagamento: ' . $e->getMessage());
         }
 
         return redirect()->route('detalhes_consulta_recepcionista', ['id_consulta' => $id_consulta])->with('success', 'Pagamento realizado com sucesso.');
@@ -82,7 +82,7 @@ class PagamentosController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return redirect()->back()->with('erro', 'Ocorreu um erro ao cancelar o pagamento: '.$e->getMessage());
+            return redirect()->back()->with('erro', 'Ocorreu um erro ao cancelar o pagamento: ' . $e->getMessage());
         }
 
         return redirect()->route('detalhes_consulta_recepcionista', ['id_consulta' => $pagamento->id_consulta])->with('success', 'Pagamento cancelado com sucesso.');
@@ -115,5 +115,14 @@ class PagamentosController extends Controller
         $consultas = Consulta::whereIn('estado', ['confirmada', 'em_espera', 'em_andamento'])->get();
 
         return view('pagamentos.fazer_pagamento_recepcionista', compact('servicos_clinicos', 'metodos_pagamentos', 'pacientes', 'consultas'));
+    }
+
+    public function salvar_registro_pagamento_recepcionista(Request $request)
+    {
+
+        print_r($request->all());
+        exit;
+
+        return redirect(route('mostrar_pagamentos_recepcionista'));
     }
 }

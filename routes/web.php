@@ -54,6 +54,7 @@ Route::middleware(["web"])->group(function () {
     Route::get('/painel-recepcionista/agendamentos', [ConsultaController::class, 'mostrar_consultas_recepcionista'])->name("mostrar_consultas_recepcionista");
     Route::get('/painel-recepcionista/pagamentos', [PagamentosController::class, 'mostrar_pagamentos_recepcionista'])->name("mostrar_pagamentos_recepcionista");
     Route::get('/painel-recepcionista/pagamentos/fazer', [PagamentosController::class, 'mostrar_fazer_pagamento_recepcionista'])->name("mostrar_fazer_pagamento_recepcionista");
+    Route::post('/painel-recepcionista/pagamentos', [PagamentosController::class, 'salvar_registro_pagamento_recepcionista'])->name("salvar_pagamento_recepcionista");
     Route::get('/painel-recepcionista/pagamentos/{id_pagamento}', [PagamentosController::class, 'detalhes_pagamento_recepcionista'])->name("detalhes_pagamento_recepcionista");
     Route::get('/painel-recepcionista/triagens', [ConsultaController::class, 'mostrar_triagens_recepcionista'])->name("mostrar_triagens_recepcionista");
     Route::get('/painel-recepcionista/pacientes', [PacienteController::class, 'mostrar_pacientes_recepcionista'])->name("mostrar_pacientes_recepcionista");
@@ -66,38 +67,26 @@ Route::middleware(["web"])->group(function () {
     Route::get('/painel-recepcionista/atendimento/{id_consulta}', [ConsultaController::class, 'detalhes_consulta_recepcionista'])->name("detalhes_consulta_recepcionista");
 
     // ===== ROTAS DO MÉDICO =====
-    Route::get('/painel-medico/consultas', [ConsultaController::class,'mostrar_consultas_medico'])->name('mostrar_consultas_medico');
+    Route::get('/painel-medico/consultas', [ConsultaController::class, 'mostrar_consultas_medico'])->name('mostrar_consultas_medico');
     Route::get('/painel-medico', [ConsultaController::class, 'painelmedico']);
 
     // ===== ROTAS DO ADMINISTRADOR =====
     Route::get('/admin/dashboard', [AdminController::class, 'mostrar_dashboard_admin']);
     Route::get('/admin/pagamentos', [AdminController::class, 'mostrar_pagamentos_admin']);
-    
+
     // Gerenciamento de utilizadores
     Route::get('/admin/cadastros', [AdminController::class, 'mostrar_cadastros_admin'])->name('mostrar_cadastros_admin');
     Route::get('/admin/cadastros/utilizadores/remover/{id_util}', [UtilizadoresController::class, 'remover_utilizador_admin'])->name('remover_utilizador_admin');
     Route::get('/admin/cadastros/utilizadores/registro/{id_util?}', [UtilizadoresController::class, 'mostrar_registro_utilizador_admin'])->name("mostrar_registro_utilizador_admin");
     Route::post('/admin/cadastros/utilizadores/registro/{id_util?}', [UtilizadoresController::class, 'salvar_registro_utilizador_admin'])->name("salvar_registro_utilizador_admin");
-    
+
     // Gerenciamento de especialidades
     Route::get('/admin/cadastros/especialidades/remover/{id_espec}', [EspecialidadesController::class, 'remover_especialidade_admin'])->name('remover_especialidade_admin');
     Route::get('/admin/cadastros/especialidades/registro/{id_espec?}', [EspecialidadesController::class, 'mostrar_registro_especialidade_admin'])->name('mostrar_registro_especialidade_admin');
     Route::post('/admin/cadastros/especialidades/registro/{id_espec?}', [EspecialidadesController::class, 'salvar_registro_especialidade_admin'])->name('salvar_registro_especialidade_admin');
-    
+
     // Visualizações do admin
     Route::get('/admin/consultas', [AdminController::class, 'mostrar_consultas_admin']);
     Route::get('/admin/prontuarios', [AdminController::class, 'mostrar_prontuarios_admin']);
     Route::get('/admin/exames', [AdminController::class, 'mostrar_exames_admin']);
-
-
-
-
-
-
-
-
 });
-
-
-
-

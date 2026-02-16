@@ -43,23 +43,7 @@
                                     <td>{{ $consulta->nome_medico }}</td>
                                     <td>{{ $consulta->data }}</td>
                                     <td>{{ $consulta->hora }}</td>
-                                    <td>
-                                        <span style="
-                                            padding: 4px 8px;
-                                            border-radius: 6px;
-                                            color: #fff;
-                                            font-size: 13px;
-                                            background-color:
-                                            @switch($consulta->estado)
-                                                @case('pendente') #F59E0B @break
-                                                @case('agendada') #3B82F6 @break
-                                                @case('confirmada') #22C55E @break
-                                                @case('cancelada') #EF4444 @break
-                                                @case('concluida') #6B7280 @break
-                                            @endswitch
-                                        ">
-                                            {{ ucfirst($consulta->estado) }}
-                                        </span>
+                                    <td>{{badge_estados($consulta->estado) }}
                                     </td>
                                     <td>
                                          <a  href="{{ route('detalhes_consulta_recepcionista',$consulta->id_consulta) }}"class="btn  btn-small"><i class="fa-solid fa-eye"></i></a>
