@@ -112,7 +112,10 @@ class PagamentosController extends Controller
         $servicos_clinicos = ServicoClinico::where('activo', true)->get();
         $metodos_pagamentos = MetodoPagamento::all();
         $pacientes = Paciente::all();
-        $consultas = Consulta::whereIn('estado', ['confirmada', 'em_espera', 'em_andamento'])->get();
+        $consultas = Consulta::select('consultas.*', 'paciente.nome as nome_paciente', 'tipos_consultas.nome as tipo_consulta')
+            ->join('paciente', 'consultas.id_paciente', '=', 'paciente.id_paciente')
+            ->join('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
+        ->whereIn('estado', ['confirmada', 'em_espera', 'em_andamento'])->get();
 
         return view('pagamentos.fazer_pagamento_recepcionista', compact('servicos_clinicos', 'metodos_pagamentos', 'pacientes', 'consultas'));
     }
