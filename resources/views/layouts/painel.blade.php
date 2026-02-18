@@ -51,9 +51,9 @@
                         <a href="{{ route('mostrar_pacientes_recepcionista') }}"
                             class="nav-link {{ link_ativo('mostrar_pacientes_recepcionista') }}">Pacientes</a>
                     @endif
-                    <a href="{{ route('visualizar_perfil') }}"
-                        class="nav-link {{ link_ativo('visualizar_perfil') }}">Perfil</a>
                     <a class="nav-link" style=" font-weight: 500; color:red;" href="/sair"><strong>Sair</strong></a>
+                    <a href="/visualizar-perfil" class="nav-link"><i style="font-size: 28px; color: #0066cc"
+                            class="fa-solid fa-circle-user"></i></a>
                 </nav>
             </div>
             <!-- Menu Mobile Toggle -->
