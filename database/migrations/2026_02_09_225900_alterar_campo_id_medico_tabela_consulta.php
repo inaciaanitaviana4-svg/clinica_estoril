@@ -8,18 +8,14 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('consultas', function (Blueprint $table) {
-            // 
             $table->unsignedInteger('id_medico', )->nullable()->change();
-          
         });
     }
 
     public function down(): void
     {
         Schema::table('consultas', function (Blueprint $table) {
-            // 
             $table->unsignedInteger('id_medico')->nullable(false)->change();
-           
         });
     }
 };
