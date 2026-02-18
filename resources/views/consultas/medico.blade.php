@@ -39,7 +39,8 @@
                                       {{ badge_estados($consulta->estado) }}
                                     </td>
                                     <td>
-                                        <div class="btn-group">           
+                                        <div class="btn-group">
+                                            <a href="{{ route('realizar_consulta_medico', $consulta->id_consulta) }}" class="btn btn-primary"><i class="fa-solid fa-stethoscope"></i></a>           
                                         </div>
                                     </td>
                                 </tr>

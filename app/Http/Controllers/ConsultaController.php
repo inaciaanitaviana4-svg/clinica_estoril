@@ -262,5 +262,30 @@ class ConsultaController extends Controller
 
         return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
     }
+    public function realizar_consulta_medico($id_consulta)
+    {
+        $utilizador = verificar_medico();
+        if (! $utilizador) {
+            return back()->with('erro', 'Não tem permissão para acessar esta página');
+        }
+        $consulta = Consulta::select(
+            'consultas.*',
+            'tipos_consultas.nome as nome_tipo_consulta',
+            'servicos_clinicos.nome as nome_servico_clinico',
+            'paciente.nome as nome_paciente'
+        )
+            ->leftJoin('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+            ->leftJoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
+            ->join('paciente', 'consultas.id_paciente', '=', 'paciente.id_paciente')
+            ->where('id_consulta', $id_consulta)->first();
+        if (! $consulta) {
+            return back()->with('erro', 'consulta não encontrado');
+        }
+        if ($consulta->id_medico != $utilizador->id_medico) {
+            return back()->with('erro', 'Não tem permissão para acessar esta consulta');
+        }
+
+        return view('consultas.realizar_consulta_medico', compact('consulta'));
+    }
    
 }

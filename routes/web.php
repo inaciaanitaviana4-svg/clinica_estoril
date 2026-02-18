@@ -74,7 +74,7 @@ Route::middleware(["web"])->group(function () {
     // ===== ROTAS DO MÉDICO =====
     Route::get('/painel-medico/consultas', [ConsultaController::class, 'mostrar_consultas_medico'])->name('mostrar_consultas_medico');
     Route::get('/painel-medico', [ConsultaController::class, 'painelmedico']);
-    Route::get('/painel-medico/triagem/{id_consulta}', [ConsultaController::class, 'fazer_triagem_medico'])->name('fazer_triagem_medico');
+    Route::get('/painel-medico/consultas/realizar/{id_consulta}', [ConsultaController::class, 'realizar_consulta_medico'])->name('realizar_consulta_medico');
 
     // ===== ROTAS DO ADMINISTRADOR =====
     Route::get('/admin/dashboard', [AdminController::class, 'mostrar_dashboard_admin']);
