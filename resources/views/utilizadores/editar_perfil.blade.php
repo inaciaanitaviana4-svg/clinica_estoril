@@ -1,7 +1,7 @@
-@extends(Session::get('tipo_utilizador')=="admi"?"layouts.admin":"layouts.painel")
-@section("titulo", "Perfil")
-@section("conteudo")
-    <section class="section active {{ Session::get('tipo_utilizador')=="admi"?"":"painel" }}">
+@extends(Session::get('tipo_utilizador') == 'admi' ? 'layouts.admin' : 'layouts.painel')
+@section('titulo', 'Perfil')
+@section('conteudo')
+    <section class="section active {{ Session::get('tipo_utilizador') == 'admi' ? '' : 'painel' }}">
         <div class="editar-perfil-container">
             <!-- Header -->
             <div class="editar-perfil-header">
@@ -36,24 +36,28 @@
                                 <option value="F" {{ $utilizador->genero == 'F' ? 'selected' : '' }}>Feminino</option>
                             </select>
                         </div>
-                        @if($dados["paciente"])
+                        @if ($dados['paciente'])
                             <div class="editar-perfil-field">
                                 <label class="editar-perfil-label editar-perfil-label--required">Data de Nascimento</label>
                                 <input name="data_nascimento" type="date" class="editar-perfil-input"
-                                    value="{{ $dados["paciente"]->data_nascimento }}">
+                                    value="{{ $dados['paciente']->data_nascimento }}">
                             </div>
                             <div class="editar-perfil-field">
                                 <label class="editar-perfil-label">Estado Civil</label>
                                 <select name="estado_civil" class="editar-perfil-select">
                                     <option value="">Selecione...</option>
-                                    <option value="solteiro" {{ $dados["paciente"]->estado_civil == 'solteiro' ? 'selected' : '' }}>
+                                    <option value="solteiro"
+                                        {{ $dados['paciente']->estado_civil == 'solteiro' ? 'selected' : '' }}>
                                         Solteiro(a)</option>
-                                    <option value="casado" {{ $dados["paciente"]->estado_civil == 'casado' ? 'selected' : '' }}>
+                                    <option value="casado"
+                                        {{ $dados['paciente']->estado_civil == 'casado' ? 'selected' : '' }}>
                                         Casado(a)
                                     </option>
-                                    <option value="divorciado" {{ $dados["paciente"]->estado_civil == 'divorciado' ? 'selected' : '' }}>
+                                    <option value="divorciado"
+                                        {{ $dados['paciente']->estado_civil == 'divorciado' ? 'selected' : '' }}>
                                         Divorciado(a)</option>
-                                    <option value="viuvo" {{ $dados["paciente"]->estado_civil == 'viuvo' ? 'selected' : '' }}>
+                                    <option value="viuvo"
+                                        {{ $dados['paciente']->estado_civil == 'viuvo' ? 'selected' : '' }}>
                                         Viúvo(a)
                                     </option>
                                 </select>
@@ -61,7 +65,7 @@
                             <div class="editar-perfil-field">
                                 <label class="editar-perfil-label editar-perfil-label--required">Número do BI</label>
                                 <input name="num_bi" type="text" class="editar-perfil-input"
-                                    value="{{ $dados["paciente"]->num_bi }}" placeholder="000000000LA000">
+                                    value="{{ $dados['paciente']->num_bi }}" placeholder="000000000LA000">
                             </div>
                         @endif
                     </div>
@@ -76,8 +80,8 @@
                     <div class="editar-perfil-grid">
                         <div class="editar-perfil-field">
                             <label class="editar-perfil-label editar-perfil-label--required">Email</label>
-                            <input name="email" type="email" class="editar-perfil-input" value="{{ $utilizador->email }}"
-                                placeholder="seu.email@exemplo.com">
+                            <input name="email" type="email" class="editar-perfil-input"
+                                value="{{ $utilizador->email }}" placeholder="seu.email@exemplo.com">
                             <span class="editar-perfil-helper-text">Este email será usado para login e notificações</span>
                         </div>
                         <div class="editar-perfil-field">
@@ -97,47 +101,63 @@
                     <div class="editar-perfil-grid">
                         <div class="editar-perfil-field editar-perfil-field--full">
                             <label class="editar-perfil-label editar-perfil-label--required">Morada</label>
-                            <textarea name="morada" class="editar-perfil-textarea"
-                                placeholder="Rua, número, edifício, andar, apartamento...">{{ $dados["paciente"]->morada??$dados["admin"]->morada??$dados["recepcionista"]->morada??$dados["medico"]->morada }}</textarea>
+                            <textarea name="morada" class="editar-perfil-textarea" placeholder="Rua, número, edifício, andar, apartamento...">{{ $dados['paciente']->morada ?? ($dados['admin']->morada ?? ($dados['recepcionista']->morada ?? $dados['medico']->morada)) }}</textarea>
                         </div>
-                        @if($dados["paciente"])
+                        @if ($dados['paciente'])
                             <div class="editar-perfil-field">
                                 <label class="editar-perfil-label editar-perfil-label--required">Cidade</label>
                                 <input name="cidade" type="text" class="editar-perfil-input"
-                                    value="{{ $dados["paciente"]->cidade }}" placeholder="Digite a cidade">
+                                    value="{{ $dados['paciente']->cidade }}" placeholder="Digite a cidade">
                             </div>
                             <div class="editar-perfil-field">
                                 <label class="editar-perfil-label editar-perfil-label--required">Bairro</label>
                                 <input name="bairro" type="text" class="editar-perfil-input"
-                                    value="{{ $dados["paciente"]->bairro }}" placeholder="Digite o bairro">
+                                    value="{{ $dados['paciente']->bairro }}" placeholder="Digite o bairro">
                             </div>
                             <div class="editar-perfil-field editar-perfil-field--full">
                                 <label class="editar-perfil-label">Seguro</label>
                                 <input name="seguro" type="text" class="editar-perfil-input"
-                                    value="{{ $dados["paciente"]->seguro }}" placeholder="Informações do seguro profissional">
+                                    value="{{ $dados['paciente']->seguro }}"
+                                    placeholder="Informações do seguro profissional">
                             </div>
                         @endif
                     </div>
                 </div>
+                <div class="editar-perfil-section">
+                    <h2 class="editar-perfil-section-title">
+                        <span class="editar-perfil-section-icon"></span>
+                        Informações de Acesso
+                    </h2>
 
+                    <div class="editar-perfil-grid">
+                        <div class="editar-perfil-field">
+                            <label class="editar-perfil-label editar-perfil-label--required">Senha</label>
+                            <input name="senha" type="password" class="editar-perfil-input"
+                                placeholder="Digite sua senha">
+                        </div>
+                    </div>
+                </div>
                 <!-- Informações Profissionais -->
-                @if(!$dados["paciente"])
+                @if (!$dados['paciente'])
                     <div class="editar-perfil-section">
                         <h2 class="editar-perfil-section-title">
                             <span class="editar-perfil-section-icon"></span>
                             Informações Profissionais
                         </h2>
                         <div class="editar-perfil-grid">
-                            @if($dados["medico"])
+                            @if ($dados['medico'])
                                 <div class="editar-perfil-field">
                                     <label class="editar-perfil-label editar-perfil-label--required">Especialidade</label>
                                     <input name="especialidade" type="text" class="editar-perfil-input"
-                                        value="{{ $dados["medico"]->especialidade }}" placeholder="Digite sua especialidade">
+                                        value="{{ $dados['medico']->especialidade }}"
+                                        placeholder="Digite sua especialidade">
                                 </div>
                                 <div class="editar-perfil-field">
-                                    <label class="editar-perfil-label editar-perfil-label--required">Anos de Experiência</label>
+                                    <label class="editar-perfil-label editar-perfil-label--required">Anos de
+                                        Experiência</label>
                                     <input name="ano_experiencia" type="number" class="editar-perfil-input"
-                                        value="{{ $dados["medico"]->ano_experiencia }}" placeholder="0" min="0" max="70">
+                                        value="{{ $dados['medico']->ano_experiencia }}" placeholder="0" min="0"
+                                        max="70">
                                 </div>
                             @endif
                         </div>

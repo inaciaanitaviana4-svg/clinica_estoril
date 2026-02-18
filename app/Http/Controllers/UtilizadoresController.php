@@ -202,7 +202,6 @@ class UtilizadoresController extends Controller
 
     /**
      * Retorna a view para criar conta de paciente
-     *
      */
     public function criar_conta_paciente()
     {
@@ -256,7 +255,6 @@ class UtilizadoresController extends Controller
 
     /**
      * Retorna a view para editar o perfil do utilizador logado
-     *
      */
     public function editar_perfil()
     {
@@ -335,11 +333,19 @@ class UtilizadoresController extends Controller
             $paciente = Paciente::find($utilizador->id_paciente);
         }
 
+        // Define senha: mantém antiga se não informada em edição, cria hash se nova
+       $senha = null;
+        if ( ! $request->senha) {
+            $senha = $utilizador->senha;
+        } else {
+            $senha = Hash::make($request->senha);
+        }
         // Atualiza dados gerais do utilizador
         $utilizador->num_telefone = $request['num_telefone'];
         $utilizador->email = $request['email'];
         $utilizador->genero = $request['genero'];
         $utilizador->nome = $request['nome'];
+        $utilizador->senha = $senha;
         $utilizador->save();
 
         // Atualiza dados do admin se aplicável
@@ -349,6 +355,7 @@ class UtilizadoresController extends Controller
             $admin->nome = $request['nome'];
             $admin->genero = $request['genero'];
             $admin->email = $request['email'];
+            $admin->senha = $senha;
             $admin->save();
         }
 
@@ -365,6 +372,7 @@ class UtilizadoresController extends Controller
             $paciente->cidade = $request['cidade'];
             $paciente->bairro = $request['bairro'];
             $paciente->seguro = $request['seguro'];
+            $paciente->senha = $senha;
             $paciente->save();
         }
 
@@ -375,6 +383,7 @@ class UtilizadoresController extends Controller
             $recepcionista->nome = $request['nome'];
             $recepcionista->genero = $request['genero'];
             $recepcionista->email = $request['email'];
+            $recepcionista->senha = $senha;
             $recepcionista->save();
         }
 
@@ -387,6 +396,7 @@ class UtilizadoresController extends Controller
             $medico->email = $request['email'];
             $medico->especialidade = $request['especialidade'];
             $medico->ano_experiencia = $request['ano_experiencia'];
+            $medico->senha = $senha;
             $medico->save();
         }
 

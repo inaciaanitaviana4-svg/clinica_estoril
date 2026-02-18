@@ -247,4 +247,19 @@ class ConsultaController extends Controller
 
         return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
     }
+    public function mudar_estado_consulta_recepcionista(Request $request, $id_consulta)
+    {
+        $utilizador = verificar_recepcionista();
+        if (! $utilizador) {
+            return back()->with('erro', 'Não tem permissão para acessar esta página');
+        }
+        $consulta = Consulta::find($id_consulta);
+        if (! $consulta) {
+            return back()->with('erro', 'Consulta não encontrada');
+        }
+        $consulta->estado = $request->estado;
+        $consulta->save();
+
+        return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
+    }
 }
