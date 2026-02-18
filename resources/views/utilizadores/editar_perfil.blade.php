@@ -135,6 +135,11 @@
                             <input name="senha" type="password" class="editar-perfil-input"
                                 placeholder="Digite sua senha">
                         </div>
+                        <div class="editar-perfil-field">
+                            <label class="editar-perfil-label editar-perfil-label--required">Confirmar Senha</label>
+                            <input name="confirmar_senha" type="password" class="editar-perfil-input"
+                                placeholder="Confirme sua senha">
+                        </div>
                     </div>
                 </div>
                 <!-- Informações Profissionais -->

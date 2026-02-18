@@ -47,7 +47,7 @@ class ConsultaController extends Controller
             ->join('paciente', 'consultas.id_paciente', '=', 'paciente.id_paciente')
             ->leftJoin('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
             ->leftJoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
-            ->whereIn('estado', ['agendada', 'concluida', 'em_andamento'])
+            ->whereIn('estado', ['agendada', 'concluida', 'em_andamento', 'confirmada'])
             ->where('consultas.id_medico', $utilizador->id_medico)
             ->orderBy('data', 'asc')
             ->orderBy('hora', 'asc')

@@ -243,46 +243,48 @@ class PacienteController extends Controller
         }
         try {
             // Valida email únicos em ambos os modelos
-        $emailexiste = Paciente::where('email', $request->email)->first();
-        $emailexisteutilizador = Utilizador::where('email', $request->email)->first();
-        if ($emailexiste || $emailexisteutilizador) {
-            return back()->with('erro', 'Este email já está cadastrado no sistema. Use um email diferente ou faça login se já possui uma conta.');
-        }
+            $emailexiste = Paciente::where('email', $request->email)->first();
+            $emailexisteutilizador = Utilizador::where('email', $request->email)->first();
+            if ($emailexiste || $emailexisteutilizador) {
+                return back()->with('erro', 'Este email já está cadastrado no sistema. Use um email diferente ou faça login se já possui uma conta.');
+            }
 
-        // Valida telefone único em ambos os modelos
-        $num_telefoneexiste = Paciente::where('num_telefone', $request->num_telefone)->first();
-        $num_telefoneexisteutilizador = Utilizador::where('num_telefone', $request->num_telefone)->first();
-        if ($num_telefoneexiste || $num_telefoneexisteutilizador) {
-            return back()->with('erro', 'Este número de telefone já está registrado no sistema. Use um número diferente.');
-        }
+            // Valida telefone único em ambos os modelos
+            $num_telefoneexiste = Paciente::where('num_telefone', $request->num_telefone)->first();
+            $num_telefoneexisteutilizador = Utilizador::where('num_telefone', $request->num_telefone)->first();
+            if ($num_telefoneexiste || $num_telefoneexisteutilizador) {
+                return back()->with('erro', 'Este número de telefone já está registrado no sistema. Use um número diferente.');
+            }
+            if ($request['senha'] != $request['confirmar_senha']) {
+                return back()->with('erro', 'As senhas não coincidem. Por favor, confirme sua senha corretamente.');
+            }
+            // Cria novo registro de paciente
+            $paciente = Paciente::create([
+                'nome' => $request['nome'],
+                'email' => $request['email'],
+                'num_telefone' => $request['num_telefone'],
+                'genero' => $request['genero'],
+                'morada' => $request['morada'],
+                'senha' => Hash::make($request['senha']),
+                'data_nascimento' => $request['data_nascimento'],
+                'num_bi' => $request['num_bi'],
+                'estado_civil' => $request['estado_civil'],
+                'cidade' => $request['cidade'],
+                'bairro' => $request['bairro'],
+                'seguro' => $request['seguro'],
+                'id_clinica' => 1,
+            ]);
 
-        // Cria novo registro de paciente
-        $paciente = Paciente::create([
-            'nome' => $request['nome'],
-            'email' => $request['email'],
-            'num_telefone' => $request['num_telefone'],
-            'genero' => $request['genero'],
-            'morada' => $request['morada'],
-            'senha' => Hash::make($request['senha']),
-            'data_nascimento' => $request['data_nascimento'],
-            'num_bi' => $request['num_bi'],
-            'estado_civil' => $request['estado_civil'],
-            'cidade' => $request['cidade'],
-            'bairro' => $request['bairro'],
-            'seguro' => $request['seguro'],
-            'id_clinica' => 1,
-        ]);
-
-        // Cria utilizador associado ao paciente
-        $utilizador = Utilizador::create([
-            'num_telefone' => $request['num_telefone'],
-            'senha' => Hash::make($request['senha']),
-            'nome' => $request['nome'],
-            'genero' => $request['genero'],
-            'email' => $request['email'],
-            'nivel_acesso' => 3, // 3 = paciente
-            'id_paciente' => $paciente->id_paciente,
-        ]);
+            // Cria utilizador associado ao paciente
+            $utilizador = Utilizador::create([
+                'num_telefone' => $request['num_telefone'],
+                'senha' => Hash::make($request['senha']),
+                'nome' => $request['nome'],
+                'genero' => $request['genero'],
+                'email' => $request['email'],
+                'nivel_acesso' => 3, // 3 = paciente
+                'id_paciente' => $paciente->id_paciente,
+            ]);
 
             if (! $paciente) {
                 return back()->with('erro', 'não foi posssivel cadastrar o paciente');

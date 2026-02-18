@@ -37,29 +37,38 @@
                     <div class="photo"></div>
 
                     <h2 style="text-align: center;"><strong>Registo de Paciente</strong> </h2>
-                 @if(session("erro"))
-                    <div style="background-color:red;color:white;text-align:center">
-                        {{ session("erro") }}
-                    </div>
+                    @if (session('erro'))
+                        <div style="background-color:red;color:white;text-align:center">
+                            {{ session('erro') }}
+                        </div>
                     @endif
                     <form method="post" action="/cadastrar-paciente">
                         {{ csrf_field() }}
                         <div class="form-group">
                             <label for="nome">Nome Completo</label>
-                            <input type="text" id="nome" name="nome" placeholder="Ex.: Eugénio Influencer" required>
+                            <input type="text" id="nome" name="nome" placeholder="Ex.: Eugénio Influencer"
+                                required>
                         </div>
                         <div class="form-group">
                             <label for="num_telefone">Número de telefone</label>
-                            <input type="number" id="num_telefone" name="num_telefone" placeholder="9XXXXXXXX" maxlength="9" min="9" required>
+                            <input type="number" id="num_telefone" name="num_telefone" placeholder="9XXXXXXXX"
+                                maxlength="9" min="9" required>
                         </div>
                         <div class="form-group">
                             <label for="email">E-mail</label>
-                            <input type="email" id="email" name="email" placeholder="eugenio@gmail.com" required>
+                            <input type="email" id="email" name="email" placeholder="eugenio@gmail.com"
+                                required>
                         </div>
                         <div class="form-group">
                             <label for="senha">senha</label>
                             <input type="password" id="senha" name="senha" placeholder="**********" required>
                         </div>
+                        <div class="form-group">
+                            <label for="confirmar_senha">Confirmar senha</label>
+                            <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="**********"
+                                required>
+                        </div>
+
                         <div class="form-group">
                             <label for="data_nascimento">Data de Nascimento</label>
                             <input type="date" id="data_nascimento" name="data_nascimento" required>

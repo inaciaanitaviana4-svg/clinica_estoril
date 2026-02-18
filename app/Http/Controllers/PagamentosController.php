@@ -33,6 +33,17 @@ class PagamentosController extends Controller
         if (! $servico_clinico) {
             return redirect()->back()->with('erro', 'Serviço clínico não encontrado.');
         }
+        $metodo_pagamento = MetodoPagamento::find($request->input('id_metodo_pagamento'));
+        if (! $metodo_pagamento) {
+            return redirect()->back()->with('erro', 'Método de pagamento não encontrado.');
+        }
+        $valor_pago = $request->input('id_metodo_pagamento') == 1 ? $request->input('valor_pago') : $servico_clinico->preco;
+        if (! $valor_pago || $valor_pago <= 0) {
+            return back()->with('erro', 'Para pagamentos em dinheiro, o valor pago deve ser maior que zero.');
+        }
+        if ($valor_pago < $servico_clinico->preco) {
+            return back()->with('erro', 'Para pagamentos em dinheiro, o valor pago deve ser maior ou igual ao preço do serviço clínico.');
+        }
         try {
             DB::beginTransaction();
             $pagamento = Pagamento::create([
@@ -41,7 +52,7 @@ class PagamentosController extends Controller
                 'id_recepcionista' => $utilizador->id_recepcionista,
                 'id_metodo_pagamento' => $request->input('id_metodo_pagamento'),
                 'data' => now(),
-                'total_pago' => $request->input('valor_pago'),
+                'total_pago' => $valor_pago,
                 'estado' => 'sucesso',
             ]);
             $items_pagamento = ItemPagamento::create([
@@ -55,7 +66,7 @@ class PagamentosController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return redirect()->back()->with('erro', 'Ocorreu um erro ao realizar o pagamento: '.$e->getMessage());
+            return redirect()->back()->with('erro', 'Ocorreu um erro ao realizar o pagamento: ');
         }
 
         return redirect()->route('detalhes_consulta_recepcionista', ['id_consulta' => $id_consulta])->with('success', 'Pagamento realizado com sucesso.');
@@ -82,7 +93,7 @@ class PagamentosController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return redirect()->back()->with('erro', 'Ocorreu um erro ao cancelar o pagamento: '.$e->getMessage());
+            return redirect()->back()->with('erro', 'Ocorreu um erro ao cancelar o pagamento: ');
         }
 
         return redirect()->route('detalhes_consulta_recepcionista', ['id_consulta' => $pagamento->id_consulta])->with('success', 'Pagamento cancelado com sucesso.');
@@ -235,6 +246,7 @@ class PagamentosController extends Controller
 
         return view('pagamentos.detalhes_pagamento_recepcionista', compact('pagamento', 'itens_pagamento'));
     }
+
     public function mudar_estado_pagamento_recepcionista(Request $request, $id_pagamento)
     {
         $utilizador = verificar_recepcionista();
