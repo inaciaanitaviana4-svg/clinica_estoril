@@ -36,42 +36,10 @@
                                     <td>{{ $consulta->data }}</td>
                                     <td>{{ $consulta->hora }}</td>
                                     <td>
-                                        <span style="
-                                            padding: 4px 8px;
-                                            border-radius: 6px;
-                                            color: #fff;
-                                            font-size: 13px;
-                                            background-color:
-                                            @switch($consulta->estado)
-                                                @case('pendente') #F59E0B @break
-                                                @case('agendada') #3B82F6 @break
-                                                @case('confirmada') #22C55E @break
-                                                @case('cancelada') #EF4444 @break
-                                                @case('concluida') #6B7280 @break
-                                            @endswitch
-                                        ">
-                                            {{ ucfirst($consulta->estado) }}
-                                        </span>
+                                      {{ badge_estados($consulta->estado) }}
                                     </td>
                                     <td>
-                                        <div class="btn-group">
-                                            @if($consulta->estado == "pendente" || $consulta->estado == "agendada")
-                                                <form action="/cancelar-consulta-paciente/{{$consulta->id_consulta }}"
-                                                    method="post">
-                                                    {{ csrf_field() }}
-                                                    <button class="btn btn-bg-red btn-small">Cancelar</button>
-
-                                                </form>
-                                            @endif
-
-                                              @if($consulta->estado == "agendada")
-                                                <form action="/confirmar-consulta-paciente/{{$consulta->id_consulta }}"
-                                                    method="post">
-                                                    {{ csrf_field() }}
-                                                    <button class="btn btn-primary btn-small">confirmar</button>
-
-                                                </form>
-                                            @endif
+                                        <div class="btn-group">           
                                         </div>
                                     </td>
                                 </tr>

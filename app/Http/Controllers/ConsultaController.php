@@ -262,4 +262,5 @@ class ConsultaController extends Controller
 
         return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
     }
+   
 }

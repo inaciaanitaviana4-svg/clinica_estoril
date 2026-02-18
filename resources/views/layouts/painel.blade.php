@@ -36,7 +36,6 @@
                         <a href="/listar-minhas-notificacoes" class="nav-link">Notificações</a>
                     @endif
                     @if (session('tipo_utilizador') == 'medico')
-                        <a href="{{ route('mostrar_triagens_recepcionista') }}" class="nav-link">Triagens</a>
                         <a href="/prontuarios" class="nav-link">Prontuarios</a>
                         <a href="/consulta" class="nav-link">Consultas</a>
                         <a href="/exames" class="nav-link">Exames</a>
