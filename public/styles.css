@@ -1546,6 +1546,8 @@ ul {
 }
 
 .contact-info-card {
+    padding: 0;
+    padding-bottom: 30px;
     text-align: center;
     padding: var(--spacing-xl);
     background: var(--bg-light);
@@ -1560,6 +1562,7 @@ ul {
 }
 
 .contact-info-icon {
+    
     width: 70px;
     height: 70px;
     margin: 0 auto var(--spacing-md);
