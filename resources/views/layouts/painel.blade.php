@@ -72,6 +72,9 @@
     <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">
         <i class="fas fa-arrow-up"></i>
     </button>
+     <script src="/jquery-3.2.1.slim.min.js"></script>
+    <script src="/popper.min.js"></script>
+    <script src="/bootstrap.min.js"></script>
     @yield('script')
 
     <script src="/script.js"></script>

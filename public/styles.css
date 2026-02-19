@@ -64,6 +64,25 @@ body {
     line-height: 1.6;
     overflow-x: hidden;
 }
+.rc-label{
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-gray);
+    text-transform: uppercase;
+}
+.rc-valor{
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+.rc-container{
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+}
+.text-primary-color{
+    color: var(--primary-color);
+}
 .linha-div{
     display: flex;
     gap: 8px;
