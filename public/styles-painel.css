@@ -88,12 +88,18 @@
     color: var(--text-gray);
     border-bottom: 3px solid transparent;
     transition: all 0.3s ease;
+    text-decoration: none;
+    text-underline-offset: none;
 }
 
 .tab.active {
     color: var(--primary-color);
     border-bottom-color: var(--primary-color);
     font-weight: 600;
+}
+
+.tab:hover{
+    text-decoration: none;
 }
 
 .tab-content {

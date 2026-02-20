@@ -8,7 +8,8 @@ function desactivarTodasTabs() {
 }
 
 for (let i = 0; i < tabs.length; i++) {
-    tabs.item(i).addEventListener("click", () => {
+    tabs.item(i).addEventListener("click", (e) => {
+        e.preventDefault()
         desactivarTodasTabs()
         tabs.item(i).classList.add("active")
         tabsContent.item(i).classList.add("active")

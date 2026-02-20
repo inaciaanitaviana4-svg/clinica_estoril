@@ -1,56 +1,81 @@
 @extends('layouts.painel')
 @section('titulo', 'Realizar Consulta')
 @section('conteudo')
-    <section id="medico" class="section active painel ">
+<section id="medico" class="section active painel ">
 
-        <div class="card">
-            <h2 class="text-primary-color">{{ $paciente->nome }}</h2>
-            <div class="row">
-                <span class="col"><i class="fa-regular fa-calendar"></i>
-                    {{ date('Y') - date('Y', strtotime($paciente->data_nascimento)) }} ano(s) </span>
-                <span class="col"><i class="fa-solid fa-venus"></i> {{ $paciente->genero }}</span>
-                <span class="col"><i class="fa-solid fa-mobile-screen"></i> {{ $paciente->num_telefone }}</span>
-                <span class="col"><i class="fa-regular fa-envelope"></i> {{ $paciente->email }}</span>
+    <div class="card">
+        <h2 class="text-primary-color">{{ $paciente->nome }}</h2>
+        <div class="row">
+            <span class="col"><i class="fa-regular fa-calendar"></i>
+                {{ date('Y') - date('Y', strtotime($paciente->data_nascimento)) }} ano(s) </span>
+            <span class="col"><i class="fa-solid fa-venus"></i> {{ $paciente->genero }}</span>
+            <span class="col"><i class="fa-solid fa-mobile-screen"></i> {{ $paciente->num_telefone }}</span>
+            <span class="col"><i class="fa-regular fa-envelope"></i> {{ $paciente->email }}</span>
+        </div>
+        <div class="row mt-4 p-4" style="background-color: var(--bg-light)">
+            <div class="col rc-container">
+                <span class="rc-label">Consulta N.º</span>
+                <span class="rc-valor">{{ $consulta->id_consulta }}</span>
+
             </div>
-            <div class="row mt-4 p-4" style="background-color: var(--bg-light)">
-                <div class="col rc-container">
-                    <span class="rc-label">Consulta N.º</span>
-                    <span class="rc-valor">{{ $consulta->id_consulta }}</span>
+            <div class="col rc-container">
+                <span class="rc-label">Data da Consulta</span>
+                <span class="rc-valor">{{ $consulta->data }} - {{ $consulta->hora }}</span>
 
+            </div>
+            <div class="col rc-container">
+                <span class="rc-label">Tipo</span>
+                <span class="rc-valor">{{ $consulta->nome_tipo_consulta }}</span>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="tabs">
+            <a class="tab active" href="#" style="display: flex; align-items: center; gap:4px;"><i class="fa-regular fa-clipboard"></i> Diagnóstico</a>
+            <a class="tab" href="#" style="display: flex; align-items: center; gap:4px;"><i class="fa-solid fa-file-waveform"></i> Exames</a>
+            <a class="tab" href="#" style="display: flex; align-items: center; gap:4px;"><i class="fa-solid fa-capsules"></i> Receita</a>
+        </div>
+
+        <!-- Diagnóstico -->
+        <div class="tab-content active">
+            <h3 class="rc-tab-title">Novo Diagnóstico</h3>
+            <div class="mb-3">
+                <label class="rc-tab-form-label"><i class="fa-regular fa-comment-dots"></i> Descrição do Diagnóstico</label>
+                <textarea class="rc-tab-form-control" placeholder="Descreva o diagnóstico, sintomas observados, hipóteses e recomendações..."></textarea>
+            </div>
+            <button class="btn btn-primary" style="width: 100%;">Salvar Diagnóstico</button>
+
+            <div>
+                <div class="rc-section-title mt-4">
+                    <i class="fa-regular fa-clock"></i> Histórico de Diagnóstico
                 </div>
-                <div class="col rc-container">
-                    <span class="rc-label">Data da Consulta</span>
-                    <span class="rc-valor">{{ $consulta->data }} - {{ $consulta->hora }}</span>
-
-                </div>
-                <div class="col rc-container">
-                    <span class="rc-label">Tipo</span>
-                    <span class="rc-valor">{{ $consulta->nome_tipo_consulta }}</span>
-
+                <div class="rc-history-list">
+                    <div class="rc-history-item">
+                        <div class="rc-history-meta">
+                            <span><i class="fa-regular fa-calendar-days"></i> 15 Jan 2026</span>
+                            <span><i class="fa-solid fa-user-doctor"></i> Dr. Miguel Costa</span>
+                        </div>
+                        <div class="rc-history-content">Paciente apresenta sintomas de gripe comum. Febre baixa (37.8°C), tosse seca e dor de garganta. Sem sinais de complicação respiratória. Recomendado repouso e hidratação adequada. Prescrever analgésico para controle da febre.</div>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Exames -->
+        <div class="tab-content">
+            <h3 class="rc-tab-title">Solicitar Exame</h3>
+        </div>
+
+        <!-- Receita -->
+        <div class="tab-content">
+            <h3 class="rc-tab-title">Receita Médica</h3>
 
         </div>
-        <div class="card mt-4">
-            <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
-                        type="button" role="tab" aria-controls="nav-home" aria-selected="true"><i class="fa-regular fa-clipboard"></i> Diagnóstico</button>
-                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
-                        type="button" role="tab" aria-controls="nav-profile" aria-selected="false"><i class="fa-solid fa-file-waveform"></i> Exames</button>
-                    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
-                        type="button" role="tab" aria-controls="nav-contact" aria-selected="false"><i class="fa-solid fa-capsules"></i> Receita</button>
-                </div>
-            </nav>
-            <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"
-                    tabindex="0">...</div>
-                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"
-                    tabindex="0">...</div>
-                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab"
-                    tabindex="0">...</div>
-            </div>
-            
-        </div>
-    </section>
+    </div>
+</section>
+@endsection
+@section('script')
+<script src="/tabs.js"></script>
 @endsection

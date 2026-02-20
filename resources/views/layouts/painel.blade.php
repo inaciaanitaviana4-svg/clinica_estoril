@@ -38,7 +38,6 @@
                     @if (session('tipo_utilizador') == 'medico')
                         <a href="/prontuarios" class="nav-link">Prontuarios</a>
                         <a href="/consulta" class="nav-link">Consultas</a>
-                        <a href="/exames" class="nav-link">Exames</a>
                         <a href="/horarios" class="nav-link">Horarios</a>
                         <a href="/relatorio_medico" class="nav-link">Relatórios</a>
                     @endif
@@ -77,10 +76,6 @@
     <script src="/bootstrap.min.js"></script>
     @yield('script')
 
-    <script src="/script.js"></script>
-    <script src="/chatbot.js"></script>
-    <script src="/auth.js"></script>
-    <script src="/main.js"></script>
 </body>
 
 </html>
