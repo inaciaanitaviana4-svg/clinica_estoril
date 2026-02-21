@@ -285,7 +285,7 @@ class ConsultaController extends Controller
             return back()->with('erro', 'Não tem permissão para acessar esta consulta');
         }
         $paciente = Paciente::find($consulta->id_paciente);
-
-        return view('consultas.realizar_consulta_medico', compact('consulta', 'paciente'));
+        $exames = ServicoClinico::where("id_tipo_consulta", 4)->get();
+        return view('consultas.realizar_consulta_medico', compact('consulta', 'paciente', 'exames'));
     }
 }

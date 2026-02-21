@@ -140,31 +140,67 @@ textarea.rc-tab-form-control {
     align-items: center;
     gap: 0.5rem;
 }
-.rc-history-list { display: flex; flex-direction: column; gap: 1rem; }
+.rc-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
 .rc-history-item {
-  background: var(--bg-light);
-  border: 1px solid var(--border-color);
-  border-left: 3px solid var(--secondary-color);
-  border-radius: .6rem;
-  padding: 1rem 1.25rem;
+    background: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--secondary-color);
+    border-radius: 0.6rem;
+    padding: 1rem 1.25rem;
 }
 .rc-history-item .rc-history-meta {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: .6rem;
-  font-size: .8rem;
-  color: var(--text-gray);
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.8rem;
+    color: var(--text-gray);
 }
-.rc-history-item .rc-history-meta span { display: flex; align-items: center; gap: .35rem; }
+.rc-history-item .rc-history-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
 .rc-history-item .history-content {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: .83rem;
-  line-height: 1.6;
-  color: var(--primary-color);
-  white-space: pre-wrap;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.83rem;
+    line-height: 1.6;
+    color: var(--primary-color);
+    white-space: pre-wrap;
 }
 .text-primary-color {
     color: var(--primary-color);
+}
+
+.medication-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.medication-item {
+    background: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: start;
+}
+.medication-fields {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 0.85rem;
+}
+.actions-bar {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
 }
 .linha-div {
     display: flex;
@@ -475,8 +511,13 @@ ul {
     box-shadow: var(--shadow-sm);
 }
 
+.btn-green {
+    background: var(--secondary-color);
+    color: white;
+    box-shadow: var(--shadow-sm);
+}
+
 .btn-primary:hover {
-    transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
 .btn-danger {
@@ -492,7 +533,6 @@ ul {
 
 .btn-secondary:hover {
     background: rgba(255, 255, 255, 0.9);
-    transform: translateY(-2px);
 }
 
 .btn-white {
@@ -501,7 +541,6 @@ ul {
 }
 
 .btn-white:hover {
-    transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
 
@@ -530,6 +569,14 @@ ul {
 .btn-full {
     width: 100%;
     justify-content: center;
+}
+
+.add-medication-panel {
+    background: #e6f5f2;
+    border: 1.5px dashed #0d6f5f;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
 }
 
 /* ===== SEÇÕES GERAIS ===== */
