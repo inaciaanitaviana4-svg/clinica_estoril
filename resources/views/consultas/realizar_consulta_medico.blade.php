@@ -54,8 +54,8 @@
                 <div class="rc-history-list">
                     <div class="rc-history-item">
                         <div class="rc-history-meta">
-                            <span><i class="fa-regular fa-calendar-days"></i> 15 Jan 2026</span>
-                            <span><i class="fa-solid fa-user-doctor"></i> Dr. Miguel Costa</span>
+                            <span><i class="fa-regular fa-calendar-days"></i> 20 Fev 2026</span>
+                            <span><i class="fa-solid fa-user-doctor"></i> Dr. Inácia Anita IAV</span>
                         </div>
                         <div class="rc-history-content">Paciente apresenta sintomas de gripe comum. Febre baixa (37.8°C), tosse seca e dor de garganta. Sem sinais de complicação respiratória. Recomendado repouso e hidratação adequada. Prescrever analgésico para controle da febre.</div>
                     </div>
