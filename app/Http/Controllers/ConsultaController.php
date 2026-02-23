@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Consulta;
 use App\Models\Diagnostico;
 use App\Models\Especialidade;
+use App\Models\ExameSolicitado;
 use App\Models\Horario;
 use App\Models\ItemPagamento;
 use App\Models\Medico;
@@ -306,7 +307,7 @@ class ConsultaController extends Controller
         }
         try {
             Diagnostico::create(
-                ['id_consulta' => $id_consulta, 'descricao' => $request->diagnostico, 'criado_em' => date('Y-m-d H:i:s'),'actualizado_em' => date('Y-m-d H:i:s')],
+                ['id_consulta' => $id_consulta, 'descricao' => $request->diagnostico, 'criado_em' => date('Y-m-d H:i:s'), 'actualizado_em' => date('Y-m-d H:i:s')],
 
             );
         } catch (\Exception $e) {
@@ -337,5 +338,95 @@ class ConsultaController extends Controller
             ->get();
 
         return response()->json($diagnosticos);
+    }
+
+    public function api_listar_exames_consulta_medico($id_consulta)
+    {
+        $utilizador = verificar_medico();
+        if (! $utilizador) {
+            return response()->json(['erro' => 'Não tem permissão para acessar esta API'], 403);
+        }
+        $consulta = Consulta::find($id_consulta);
+        if (! $consulta) {
+            return response()->json(['erro' => 'Consulta não encontrada'], 404);
+        }
+        if ($consulta->id_medico != $utilizador->id_medico) {
+            return response()->json(['erro' => 'Não tem permissão para acessar esta consulta'], 403);
+        }
+        $exames = ExameSolicitado::select('exames_solicitados.*', 'servicos_clinicos.nome as nome_exame')
+            ->join('servicos_clinicos', 'exames_solicitados.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+            ->where('exames_solicitados.id_consulta', $id_consulta)
+            ->get();
+
+        return response()->json($exames);
+    }
+
+    public function api_registro_exame_consulta_medico(Request $request, $id_consulta, $id_exame = null)
+    {
+        $utilizador = verificar_medico();
+        if (! $utilizador) {
+            return response()->json(['erro' => 'Não tem permissão para acessar esta API'], 403);
+        }
+        $consulta = Consulta::find($id_consulta);
+        if (! $consulta) {
+            return response()->json(['erro' => 'Consulta não encontrada'], 404);
+        }
+        if ($consulta->id_medico != $utilizador->id_medico) {
+            return response()->json(['erro' => 'Não tem permissão para acessar esta consulta'], 403);
+        }
+        try {
+            if ($id_exame) {
+                $exame = ExameSolicitado::find($id_exame);
+                if (! $exame) {
+                    return response()->json(['erro' => 'Exame solicitado não encontrado'], 404);
+                }
+                $exame->id_servico_clinico = $request->id_servico_clinico;
+                $exame->actualizado_em = date('Y-m-d H:i:s');
+                $exame->save();
+            } else {
+                ExameSolicitado::create(
+                    ['id_consulta' => $id_consulta,
+                        'id_servico_clinico' => $request->id_servico_clinico,
+                        'status' => 'PENDENTE',
+                        'criado_em' => date('Y-m-d H:i:s'),
+                        'actualizado_em' => date('Y-m-d H:i:s')],
+
+                );
+            }
+        } catch (\Exception $e) {
+            return response()->json(['erro' => 'Erro ao registrar exame: '.$e->getMessage()], 500);
+        }
+
+        return response()->json(['sucesso' => 'Exame registrado com sucesso']);
+    }
+
+    public function api_salvar_resultado_exame_consulta_medico(Request $request, $id_consulta, $id_exame)
+    {
+        $utilizador = verificar_medico();
+        if (! $utilizador) {
+            return response()->json(['erro' => 'Não tem permissão para acessar esta API'], 403);
+        }
+        $consulta = Consulta::find($id_consulta);
+        if (! $consulta) {
+            return response()->json(['erro' => 'Consulta não encontrada'], 404);
+        }
+        if ($consulta->id_medico != $utilizador->id_medico) {
+            return response()->json(['erro' => 'Não tem permissão para acessar esta consulta'], 403);
+        }
+        try {
+            $exame = ExameSolicitado::find($id_exame);
+            if (! $exame) {
+                return response()->json(['erro' => 'Exame solicitado não encontrado'], 404);
+            }
+            $exame->resultado = $request->resultado;
+            $exame->observacoes = $request->observacoes;
+            $exame->status = 'REALIZADO';
+            $exame->actualizado_em = date('Y-m-d H:i:s');
+            $exame->save();
+        } catch (\Exception $e) {
+            return response()->json(['erro' => 'Erro ao salvar resultado do exame: '.$e->getMessage()], 500);
+        }
+
+        return response()->json(['sucesso' => 'Resultado do exame salvo com sucesso']);
     }
 }

@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     await listarDiagnosticos();
+        await listarExames();
 });
 const salvar_diagnostico_btn = document.getElementById('salvar-diagnostico-btn');
 salvar_diagnostico_btn.addEventListener('click', async () => {
@@ -53,6 +54,75 @@ async function listarDiagnosticos() {
         });
     } catch (error) {
         console.error('Erro ao listar diagnósticos:', error);
-       
+
     }
+}
+async function adicionarExame() {
+    const exameSelect = document.getElementById('exame-select');
+    const exameId = exameSelect.value;
+    if (!exameId) {
+        alert('Por favor, selecione um exame para adicionar.');
+        return;
+    }
+    try {
+        const response = await fetch(api.registroExame, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                id_servico_clinico: exameId
+            })
+        });
+        if (!response.ok) {
+            throw new Error('Erro ao adicionar exame: ' + response.statusText);
+        }
+        const exame = await response.json();
+        alert('Exame adicionado com sucesso!');
+        await listarExames();
+        exameSelect.value = ''; // Limpa a seleção após adicionar
+    }
+    catch (error) {
+        console.error('Erro ao adicionar exame:', error);
+        alert('Ocorreu um erro ao adicionar o exame. Por favor, tente novamente.');
+    }
+
+}
+async function listarExames() {
+    try {
+        const response = await fetch(api.listarExames, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Erro ao listar exames: ' + response.statusText);
+        }   
+        const exames = await response.json();
+        const tabelaExames = document.getElementById('tabela-exame');
+        tabelaExames.innerHTML = '';
+        exames.forEach((exame) => {
+            const novaLinha = document.createElement('tr');
+            let acaoBtn = '';
+            if (exame.status === 'PENDENTE') {
+                acaoBtn = `<button class="btn btn-sm btn-primary" onclick="adicionarResultadoExame(${exame.id_exame_realizado},${exame})">Adicionar Resultado</button>`;
+            }else if (exame.status === 'REALIZADO') {
+                acaoBtn = `<button class="btn btn-sm btn-success" onclick="visualizarExame(${exame.id_exame_realizado}, ${exame})">Visualizar Resultado</button>`;
+            }
+            novaLinha.innerHTML = `
+                <td style="align-content: center;">${exame.nome_exame}</td>
+                <td style="align-content: center;">${badge_estados(exame.status)}</td>
+                <td style="align-content: center;">
+                    ${acaoBtn}
+                </td>
+            `;
+            tabelaExames.appendChild(novaLinha);
+        });
+    } catch (error) {
+        console.error('Erro ao listar exames:', error);
+     
+    }   
 }

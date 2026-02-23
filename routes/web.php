@@ -78,6 +78,7 @@ Route::middleware(["web"])->group(function () {
     Route::post('/api/consultas/{id_consulta}/salvar-diagnostico', [ConsultaController::class, 'api_salvar_diagnostico_consulta_medico'])->name('api_salvar_diagnostico_consulta_medico');
     Route::get('/api/consultas/{id_consulta}/listar-diagnostico', [ConsultaController::class, 'api_listar_diagnostico_consulta_medico'])->name('api_listar_diagnostico_consulta_medico');
     Route::post('/api/consultas/{id_consulta}/registro-exame/{id_exame?}', [ConsultaController::class, 'api_registro_exame_consulta_medico'])->name('api_registro_exame_consulta_medico');
+    Route::post('/api/consultas/{id_consulta}/salvar-resultado-exame/{id_exame?}', [ConsultaController::class, 'api_salvar_resultado_exame_consulta_medico'])->name('api_salvar_resultado_exame_consulta_medico');
     Route::get('/api/consultas/{id_consulta}/buscar-exame/{id_exame?}', [ConsultaController::class, 'api_buscar_exame_consulta_medico'])->name('api_buscar_exame_consulta_medico');
     Route::get('/api/consultas/{id_consulta}/listar-exames', [ConsultaController::class, 'api_listar_exames_consulta_medico'])->name('api_listar_exames_consulta_medico');
     Route::post('/api/consultas/{id_consulta}/adicionar-receita', [ConsultaController::class, 'api_adicionar_receita_consulta_medico'])->name('api_adicionar_receita_consulta_medico');

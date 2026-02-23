@@ -57,7 +57,7 @@
                         <i class="fa-regular fa-clock"></i> Histórico de Diagnóstico
                     </div>
                     <div class="rc-history-list" id="historico-diagnosticos">
-                       
+
                     </div>
 
                 </div>
@@ -68,13 +68,14 @@
                 <h3 class="rc-tab-title">Solicitar Exame</h3>
                 <div style="display: flex; flex-direction: column;">
                     <label class="mt-3 rc-tab-form-label" for="exame-select">Selecionar Exame</label>
-                    <select class="form-control rc-tab-form-select mb-4" name="exame-select">
+                    <select id="exame-select" class="form-control rc-tab-form-select mb-4" name="exame-select">
                         <option value="">Escolha um exame</option>
                         @foreach ($exames as $exame)
                             <option value="{{ $exame->id_servico_clinico }}">{{ $exame->nome }}</option>
                         @endforeach
                     </select>
-                    <button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Adicionar Exame</button>
+                    <button class="btn btn-primary" onclick="adicionarExame()"><i class="fa-solid fa-plus"></i> Adicionar
+                        Exame</button>
                 </div>
 
                 <div class="table-responsive-sm mt-4">
@@ -86,7 +87,7 @@
                                 <th scope="col" style="width: 0%;">AÇÕES</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tabela-exame">
                             <tr>
                                 <td style="align-content: center;">Hemograma Completo</td>
                                 <td style="align-content: center;">{{ badge_estados('pendente') }}</td>
@@ -234,11 +235,32 @@
             salvarDiagnostico: "{{ route('api_salvar_diagnostico_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
             listarDiagnosticos: "{{ route('api_listar_diagnostico_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
             registroExame: "{{ route('api_registro_exame_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
+            salvarResultadoExame: "{{ route('api_salvar_resultado_exame_consulta_medico', ['id_consulta' => $consulta->id_consulta, 'id_exame' => ':id_exame']) }}",
             buscarExame: "{{ route('api_buscar_exame_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
             listarExames: "{{ route('api_listar_exames_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
             adicionarReceita: "{{ route('api_adicionar_receita_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
             listarReceitas: "{{ route('api_listar_receitas_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
             removerReceita: "{{ route('api_remover_receita_consulta_medico', ['id_consulta' => $consulta->id_consulta, 'id_receita' => ':id_receita']) }}"
+        }
+
+        function badge_estados(estado) {
+            let cor = '#000000'; // Cor padrão
+            let estado_nome = '';
+            switch (estado) {
+                case 'PENDENTE':
+                    cor = '#f59e0b';
+                    estado_nome = 'Pendente';
+                    break;
+              
+                case 'REALIZADO':
+                    cor = '#10b981';
+                    estado_nome = 'Realizado';
+                    break;
+
+            }
+
+            return `<span style='padding: 4px 8px; background-color: ${cor}; color: white; border-radius: 4px;'>${estado_nome}</span>`;
+
         }
     </script>
     <script src="/realizar-consulta.js"></script>
