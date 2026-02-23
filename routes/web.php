@@ -75,6 +75,14 @@ Route::middleware(["web"])->group(function () {
     Route::get('/painel-medico/consultas', [ConsultaController::class, 'mostrar_consultas_medico'])->name('mostrar_consultas_medico');
     Route::get('/painel-medico', [ConsultaController::class, 'painelmedico']);
     Route::get('/painel-medico/consultas/realizar/{id_consulta}', [ConsultaController::class, 'realizar_consulta_medico'])->name('realizar_consulta_medico');
+    Route::post('/api/consultas/{id_consulta}/salvar-diagnostico', [ConsultaController::class, 'api_salvar_diagnostico_consulta_medico'])->name('api_salvar_diagnostico_consulta_medico');
+    Route::get('/api/consultas/{id_consulta}/listar-diagnostico', [ConsultaController::class, 'api_listar_diagnostico_consulta_medico'])->name('api_listar_diagnostico_consulta_medico');
+    Route::post('/api/consultas/{id_consulta}/registro-exame/{id_exame?}', [ConsultaController::class, 'api_registro_exame_consulta_medico'])->name('api_registro_exame_consulta_medico');
+    Route::get('/api/consultas/{id_consulta}/buscar-exame/{id_exame?}', [ConsultaController::class, 'api_buscar_exame_consulta_medico'])->name('api_buscar_exame_consulta_medico');
+    Route::get('/api/consultas/{id_consulta}/listar-exames', [ConsultaController::class, 'api_listar_exames_consulta_medico'])->name('api_listar_exames_consulta_medico');
+    Route::post('/api/consultas/{id_consulta}/adicionar-receita', [ConsultaController::class, 'api_adicionar_receita_consulta_medico'])->name('api_adicionar_receita_consulta_medico');
+    Route::post('/api/consultas/{id_consulta}/listar-receitas', [ConsultaController::class, 'api_listar_receitas_consulta_medico'])->name('api_listar_receitas_consulta_medico');
+    Route::delete('/api/consultas/{id_consulta}/remover-receita/{id_receita}', [ConsultaController::class, 'api_remover_receita_consulta_medico'])->name('api_remover_receita_consulta_medico');
 
     // ===== ROTAS DO ADMINISTRADOR =====
     Route::get('/admin/dashboard', [AdminController::class, 'mostrar_dashboard_admin']);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Consulta;
+use App\Models\Diagnostico;
 use App\Models\Especialidade;
 use App\Models\Horario;
 use App\Models\ItemPagamento;
@@ -285,7 +286,56 @@ class ConsultaController extends Controller
             return back()->with('erro', 'Não tem permissão para acessar esta consulta');
         }
         $paciente = Paciente::find($consulta->id_paciente);
-        $exames = ServicoClinico::where("id_tipo_consulta", 4)->get();
+        $exames = ServicoClinico::where('id_tipo_consulta', 4)->get();
+
         return view('consultas.realizar_consulta_medico', compact('consulta', 'paciente', 'exames'));
+    }
+
+    public function api_salvar_diagnostico_consulta_medico(Request $request, $id_consulta)
+    {
+        $utilizador = verificar_medico();
+        if (! $utilizador) {
+            return response()->json(['erro' => 'Não tem permissão para acessar esta API'], 403);
+        }
+        $consulta = Consulta::find($id_consulta);
+        if (! $consulta) {
+            return response()->json(['erro' => 'Consulta não encontrada'], 404);
+        }
+        if ($consulta->id_medico != $utilizador->id_medico) {
+            return response()->json(['erro' => 'Não tem permissão para acessar esta consulta'], 403);
+        }
+        try {
+            Diagnostico::create(
+                ['id_consulta' => $id_consulta, 'descricao' => $request->diagnostico, 'criado_em' => date('Y-m-d H:i:s'),'actualizado_em' => date('Y-m-d H:i:s')],
+
+            );
+        } catch (\Exception $e) {
+            return response()->json(['erro' => 'Erro ao salvar diagnóstico: '.$e->getMessage()], 500);
+        }
+
+        return response()->json(['sucesso' => 'Diagnóstico salvo com sucesso']);
+    }
+
+    public function api_listar_diagnostico_consulta_medico($id_consulta)
+    {
+        $utilizador = verificar_medico();
+        if (! $utilizador) {
+            return response()->json(['erro' => 'Não tem permissão para acessar esta API'], 403);
+        }
+        $consulta = Consulta::find($id_consulta);
+        if (! $consulta) {
+            return response()->json(['erro' => 'Consulta não encontrada'], 404);
+        }
+        if ($consulta->id_medico != $utilizador->id_medico) {
+            return response()->json(['erro' => 'Não tem permissão para acessar esta consulta'], 403);
+        }
+        $diagnosticos = Diagnostico::select('id_diagnostico', 'descricao', 'medico.nome as medico', 'criado_em as data')
+            ->join('consultas', 'diagnosticos.id_consulta', '=', 'consultas.id_consulta')
+            ->join('medico', 'medico.id_medico', '=', 'consultas.id_medico')
+            ->where('diagnosticos.id_consulta', $id_consulta)
+            ->orderBy('criado_em', 'desc')
+            ->get();
+
+        return response()->json($diagnosticos);
     }
 }

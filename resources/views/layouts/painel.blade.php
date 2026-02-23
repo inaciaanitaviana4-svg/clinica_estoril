@@ -32,24 +32,24 @@
                 <!-- Navegação Desktop   active -->
                 <nav class="nav-menu">
                     @if (session('tipo_utilizador') == 'paciente')
-                        <a href="/consultas-paciente" class="nav-link">Consultas</a>
-                        <a href="/listar-minhas-notificacoes" class="nav-link">Notificações</a>
+                        <a href="/consultas-paciente" class="nav-link"><i class="fa-solid fa-stethoscope"></i> Consultas</a>
+                        <a href="/listar-minhas-notificacoes" class="nav-link"><i class="fa-solid fa-bell"></i> Notificações</a>
                     @endif
                     @if (session('tipo_utilizador') == 'medico')
-                        <a href="/prontuarios" class="nav-link">Prontuarios</a>
-                        <a href="/consulta" class="nav-link">Consultas</a>
-                        <a href="/horarios" class="nav-link">Horarios</a>
-                        <a href="/relatorio_medico" class="nav-link">Relatórios</a>
+                        <a href="/prontuarios" class="nav-link"><i class="fa-solid fa-file-medical"></i> Prontuarios</a>
+                        <a href="/consulta" class="nav-link"><i class="fa-solid fa-calendar-check"></i> Consultas</a>
+                        <a href="/horarios" class="nav-link"><i class="fa-solid fa-clock"></i> Horarios</a>
+                        <a href="/relatorio_medico" class="nav-link"><i class="fa-solid fa-file-alt"></i> Relatórios</a>
                     @endif
                     @if (session('tipo_utilizador') == 'recepcionista')
                         <a href="{{ route('mostrar_consultas_recepcionista') }}"
-                            class="nav-link {{ link_ativo('mostrar_consultas_recepcionista') }}">Consultas/Agendamentos</a>
+                            class="nav-link {{ link_ativo('mostrar_consultas_recepcionista') }}"><i class="fa-solid fa-stethoscope"></i> Consultas/Agendamentos</a>
                         <a href="{{ route('mostrar_pagamentos_recepcionista') }}"
-                            class="nav-link {{ link_ativo('mostrar_pagamentos_recepcionista') }}">Pagamentos</a>
+                            class="nav-link {{ link_ativo('mostrar_pagamentos_recepcionista') }}"><i class="fa-solid fa-credit-card"></i> Pagamentos</a>
                         <a href="{{ route('mostrar_pacientes_recepcionista') }}"
-                            class="nav-link {{ link_ativo('mostrar_pacientes_recepcionista') }}">Pacientes</a>
+                            class="nav-link {{ link_ativo('mostrar_pacientes_recepcionista') }}"><i class="fa-solid fa-users"></i> Pacientes</a>
                     @endif
-                    <a class="nav-link" style=" font-weight: 500; color:red;" href="/sair"><strong>Sair</strong></a>
+                    <a class="nav-link" style=" font-weight: 500; color:red;" href="/sair"><strong><i class="fa-solid fa-right-from-bracket"></i> Sair</strong></a>
                     <a href="/visualizar-perfil" class="nav-link"><i style="font-size: 28px; color: #0066cc"
                             class="fa-solid fa-circle-user"></i></a>
                 </nav>

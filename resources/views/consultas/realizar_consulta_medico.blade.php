@@ -47,26 +47,19 @@
                 <div class="mb-3">
                     <label class="rc-tab-form-label"><i class="fa-regular fa-comment-dots"></i> Descrição do
                         Diagnóstico</label>
-                    <textarea class="form-control" placeholder="Descreva o diagnóstico, sintomas observados, hipóteses e recomendações..."
-                        rows="10"></textarea>
+                    <textarea class="form-control" id="diagnostico-textarea"
+                        placeholder="Descreva o diagnóstico, sintomas observados, hipóteses e recomendações..." rows="10"></textarea>
                 </div>
-                <button class="btn btn-primary" style="width: 100%;">Salvar Diagnóstico</button>
+                <button class="btn btn-primary" style="width: 100%;" id="salvar-diagnostico-btn">Salvar Diagnóstico</button>
 
                 <div>
                     <div class="rc-section-title mt-4">
                         <i class="fa-regular fa-clock"></i> Histórico de Diagnóstico
                     </div>
-                    <div class="rc-history-list">
-                        <div class="rc-history-item">
-                            <div class="rc-history-meta">
-                                <span><i class="fa-regular fa-calendar-days"></i> 20 Fev 2026</span>
-                                <span><i class="fa-solid fa-user-doctor"></i> Dr. Inácia Anita IAV</span>
-                            </div>
-                            <div class="rc-history-content">Paciente apresenta sintomas de gripe comum. Febre baixa
-                                (37.8°C), tosse seca e dor de garganta. Sem sinais de complicação respiratória. Recomendado
-                                repouso e hidratação adequada. Prescrever analgésico para controle da febre.</div>
-                        </div>
+                    <div class="rc-history-list" id="historico-diagnosticos">
+                       
                     </div>
+
                 </div>
             </div>
 
@@ -199,40 +192,54 @@
             </div>
         </div>
     </section>
-@endsection
-<!-- Button trigger modal -->
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Nome do Exame</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="rc-tab-form-label"><i class="fa-solid fa-file-waveform"></i> Resultado do Exame</label>
-                    <textarea class="form-control" placeholder="Descreva o resultado do exame, observações e recomendações..."
-                        rows="10"></textarea>
-
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Nome do Exame</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="mb-3">
-                    <label class="rc-tab-form-label"><i class="fa-regular fa-comment-dots"></i>Observações Adicionais(opcional)</label>
-                    <textarea class="form-control" placeholder="observações gerais, recomendações ou notas do laboratório..."
-                        rows="5"></textarea>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="rc-tab-form-label"><i class="fa-solid fa-file-waveform"></i> Resultado do
+                            Exame</label>
+                        <textarea class="form-control" placeholder="Descreva o resultado do exame, observações e recomendações..."
+                            rows="10"></textarea>
 
+                    </div>
+                    <div class="mb-3">
+                        <label class="rc-tab-form-label"><i class="fa-regular fa-comment-dots"></i>Observações
+                            Adicionais(opcional)</label>
+                        <textarea class="form-control" placeholder="observações gerais, recomendações ou notas do laboratório..."
+                            rows="5"></textarea>
+
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary">Salvar</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary">Salvar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+@endsection
 @section('script')
     <script src="/tabs.js"></script>
+    <script>
+        const csrfToken = "{{ csrf_token() }}";
+        const api = {
+            salvarDiagnostico: "{{ route('api_salvar_diagnostico_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
+            listarDiagnosticos: "{{ route('api_listar_diagnostico_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
+            registroExame: "{{ route('api_registro_exame_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
+            buscarExame: "{{ route('api_buscar_exame_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
+            listarExames: "{{ route('api_listar_exames_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
+            adicionarReceita: "{{ route('api_adicionar_receita_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
+            listarReceitas: "{{ route('api_listar_receitas_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
+            removerReceita: "{{ route('api_remover_receita_consulta_medico', ['id_consulta' => $consulta->id_consulta, 'id_receita' => ':id_receita']) }}"
+        }
+    </script>
+    <script src="/realizar-consulta.js"></script>
 @endsection

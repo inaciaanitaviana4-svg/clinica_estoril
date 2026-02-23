@@ -44,14 +44,20 @@
                 </div>
 
                 <div style="display: flex; flex-direction: column; margin-top: 20px;">
-                    <?php $menus = [['href' => '/admin/dashboard', 'titulo' => 'Dashboard'], ['href' => '/admin/pagamentos', 'titulo' => 'Pagamentos'], ['href' => '/admin/cadastros', 'titulo' => 'Cadastros'], ['href' => '/admin/consultas', 'titulo' => 'Consultas'], ['href' => '/admin/prontuarios', 'titulo' => 'Prontuários'], ['href' => '/admin/exames', 'titulo' => 'Exames'], ['href' => '/admin/relatorios-medicos', 'titulo' => 'Relatórios Medicos']];
+                    <?php $menus = [['href' => '/admin/dashboard', 'titulo' => 'Dashboard','icon' => 'fa-solid fa-gauge'],
+                     ['href' => '/admin/pagamentos', 'titulo' => 'Pagamentos', 'icon' => 'fa-solid fa-credit-card'],
+                      ['href' => '/admin/cadastros', 'titulo' => 'Cadastros', 'icon' => 'fa-solid fa-users'],
+                       ['href' => '/admin/consultas', 'titulo' => 'Consultas', 'icon' => 'fa-solid fa-stethoscope'],
+                        ['href' => '/admin/prontuarios', 'titulo' => 'Prontuários', 'icon' => 'fa-solid fa-file-medical'],
+                         ['href' => '/admin/exames', 'titulo' => 'Exames', 'icon' => 'fa-solid fa-microscope'],
+                          ['href' => '/admin/relatorios-medicos', 'titulo' => 'Relatórios Medicos', 'icon' => 'fa-solid fa-file-alt']];
                     ?>
                     @foreach ($menus as $menu)
                         <a class="sidebar-menu-item" style="padding: 12px 16px; font-weight: 500;"
-                            href="{{ $menu['href'] }}">{{ $menu['titulo'] }}</a>
+                            href="{{ $menu['href'] }}"><i class="{{ $menu['icon'] }}"></i> {{ $menu['titulo'] }}</a>
                     @endforeach
                     <a class="sidebar-menu-item" style="padding: 12px 16px; font-weight: 500; color:red;"
-                        href="/sair"><strong>Sair</strong></a>
+                        href="/sair"><i class="fa-solid fa-right-from-bracket"></i> <strong>Sair</strong></a>
                 </div>
             </aside>
         </div>
@@ -111,7 +117,7 @@
             const menu = menus.item(i)
             menu.classList.remove("sidebar-menu-item-active")
             const href = menu.getAttribute("href")
-            if ( url.startsWith(href)) {
+            if (url.startsWith(href)) {
                 menu.classList.add("sidebar-menu-item-active")
             }
         }
@@ -123,32 +129,32 @@
     <script type="text/javascript" src="/toastify-js.js"></script>
     <script>
         /* Toastify({
-                text: "Mensagem de sucesso!",
-                close: true,
-                gravity: "top",
-                position: "right",
-                stopOnFocus: true,
-                backgroundColor: "#4BB543", // verde de sucesso
-            }).showToast();
+                        text: "Mensagem de sucesso!",
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        stopOnFocus: true,
+                        backgroundColor: "#4BB543", // verde de sucesso
+                    }).showToast();
 
-            Toastify({
-                text: "Mensagem de erro!",
-                close: true,
-                gravity: "top",
-                position: "right",
-                stopOnFocus: true,
-                backgroundColor: "#FF3333", // vermelho de erro
-            }).showToast();
+                    Toastify({
+                        text: "Mensagem de erro!",
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        stopOnFocus: true,
+                        backgroundColor: "#FF3333", // vermelho de erro
+                    }).showToast();
 
-            Toastify({
-                text: "Mensagem de informação!",
-                close: true,
-                gravity: "top",
-                position: "right",
-                stopOnFocus: true,
-                backgroundColor: "#3498db", // azul de informação
-            }).showToast();
-            */
+                    Toastify({
+                        text: "Mensagem de informação!",
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        stopOnFocus: true,
+                        backgroundColor: "#3498db", // azul de informação
+                    }).showToast();
+                    */
     </script>
 
     <script>
