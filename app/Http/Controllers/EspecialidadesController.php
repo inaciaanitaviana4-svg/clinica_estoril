@@ -8,8 +8,15 @@ use Illuminate\Http\Request;
 class EspecialidadesController extends Controller
 {
     //
+
+    public function especialidade(){
+       $especialidades= Especialidade::all();
+       return view("especialidades",compact("especialidades"));
+
+    }
     public function mostrar_registro_especialidade_admin($id_espec = null)
     {
+        $totalEspecialidades= Especialidade::count();
         $especialidade = Especialidade::find($id_espec);
         if ($id_espec && !$especialidade) {
             return redirect()->back()->with("error", "especialidade não encontrada");

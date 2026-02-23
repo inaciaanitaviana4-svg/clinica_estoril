@@ -225,6 +225,7 @@ class PacienteController extends Controller
 
     public function salvar_cadastro_paciente_recepcionista(Request $request)
     {
+        $totalPacientes= Paciente::count();
         $utilizador = verificar_recepcionista();
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');

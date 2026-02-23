@@ -37,7 +37,7 @@
                         <i class="fas fa-users"></i>
                     </div>
                     <div class="stat-info">
-                        <h3 class="stat-number">20.000+</h3>
+                        <h3 class="stat-number">{{ $totalPacientes }} </h3>
                         <p class="stat-label">Pacientes Atendidos</p>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                         <i class="fas fa-award"></i>
                     </div>
                     <div class="stat-info">
-                        <h3 class="stat-number">10</h3>
+                        <h3 class="stat-number">{{ $anosExperiencia }} </h3>
                         <p class="stat-label">Anos de Experiência</p>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                         <i class="fas fa-stethoscope"></i>
                     </div>
                     <div class="stat-info">
-                        <h3 class="stat-number">20+</h3>
+                        <h3 class="stat-number">{{ $totalEspecialidades }} </h3>
                         <p class="stat-label">Especialidades</p>
                     </div>
                 </div>

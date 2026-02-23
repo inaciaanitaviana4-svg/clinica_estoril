@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Configuracao;
+use App\Models\Especialidade;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\View\View;
+use App\Models\Paciente;
 use Illuminate\Support\Facades\Auth;
 class SiteController extends Controller
 {
@@ -12,7 +16,15 @@ class SiteController extends Controller
      */
     public function inicio(): View
     {
-        return view("index");
+        $config= Configuracao::first();
+        $anoAtual = Carbon::now()->year;
+        $anosExperiencia = $anoAtual-$config ->ano_fundacao;
+
+        $totalPacientes= paciente::count();
+        $totalEspecialidades= Especialidade::count();
+        
+        $especialidades= Especialidade::all();
+        return view("index" ,compact("anosExperiencia","totalPacientes", "totalEspecialidades", "especialidades"));
             
         
     }
