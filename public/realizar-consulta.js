@@ -82,17 +82,22 @@ async function adicionarExame() {
                 id_servico_clinico: exameId,
             }),
         });
+
+        const data = await response.json();
+
         if (!response.ok) {
-            throw new Error("Erro ao adicionar exame: " + response.statusText);
+            throw new Error("Erro ao adicionar exame: " + data?.erro || "");
         }
-        const exame = await response.json();
+
         alert("Exame adicionado com sucesso!");
+
         await listarExames();
         exameSelect.value = ""; // Limpa a seleção após adicionar
     } catch (error) {
         console.error("Erro ao adicionar exame:", error);
         alert(
-            "Ocorreu um erro ao adicionar o exame. Por favor, tente novamente."
+            "Ocorreu um erro ao adicionar o exame. Por favor, tente novamente.\n" +
+                error?.message || ""
         );
     }
 }
@@ -116,9 +121,9 @@ async function listarExames() {
             const novaLinha = document.createElement("tr");
             let acaoBtn = "";
             if (exame.status === "PENDENTE") {
-                acaoBtn = `<button class="btn btn-sm btn-primary" onclick="adicionarResultadoExame(${exame.id_exame_realizado},${exame})">Adicionar Resultado</button>`;
+                acaoBtn = `<button class="btn btn-sm btn-primary" onclick="adicionarResultadoExame(${exame.id_exame_solicitado})">Adicionar Resultado</button>`;
             } else if (exame.status === "REALIZADO") {
-                acaoBtn = `<button class="btn btn-sm btn-success" onclick="visualizarExame(${exame.id_exame_realizado}, ${exame})">Visualizar Resultado</button>`;
+                acaoBtn = `<button class="btn btn-sm btn-success" onclick="visualizarExame(${exame.id_exame_solicitado})">Visualizar Resultado</button>`;
             }
             novaLinha.innerHTML = `
                 <td style="align-content: center;">${exame.nome_exame}</td>
@@ -136,10 +141,150 @@ async function listarExames() {
     }
 }
 
-function adicionarResultadoExame(id, dados) {
-    console.log({ id, dados });
+async function salvarResultadoExame() {
+    try {
+        let resultadoTextarea = document.getElementById(
+            "exame-resultado-modal"
+        );
+        let observacoesTextarea = document.getElementById(
+            "exame-observacoes-modal"
+        );
+        let idInput = document.getElementById("exame-id-modal");
+
+        const resultado = resultadoTextarea?.value?.trim() || "";
+        const observacoes = observacoesTextarea?.value?.trim() || "";
+        const id = idInput?.value?.trim();
+
+        if (resultado === "") {
+            alert("Por favor, preencha o resultado antes de salvar.");
+            return;
+        }
+
+        const url = api.salvarResultadoExame.replace(":id_exame", id);
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken,
+            },
+            body: JSON.stringify({
+                resultado,
+                observacoes,
+            }),
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data?.erro || "Error ao salvar resultado do exame");
+        }
+
+        alert("Resultado salvo com sucesso!");
+        $("#visualizarExameModal").modal("hide");
+        await listarExames();
+
+        resultadoTextarea.value = "";
+        observacoesTextarea.value = "";
+        idInput.value = "";
+    } catch (error) {
+        alert(
+            "Ocorreu um erro ao salvar o resultado do exame: " +
+                error?.message || ""
+        );
+
+        console.error("Erro ao salvar resultado do exame:", error);
+    }
 }
 
-function visualizarExame(id, dados) {
-    cosole.log({ id, dados });
+async function adicionarResultadoExame(id) {
+    try {
+        const url = api.buscarExame.replace(":id_exame", id);
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken,
+            },
+        });
+
+        const data = await response.json();
+
+        if (!response?.ok) {
+            throw new Error(data?.erro || "Erro ao buscar os dados do exame");
+        }
+
+        let salvarBtn = document.getElementById("salvar-resultado-exame-btn");
+        let idInput = document.getElementById("exame-id-modal");
+        let title = document.getElementById("exame-titulo-modal");
+        let resultado = document.getElementById("exame-resultado-modal");
+        let observacoes = document.getElementById("exame-observacoes-modal");
+
+        title.removeAttribute("readonly");
+        resultado.removeAttribute("readonly");
+        observacoes.removeAttribute("readonly");
+        title.removeAttribute("disabled");
+        resultado.removeAttribute("disabled");
+        observacoes.removeAttribute("disabled");
+        salvarBtn.style.display = "block";
+
+        idInput.value = id;
+        title.innerHTML = `Exame: ${data?.nome_exame || ""}`;
+        resultado.value = data?.resultado || "";
+        observacoes.value = data?.observacoes || "";
+
+        $("#visualizarExameModal").modal("show");
+    } catch (error) {
+        alert(
+            "Ocorreu um erro ao buscar os dados do exame: " + error?.message ||
+                ""
+        );
+
+        console.error("Erro ao adicionar resultado exame:", error);
+    }
+}
+
+async function visualizarExame(id) {
+    try {
+        const url = api.buscarExame.replace(":id_exame", id);
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken,
+            },
+        });
+
+        const data = await response.json();
+
+        if (!response?.ok) {
+            throw new Error(data?.erro || "Erro ao buscar os dados do exame");
+        }
+
+        let salvarBtn = document.getElementById("salvar-resultado-exame-btn");
+        let idInput = document.getElementById("exame-id-modal");
+        let title = document.getElementById("exame-titulo-modal");
+        let resultado = document.getElementById("exame-resultado-modal");
+        let observacoes = document.getElementById("exame-observacoes-modal");
+
+        idInput.value = id;
+        title.innerHTML = `Exame: ${data?.nome_exame || ""}`;
+        resultado.value = data?.resultado || "";
+        observacoes.value = data?.observacoes || "";
+
+        title.setAttribute("readonly", "readonly");
+        resultado.setAttribute("readonly", "readonly");
+        observacoes.setAttribute("readonly", "readonly");
+        title.setAttribute("disabled", "disabled");
+        resultado.setAttribute("disabled", "disabled");
+        observacoes.setAttribute("disabled", "disabled");
+        salvarBtn.style.display = "none";
+
+        $("#visualizarExameModal").modal("show");
+    } catch (error) {
+        alert(
+            "Ocorreu um erro ao buscar os dados do exame: " + error?.message ||
+                ""
+        );
+
+        console.error("Erro ao adicionar resultado exame:", error);
+    }
 }

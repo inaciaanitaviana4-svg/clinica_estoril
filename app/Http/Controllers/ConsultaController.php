@@ -311,7 +311,7 @@ class ConsultaController extends Controller
 
             );
         } catch (\Exception $e) {
-            return response()->json(['erro' => 'Erro ao salvar diagnóstico: '.$e->getMessage()], 500);
+            return response()->json(['erro' => 'Erro ao salvar diagnóstico: ' . $e->getMessage()], 500);
         }
 
         return response()->json(['sucesso' => 'Diagnóstico salvo com sucesso']);
@@ -374,6 +374,16 @@ class ConsultaController extends Controller
         if ($consulta->id_medico != $utilizador->id_medico) {
             return response()->json(['erro' => 'Não tem permissão para acessar esta consulta'], 403);
         }
+
+        $exame_existe = ExameSolicitado::where([
+            "id_consulta" => $id_consulta,
+            "id_servico_clinico" => $request->id_servico_clinico
+        ])->first();
+
+        if ($exame_existe) {
+            return response()->json(['erro' => 'Este exame já foi adicionado a essa consulta'], 400);
+        }
+
         try {
             if ($id_exame) {
                 $exame = ExameSolicitado::find($id_exame);
@@ -385,16 +395,18 @@ class ConsultaController extends Controller
                 $exame->save();
             } else {
                 ExameSolicitado::create(
-                    ['id_consulta' => $id_consulta,
+                    [
+                        'id_consulta' => $id_consulta,
                         'id_servico_clinico' => $request->id_servico_clinico,
                         'status' => 'PENDENTE',
                         'criado_em' => date('Y-m-d H:i:s'),
-                        'actualizado_em' => date('Y-m-d H:i:s')],
+                        'actualizado_em' => date('Y-m-d H:i:s')
+                    ],
 
                 );
             }
         } catch (\Exception $e) {
-            return response()->json(['erro' => 'Erro ao registrar exame: '.$e->getMessage()], 500);
+            return response()->json(['erro' => 'Erro ao registrar exame: ' . $e->getMessage()], 500);
         }
 
         return response()->json(['sucesso' => 'Exame registrado com sucesso']);
@@ -424,9 +436,27 @@ class ConsultaController extends Controller
             $exame->actualizado_em = date('Y-m-d H:i:s');
             $exame->save();
         } catch (\Exception $e) {
-            return response()->json(['erro' => 'Erro ao salvar resultado do exame: '.$e->getMessage()], 500);
+            return response()->json(['erro' => 'Erro ao salvar resultado do exame: ' . $e->getMessage()], 500);
         }
 
         return response()->json(['sucesso' => 'Resultado do exame salvo com sucesso']);
+    }
+
+    public function api_buscar_exame_consulta_medico($id_exame)
+    {
+        $utilizador = verificar_medico();
+        if (! $utilizador) {
+            return response()->json(['erro' => 'Não tem permissão para acessar esta API'], 403);
+        }
+        $exame = ExameSolicitado::select('exames_solicitados.*', 'servicos_clinicos.nome as nome_exame')
+            ->join('servicos_clinicos', 'exames_solicitados.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+            ->where("id_exame_solicitado", $id_exame)
+            ->first();
+
+        if (! $exame) {
+            return response()->json(['erro' => 'Exame não encontrado'], 404);
+        }
+
+        return response()->json($exame);
     }
 }
