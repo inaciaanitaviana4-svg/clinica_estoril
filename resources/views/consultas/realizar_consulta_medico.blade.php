@@ -50,7 +50,7 @@
                     <textarea class="form-control" id="diagnostico-textarea"
                         placeholder="Descreva o diagnóstico, sintomas observados, hipóteses e recomendações..." rows="10"></textarea>
                 </div>
-                <button class="btn btn-primary" style="width: 100%;" id="salvar-diagnostico-btn">Salvar Diagnóstico</button>
+                <button class="btn btn-primary" style="width: 100%;" onclick="salvarDiagnostico()">Salvar Diagnóstico</button>
 
                 <div>
                     <div class="rc-section-title mt-4">
@@ -88,19 +88,6 @@
                             </tr>
                         </thead>
                         <tbody id="tabela-exame">
-                            <tr>
-                                <td style="align-content: center;">Hemograma Completo</td>
-                                <td style="align-content: center;">{{ badge_estados('pendente') }}</td>
-                                <td style="align-content: center;">
-                                    @if ('concluida' !== 'pendente')
-                                        <button class="btn btn-green" data-toggle="modal" data-target="#exampleModal"><i
-                                                class="fa-regular fa-pen-to-square"></i> Ver Resultado</button>
-                                    @else
-                                        <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i
-                                                class="fa-regular fa-pen-to-square"></i> Inserir Resultado</button>
-                                    @endif
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -251,7 +238,7 @@
                     cor = '#f59e0b';
                     estado_nome = 'Pendente';
                     break;
-              
+
                 case 'REALIZADO':
                     cor = '#10b981';
                     estado_nome = 'Realizado';
