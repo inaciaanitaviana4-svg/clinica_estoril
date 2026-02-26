@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
     await listarDiagnosticos();
     await listarExames();
+    await listarMedicamentos();
 });
 
 async function salvarDiagnostico() {
@@ -97,7 +98,7 @@ async function adicionarExame() {
         console.error("Erro ao adicionar exame:", error);
         alert(
             "Ocorreu um erro ao adicionar o exame. Por favor, tente novamente.\n" +
-                error?.message || ""
+            error?.message || ""
         );
     }
 }
@@ -128,8 +129,8 @@ async function listarExames() {
             novaLinha.innerHTML = `
                 <td style="align-content: center;">${exame.nome_exame}</td>
                 <td style="align-content: center;">${badge_estados(
-                    exame.status
-                )}</td>
+                exame.status
+            )}</td>
                 <td style="align-content: center;">
                     ${acaoBtn}
                 </td>
@@ -188,7 +189,7 @@ async function salvarResultadoExame() {
     } catch (error) {
         alert(
             "Ocorreu um erro ao salvar o resultado do exame: " +
-                error?.message || ""
+            error?.message || ""
         );
 
         console.error("Erro ao salvar resultado do exame:", error);
@@ -235,7 +236,7 @@ async function adicionarResultadoExame(id) {
     } catch (error) {
         alert(
             "Ocorreu um erro ao buscar os dados do exame: " + error?.message ||
-                ""
+            ""
         );
 
         console.error("Erro ao adicionar resultado exame:", error);
@@ -282,9 +283,141 @@ async function visualizarExame(id) {
     } catch (error) {
         alert(
             "Ocorreu um erro ao buscar os dados do exame: " + error?.message ||
-                ""
+            ""
         );
 
         console.error("Erro ao adicionar resultado exame:", error);
+    }
+
+}
+async function adicionarMedicamento() {
+    const medicamentoInput = document.getElementById("receitaMedicamento")
+    const dosagemInput = document.getElementById("receitaDosagem")
+    const frequenciaInput = document.getElementById("receitaFrequencia")
+    const duracaoInput = document.getElementById("receitaDuracao")
+    const medicamento = medicamentoInput?.value?.trim() || "";
+    const dosagem = dosagemInput?.value?.trim() || "";
+    const frequencia = frequenciaInput?.value?.trim() || "";
+    const duracao = duracaoInput?.value?.trim() || "";
+    if (!medicamento) {
+        alert("Por favor, informe o medicamento para adicionar.");
+        return;
+    }
+    if (!dosagem) {
+        alert("Por favor, informe a dosagem para adicionar.");
+        return;
+    }
+    if (!frequencia) {
+        alert("Por favor, informe a frequência para adicionar.");
+        return;
+    }
+    if (!duracao) {
+        alert("Por favor, informe a duração para adicionar.");
+        return;
+    }
+    try {
+        const response = await fetch(api.adicionarMedicamento, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken,
+            },
+            body: JSON.stringify({
+                medicamento,
+                dosagem,
+                frequencia,
+                duracao
+            }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                "Erro ao adicionar medicamento: " + data?.erro || ""
+            );
+        }
+
+        alert("Medicamento adicionado com sucesso!");
+
+        await listarMedicamentos();
+        medicamentoInput.value = ""; // Limpa a seleção após adicionar
+        dosagemInput.value = ""; // Limpa a seleção após adicionar
+        frequenciaInput.value = ""; // Limpa a seleção após adicionar
+        duracaoInput.value = ""; // Limpa a seleção após adicionar
+    } catch (error) {
+        console.error("Erro ao adicionar medicamento:", error);
+        alert(
+            "Ocorreu um erro ao adicionar o medicamento. Por favor, tente novamente.\n" +
+            error?.message || ""
+        );
+    }
+}
+
+async function listarMedicamentos() {
+    try {
+        const response = await fetch(api.listarMedicamentos, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken,
+            },
+        });
+        if (!response.ok) {
+            throw new Error(
+                "Erro ao listar medicamentos: " + response.statusText
+            );
+        }
+        const medicamentos = await response.json();
+        const tabelaMedicamentos = document.getElementById("lista-medicamentos");
+        tabelaMedicamentos.innerHTML = "";
+        medicamentos.forEach((medicamento) => {
+            const novaLinha = document.createElement("div");
+            novaLinha.innerHTML = `
+               <div class="medication-item">
+                        <div class="medication-fields">
+                            <div>
+                                <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:.2rem;">Medicamento
+                                </div>
+                                <div style="font-weight:500;">${medicamento.medicamento}</div>
+                            </div>
+                            <div>
+                                <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:.2rem;">Dosagem
+                                </div>
+                                <div>${medicamento.dosagem}</div>
+                            </div>
+                            <div>
+                                <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:.2rem;">Frequência
+                                </div>
+                                <div>${medicamento.frequencia}</div>
+                            </div>
+                            <div>
+                                <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:.2rem;">Duração
+                                </div>
+                                <div>${medicamento.duracao}</div>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-danger" onclick="removerMedicamento(${medicamento.id_receita_item})">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+            `;
+            tabelaMedicamentos.appendChild(novaLinha);
+        });
+    } catch (error) {
+        console.error("Erro ao listar medicamentos:", error);
+    }
+}
+async function removerMedicamento(id) {
+    const url = api.removerMedicamento.replace(":id_medicamento", id);
+    
+    try {
+        await mostrarRemoverItemModal(url);
+        await listarMedicamentos();
+    } catch (error) {
+        console.error("Erro ao remover medicamento:", error);
+        alert("Ocorreu um erro ao remover o medicamento. Por favor, tente novamente.");
     }
 }

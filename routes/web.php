@@ -6,6 +6,7 @@ use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\EspecialidadesController;
 use App\Http\Controllers\NotificacoesController;
 use App\Http\Controllers\PagamentosController;
+use App\Http\Controllers\ReceitaController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\SiteController;
@@ -81,9 +82,9 @@ Route::middleware(["web"])->group(function () {
     Route::post('/api/consultas/{id_consulta}/salvar-resultado-exame/{id_exame?}', [ConsultaController::class, 'api_salvar_resultado_exame_consulta_medico'])->name('api_salvar_resultado_exame_consulta_medico');
     Route::get('/api/consultas/buscar-exame/{id_exame}', [ConsultaController::class, 'api_buscar_exame_consulta_medico'])->name('api_buscar_exame_consulta_medico');
     Route::get('/api/consultas/{id_consulta}/listar-exames', [ConsultaController::class, 'api_listar_exames_consulta_medico'])->name('api_listar_exames_consulta_medico');
-    Route::post('/api/consultas/{id_consulta}/adicionar-receita', [ConsultaController::class, 'api_adicionar_receita_consulta_medico'])->name('api_adicionar_receita_consulta_medico');
-    Route::post('/api/consultas/{id_consulta}/listar-receitas', [ConsultaController::class, 'api_listar_receitas_consulta_medico'])->name('api_listar_receitas_consulta_medico');
-    Route::delete('/api/consultas/{id_consulta}/remover-receita/{id_receita}', [ConsultaController::class, 'api_remover_receita_consulta_medico'])->name('api_remover_receita_consulta_medico');
+    Route::post('/api/consultas/{id_consulta}/adicionar-medicamento', [ReceitaController::class, 'api_adicionar_medicamento_consulta_medico'])->name('api_adicionar_medicamento_consulta_medico');
+    Route::get('/api/consultas/{id_consulta}/listar-medicamentos', [ReceitaController::class, 'api_listar_medicamentos_consulta_medico'])->name('api_listar_medicamentos_consulta_medico');
+    Route::get('/api/consultas/{id_consulta}/remover-medicamento/{id_medicamento}', [ReceitaController::class, 'api_remover_medicamento_consulta_medico'])->name('api_remover_medicamento_consulta_medico');
 
     // ===== ROTAS DO ADMINISTRADOR =====
     Route::get('/admin/dashboard', [AdminController::class, 'mostrar_dashboard_admin']);

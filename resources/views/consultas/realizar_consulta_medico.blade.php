@@ -103,29 +103,29 @@
                         <label class="rc-tab-form-label">
                             <i class="fa-solid fa-pills"></i> Medicamento
                         </label>
-                        <input type="text" class="form-control" id="medName" placeholder="Ex.: Paracetamol">
+                        <input type="text" class="form-control" id="receitaMedicamento" placeholder="Ex.: Paracetamol">
                     </div>
                     <div class="col-md-3 mb-3">
                         <label class="rc-tab-form-label">
                             <i class="fa-solid fa-droplet"></i> Dosagem
                         </label>
-                        <input type="text" class="form-control" id="medDosage" placeholder="Ex.: 500mg">
+                        <input type="text" class="form-control" id="receitaDosagem" placeholder="Ex.: 500mg">
                     </div>
                     <div class="col-md-3 mb-3">
                         <label class="rc-tab-form-label">
                             <i class="fa-solid fa-clock"></i> Frequência
                         </label>
-                        <input type="text" class="form-control" id="medFrequency" placeholder="Ex.: 8/8h">
+                        <input type="text" class="form-control" id="receitaFrequencia" placeholder="Ex.: 8/8h">
                     </div>
                     <div class="col-md-2 mb-3">
                         <label class="rc-tab-form-label">
                             <i class="fa-solid fa-calendar"></i> Duração
                         </label>
-                        <input type="text" class="form-control" id="medDuration" placeholder="Ex.: 7 dias">
+                        <input type="text" class="form-control" id="receitaDuracao" placeholder="Ex.: 7 dias">
                     </div>
                 </div>
                 <div class="mt-3">
-                    <button class="btn btn-green" onclick="addMedication()">
+                    <button class="btn btn-green" onclick="adicionarMedicamento()">
                         <i class="fa-solid fa-plus"></i> Adicionar Medicamento
                     </button>
                 </div>
@@ -136,43 +136,13 @@
                     Medicamentos Prescritos
                 </div>
 
-                <div class="medication-list" id="medicationList">
-                    <div class="medication-item">
-                        <div class="medication-fields">
-                            <div>
-                                <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:.2rem;">Medicamento
-                                </div>
-                                <div style="font-weight:500;">Amoxicilina</div>
-                            </div>
-                            <div>
-                                <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:.2rem;">Dosagem
-                                </div>
-                                <div>500mg</div>
-                            </div>
-                            <div>
-                                <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:.2rem;">Frequência
-                                </div>
-                                <div>8/8h</div>
-                            </div>
-                            <div>
-                                <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:.2rem;">Duração
-                                </div>
-                                <div>10 dias</div>
-                            </div>
-                        </div>
-                        <div>
-                            <button class="btn btn-danger" onclick="removeMedication(0)">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
+                <div class="medication-list" id="lista-medicamentos">
+                    <!-- Lista de medicamentos será carregada aqui -->
+                   
                 </div>
 
                 <div class="actions-bar">
-                    <button class="btn btn-primary" onclick="savePrescription()">
-                        <i class="fa-regular fa-floppy-disk"></i> Salvar Receita
-                    </button>
-                    <button class="btn btn-secondary" onclick="printPrescription()">
+                    <button class="btn btn-secondary" onclick="imprimirReceita()">
                         <i class="fa-solid fa-print"></i> Imprimir Receita
                     </button>
                 </div>
@@ -227,9 +197,9 @@
         salvarResultadoExame: "{{ route('api_salvar_resultado_exame_consulta_medico', ['id_consulta' => $consulta->id_consulta, 'id_exame' => ':id_exame']) }}",
         buscarExame: "{{ route('api_buscar_exame_consulta_medico', ['id_exame' => ':id_exame']) }}",
         listarExames: "{{ route('api_listar_exames_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
-        adicionarReceita: "{{ route('api_adicionar_receita_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
-        listarReceitas: "{{ route('api_listar_receitas_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
-        removerReceita: "{{ route('api_remover_receita_consulta_medico', ['id_consulta' => $consulta->id_consulta, 'id_receita' => ':id_receita']) }}"
+        adicionarMedicamento: "{{ route('api_adicionar_medicamento_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
+        listarMedicamentos: "{{ route('api_listar_medicamentos_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
+        removerMedicamento: "{{ route('api_remover_medicamento_consulta_medico', ['id_consulta' => $consulta->id_consulta, 'id_medicamento' => ':id_medicamento']) }}"
     }
 
     function badge_estados(estado) {

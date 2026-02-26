@@ -65,7 +65,29 @@
     </header>
 
     @yield('conteudo')
+   <div class="modal fade" id="remover-modal" tabindex="-1" role="dialog" aria-labelledby="remover-modal-label"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="remover-modal-label">Deseja remover esse item?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja remover este item? Esta ação não pode ser desfeita.</p>
 
+                    <p hidden id="remover-modal-error" class="bg-danger text-white"
+                        style="padding: 4px; border-radius: 4px;"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+                    <button id="confirm-button" type="button" class="btn btn-primary">Sim</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- FOOTER -->
     <!-- Botão Voltar ao Topo -->
     <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">
@@ -74,6 +96,38 @@
      <script src="/jquery-3.2.1.slim.min.js"></script>
     <script src="/popper.min.js"></script>
     <script src="/bootstrap.min.js"></script>
+     <script>
+        async function mostrarRemoverItemModal(url) {
+            $('#remover-modal-error').attr("hidden", true)
+            $('#remover-modal-error').text('')
+            $('#remover-modal').modal('show')
+            await $('#confirm-button').on('click', async function(e) {
+                await fetchRemoverItemModal(url)
+            })
+        }
+
+        async function fetchRemoverItemModal(url) {
+            try {
+                const response = await fetch(url, {
+                    method: 'GET'
+                })
+                if (response.ok) {
+                    $('#remover-modal').modal('hide')
+                    $('#remover-modal-error').text('')
+                    location.reload();
+                } else {
+                    const mensagem = await response.json()
+                    $('#remover-modal-error').attr("hidden", false)
+                    $('#remover-modal-error').text('Erro ao remover item: ' + mensagem?.erro || '')
+                    console.error('Erro ao remover item:', response);
+                }
+            } catch (error) {
+                $('#remover-modal-error').attr("hidden", false)
+                $('#remover-modal-error').text('Erro ao remover item')
+                console.error('Erro ao remover item:', error);
+            }
+        }
+    </script>
     @yield('script')
 
 </body>
