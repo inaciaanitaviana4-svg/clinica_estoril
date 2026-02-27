@@ -6,11 +6,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function salvarDiagnostico() {
     const diagnostico_textarea = document.getElementById(
-        "diagnostico-textarea"
+        "diagnostico-textarea",
     );
     const diagnostico = diagnostico_textarea.value.trim();
     if (diagnostico === "") {
-        alert("Por favor, preencha o diagnóstico antes de salvar.");
+        mostrarMensagemAlerta(
+            "Por favor, preencha o diagnóstico antes de salvar.",
+        );
         return;
     }
     await fetch(api.salvarDiagnostico, {
@@ -23,7 +25,7 @@ async function salvarDiagnostico() {
             diagnostico: diagnostico,
         }),
     });
-    alert("Diagnóstico salvo com sucesso!");
+    mostrarMensagemSucesso("Diagnóstico salvo com sucesso!");
     await listarDiagnosticos();
     diagnostico_textarea.value = ""; // Limpa o textarea após salvar
 }
@@ -39,12 +41,12 @@ async function listarDiagnosticos() {
         });
         if (!response.ok) {
             throw new Error(
-                "Erro ao listar diagnósticos: " + response.statusText
+                "Erro ao listar diagnósticos: " + response.statusText,
             );
         }
         const diagnosticos = await response.json();
         const historicoDiagsnoticos = document.getElementById(
-            "historico-diagnosticos"
+            "historico-diagnosticos",
         );
         historicoDiagsnoticos.innerHTML = "";
         diagnosticos.forEach((item) => {
@@ -69,7 +71,7 @@ async function adicionarExame() {
     const exameSelect = document.getElementById("exame-select");
     const exameId = exameSelect.value;
     if (!exameId) {
-        alert("Por favor, selecione um exame para adicionar.");
+        mostrarMensagemAlerta("Por favor, selecione um exame para adicionar.");
         return;
     }
     try {
@@ -90,15 +92,15 @@ async function adicionarExame() {
             throw new Error("Erro ao adicionar exame: " + data?.erro || "");
         }
 
-        alert("Exame adicionado com sucesso!");
+        mostrarMensagemSucesso("Exame adicionado com sucesso!");
 
         await listarExames();
         exameSelect.value = ""; // Limpa a seleção após adicionar
     } catch (error) {
         console.error("Erro ao adicionar exame:", error);
-        alert(
+        mostrarMensagemErro(
             "Ocorreu um erro ao adicionar o exame. Por favor, tente novamente.\n" +
-            error?.message || ""
+                error?.message || "",
         );
     }
 }
@@ -129,8 +131,8 @@ async function listarExames() {
             novaLinha.innerHTML = `
                 <td style="align-content: center;">${exame.nome_exame}</td>
                 <td style="align-content: center;">${badge_estados(
-                exame.status
-            )}</td>
+                    exame.status,
+                )}</td>
                 <td style="align-content: center;">
                     ${acaoBtn}
                 </td>
@@ -145,10 +147,10 @@ async function listarExames() {
 async function salvarResultadoExame() {
     try {
         let resultadoTextarea = document.getElementById(
-            "exame-resultado-modal"
+            "exame-resultado-modal",
         );
         let observacoesTextarea = document.getElementById(
-            "exame-observacoes-modal"
+            "exame-observacoes-modal",
         );
         let idInput = document.getElementById("exame-id-modal");
 
@@ -157,7 +159,9 @@ async function salvarResultadoExame() {
         const id = idInput?.value?.trim();
 
         if (resultado === "") {
-            alert("Por favor, preencha o resultado antes de salvar.");
+            mostrarMensagemAlerta(
+                "Por favor, preencha o resultado antes de salvar.",
+            );
             return;
         }
 
@@ -179,7 +183,7 @@ async function salvarResultadoExame() {
             throw new Error(data?.erro || "Error ao salvar resultado do exame");
         }
 
-        alert("Resultado salvo com sucesso!");
+        mostrarMensagemSucesso("Resultado salvo com sucesso!");
         $("#visualizarExameModal").modal("hide");
         await listarExames();
 
@@ -187,9 +191,9 @@ async function salvarResultadoExame() {
         observacoesTextarea.value = "";
         idInput.value = "";
     } catch (error) {
-        alert(
+        mostrarMensagemErro(
             "Ocorreu um erro ao salvar o resultado do exame: " +
-            error?.message || ""
+                error?.message || "",
         );
 
         console.error("Erro ao salvar resultado do exame:", error);
@@ -234,9 +238,9 @@ async function adicionarResultadoExame(id) {
 
         $("#visualizarExameModal").modal("show");
     } catch (error) {
-        alert(
+        mostrarMensagemErro(
             "Ocorreu um erro ao buscar os dados do exame: " + error?.message ||
-            ""
+                "",
         );
 
         console.error("Erro ao adicionar resultado exame:", error);
@@ -281,38 +285,41 @@ async function visualizarExame(id) {
 
         $("#visualizarExameModal").modal("show");
     } catch (error) {
-        alert(
+        mostrarMensagemErro(
             "Ocorreu um erro ao buscar os dados do exame: " + error?.message ||
-            ""
+                "",
         );
 
         console.error("Erro ao adicionar resultado exame:", error);
     }
-
 }
 async function adicionarMedicamento() {
-    const medicamentoInput = document.getElementById("receitaMedicamento")
-    const dosagemInput = document.getElementById("receitaDosagem")
-    const frequenciaInput = document.getElementById("receitaFrequencia")
-    const duracaoInput = document.getElementById("receitaDuracao")
+    const medicamentoInput = document.getElementById("receitaMedicamento");
+    const dosagemInput = document.getElementById("receitaDosagem");
+    const frequenciaInput = document.getElementById("receitaFrequencia");
+    const duracaoInput = document.getElementById("receitaDuracao");
     const medicamento = medicamentoInput?.value?.trim() || "";
     const dosagem = dosagemInput?.value?.trim() || "";
     const frequencia = frequenciaInput?.value?.trim() || "";
     const duracao = duracaoInput?.value?.trim() || "";
     if (!medicamento) {
-        alert("Por favor, informe o medicamento para adicionar.");
+        mostrarMensagemAlerta(
+            "Por favor, informe o medicamento para adicionar.",
+        );
         return;
     }
     if (!dosagem) {
-        alert("Por favor, informe a dosagem para adicionar.");
+        mostrarMensagemAlerta("Por favor, informe a dosagem para adicionar.");
         return;
     }
     if (!frequencia) {
-        alert("Por favor, informe a frequência para adicionar.");
+        mostrarMensagemAlerta(
+            "Por favor, informe a frequência para adicionar.",
+        );
         return;
     }
     if (!duracao) {
-        alert("Por favor, informe a duração para adicionar.");
+        mostrarMensagemAlerta("Por favor, informe a duração para adicionar.");
         return;
     }
     try {
@@ -326,7 +333,7 @@ async function adicionarMedicamento() {
                 medicamento,
                 dosagem,
                 frequencia,
-                duracao
+                duracao,
             }),
         });
 
@@ -334,11 +341,11 @@ async function adicionarMedicamento() {
 
         if (!response.ok) {
             throw new Error(
-                "Erro ao adicionar medicamento: " + data?.erro || ""
+                "Erro ao adicionar medicamento: " + data?.erro || "",
             );
         }
 
-        alert("Medicamento adicionado com sucesso!");
+        mostrarMensagemSucesso("Medicamento adicionado com sucesso!");
 
         await listarMedicamentos();
         medicamentoInput.value = ""; // Limpa a seleção após adicionar
@@ -347,9 +354,9 @@ async function adicionarMedicamento() {
         duracaoInput.value = ""; // Limpa a seleção após adicionar
     } catch (error) {
         console.error("Erro ao adicionar medicamento:", error);
-        alert(
+        mostrarMensagemErro(
             "Ocorreu um erro ao adicionar o medicamento. Por favor, tente novamente.\n" +
-            error?.message || ""
+                error?.message || "",
         );
     }
 }
@@ -365,11 +372,12 @@ async function listarMedicamentos() {
         });
         if (!response.ok) {
             throw new Error(
-                "Erro ao listar medicamentos: " + response.statusText
+                "Erro ao listar medicamentos: " + response.statusText,
             );
         }
         const medicamentos = await response.json();
-        const tabelaMedicamentos = document.getElementById("lista-medicamentos");
+        const tabelaMedicamentos =
+            document.getElementById("lista-medicamentos");
         tabelaMedicamentos.innerHTML = "";
         medicamentos.forEach((medicamento) => {
             const novaLinha = document.createElement("div");
@@ -410,14 +418,191 @@ async function listarMedicamentos() {
         console.error("Erro ao listar medicamentos:", error);
     }
 }
+
 async function removerMedicamento(id) {
     const url = api.removerMedicamento.replace(":id_medicamento", id);
-    
+
     try {
-        await mostrarRemoverItemModal(url);
-        await listarMedicamentos();
+        await mostrarRemoverItemModal(url, {
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken,
+            },
+            recarregarPagina: false,
+            callback: async (sucesso) => {
+                if (sucesso) {
+                    await listarMedicamentos();
+                } else {
+                    mostrarMensagemErro(
+                        "Não foi possível remover o medicamento. Por favor, tente novamente.",
+                    );
+                }
+            },
+        });
     } catch (error) {
         console.error("Erro ao remover medicamento:", error);
-        alert("Ocorreu um erro ao remover o medicamento. Por favor, tente novamente.");
+        mostrarMensagemErro(
+            "Ocorreu um erro ao remover o medicamento. Por favor, tente novamente.",
+        );
+    }
+}
+
+async function salvarObservacoesReceita() {
+    const observacoesTextarea = document.getElementById("observacoes-receita");
+    const observacoes = observacoesTextarea?.value?.trim() || "";
+
+    try {
+        const response = await fetch(api.salvarObservacoesReceita, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken,
+            },
+            body: JSON.stringify({
+                observacoes: observacoes,
+            }),
+        });
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(
+                data?.erro || "Erro ao salvar observações da receita",
+            );
+        }
+        mostrarMensagemSucesso("Observações salvas com sucesso!");
+    } catch (error) {
+        console.error("Erro ao salvar observações da receita:", error);
+        mostrarMensagemErro(
+            "Ocorreu um erro ao salvar as observações da receita. Por favor, tente novamente.\n" +
+                error?.message || "",
+        );
+    }
+}
+
+async function imprimirReceita(id) {
+    try {
+        const response = await fetch(api.buscarReceita, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken,
+            },
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data?.erro || "Erro ao buscar receita");
+        }
+
+        const docDefinition = {
+            pageSize: "A4",
+            pageMargins: [40, 60, 40, 60],
+            content: [
+                {
+                    text: "RECEITA MÉDICA",
+                    style: "header",
+                    alignment: "center",
+                },
+                { text: "\n" },
+
+                {
+                    columns: [
+                        [
+                            {
+                                text: `Paciente: ${data.consulta.nome_paciente}`,
+                            },
+                            {
+                                text: `Idade: ${new Date().getFullYear() - new Date(data.consulta.data_nascimento_paciente).getFullYear()} anos`,
+                            },
+                            {
+                                text: `Telefone: ${data.consulta.telefone_paciente}`,
+                            },
+                        ],
+                        [
+                            { text: `Data: ${data.consulta.data}` },
+                            { text: `Hora: ${data.consulta.hora}` },
+                            {
+                                text: `Serviço: ${data.consulta.nome_servico_clinico}`,
+                            },
+                        ],
+                    ],
+                },
+
+                { text: "\nPrescrição:\n", style: "subheader" },
+
+                {
+                    table: {
+                        widths: ["*", 70, 80, 70],
+                        body: [
+                            [
+                                { text: "Medicamento", bold: true },
+                                { text: "Dosagem", bold: true },
+                                { text: "Frequência", bold: true },
+                                { text: "Duração", bold: true },
+                            ],
+                            ...data.medicamentos.map((item) => [
+                                item.medicamento,
+                                item.dosagem,
+                                item.frequencia,
+                                item.duracao,
+                            ]),
+                        ],
+                    },
+                    layout: "lightHorizontalLines",
+                },
+
+                data.consulta.observacoes_receita
+                    ? {
+                          text: `\nObservações:\n${data.consulta.observacoes_receita}`,
+                      }
+                    : {},
+
+                {
+                    text: "\n\n\n__________________________________\nAssinatura do Médico",
+                    alignment: "right",
+                },
+
+                {
+                    text: `\nDr(a). ${data.consulta.nome_medico}`,
+                    alignment: "right",
+                },
+            ],
+            styles: {
+                header: { fontSize: 18, bold: true },
+                subheader: { fontSize: 14, bold: true },
+            },
+        };
+
+        const pdfDocGenerator = pdfMake.createPdf(docDefinition);
+
+        pdfDocGenerator.getBuffer((buffer) => {
+            // Cria um Blob e uma URL para o PDF
+            const blob = new Blob([buffer], { type: "application/pdf" });
+            const dataUrl = URL.createObjectURL(blob);
+
+            // Cria um iframe invisível
+            const iframe = document.createElement("iframe");
+            iframe.style.display = "none";
+            iframe.src = dataUrl;
+
+            document.body.appendChild(iframe);
+
+            // Dispara a impressão quando o PDF carregar no iframe
+            iframe.onload = () => {
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+
+                // Opcional: remover o iframe após um tempo para limpeza
+                setTimeout(() => {
+                    URL.revokeObjectURL(dataUrl);
+                    document.body.removeChild(iframe);
+                }, 1000);
+            };
+        });
+    } catch (error) {
+        console.error("Erro ao imprimir receita:", error);
+        mostrarMensagemErro(
+            "Ocorreu um erro ao imprimir a receita. Por favor, tente novamente.",
+        );
     }
 }

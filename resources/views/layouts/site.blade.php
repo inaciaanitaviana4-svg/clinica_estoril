@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Clínica Estoril - A sua saude nas melhores mãos ">
     <title>Clínica Estoril - @yield('titulo')</title>
-    <link rel="stylesheet" href="/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="/toastify.min.css" />
+    <link rel="stylesheet" href="{{asset('styles.css')}}">
+        <link rel="stylesheet" href="{{asset('all.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('toastify.min.css')}}" />
     @yield('estilo')
 </head>
 
@@ -182,12 +182,11 @@
     <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">
         <i class="fas fa-arrow-up"></i>
     </button>
+    <script src="{{asset('script.js')}}"></script>
+    <script src="{{asset('chatbot.js')}}"></script>
+    <script src="{{asset('auth.js')}}"></script>
+    <script src="{{asset('main.js')}}"></script>
     @yield('script')
-
-    <script src="/script.js"></script>
-    <script src="/chatbot.js"></script>
-    <script src="/auth.js"></script>
-    <script src="/main.js"></script>
     <script>
         const url = window.location.pathname
         const menus = document.getElementsByClassName("nav-link")

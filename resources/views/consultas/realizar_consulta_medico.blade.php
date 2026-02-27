@@ -57,9 +57,7 @@
                     <i class="fa-regular fa-clock"></i> Histórico de Diagnóstico
                 </div>
                 <div class="rc-history-list" id="historico-diagnosticos">
-
                 </div>
-
             </div>
         </div>
 
@@ -136,9 +134,16 @@
                     Medicamentos Prescritos
                 </div>
 
-                <div class="medication-list" id="lista-medicamentos">
+                <div class="medication-list mb-3" id="lista-medicamentos">
                     <!-- Lista de medicamentos será carregada aqui -->
-                   
+                </div>
+
+                <div>
+                    <div class="mb-3">
+                        <label class="rc-tab-form-label">Observações</label>
+                        <textarea class="form-control" id="observacoes-receita" placeholder="Observações adicionais, recomendações, etc..." rows="10">{{ $receita->observacoes ?? '' }}</textarea>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;" onclick="salvarObservacoesReceita()">Salvar Observações</button>
                 </div>
 
                 <div class="actions-bar">
@@ -199,7 +204,9 @@
         listarExames: "{{ route('api_listar_exames_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
         adicionarMedicamento: "{{ route('api_adicionar_medicamento_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
         listarMedicamentos: "{{ route('api_listar_medicamentos_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
-        removerMedicamento: "{{ route('api_remover_medicamento_consulta_medico', ['id_consulta' => $consulta->id_consulta, 'id_medicamento' => ':id_medicamento']) }}"
+        removerMedicamento: "{{ route('api_remover_medicamento_consulta_medico', ['id_consulta' => $consulta->id_consulta, 'id_medicamento' => ':id_medicamento']) }}",
+        salvarObservacoesReceita: "{{ route('api_salvar_observacoes_receita_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}",
+        buscarReceita: "{{ route('api_buscar_receita_para_imprimir_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}"
     }
 
     function badge_estados(estado) {

@@ -12,6 +12,7 @@ use App\Models\Medico;
 use App\Models\MetodoPagamento;
 use App\Models\Notificacao;
 use App\Models\Paciente;
+use App\Models\Receita;
 use App\Models\ServicoClinico;
 use App\Models\TipoConsulta;
 use App\Models\Utilizador;
@@ -288,8 +289,9 @@ class ConsultaController extends Controller
         }
         $paciente = Paciente::find($consulta->id_paciente);
         $exames = ServicoClinico::where('id_tipo_consulta', 4)->get();
+        $receita = Receita::where('id_consulta', $id_consulta)->first();
 
-        return view('consultas.realizar_consulta_medico', compact('consulta', 'paciente', 'exames'));
+        return view('consultas.realizar_consulta_medico', compact('consulta', 'paciente', 'exames', 'receita'));
     }
 
     public function api_salvar_diagnostico_consulta_medico(Request $request, $id_consulta)
