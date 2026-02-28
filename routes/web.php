@@ -6,6 +6,7 @@ use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\EspecialidadesController;
 use App\Http\Controllers\NotificacoesController;
 use App\Http\Controllers\PagamentosController;
+use App\Http\Controllers\ProntuarioController;
 use App\Http\Controllers\ReceitaController;
 use Illuminate\Support\Facades\Route;
 
@@ -75,6 +76,8 @@ Route::middleware(["web"])->group(function () {
     // ===== ROTAS DO MÉDICO =====
     Route::get('/painel-medico/consultas', [ConsultaController::class, 'mostrar_consultas_medico'])->name('mostrar_consultas_medico');
     Route::get('/painel-medico', [ConsultaController::class, 'painelmedico']);
+    Route::get('/painel-medico/prontuarios', [ProntuarioController::class, 'mostrar_prontuarios_medico'])->name('mostrar_prontuarios_medico');
+    Route::get('/painel-medico/prontuarios/{id_paciente}', [ProntuarioController::class, 'mostrar_detalhes_prontuario_medico'])->name('mostrar_detalhes_prontuario_medico');
     Route::get('/painel-medico/consultas/realizar/{id_consulta}', [ConsultaController::class, 'realizar_consulta_medico'])->name('realizar_consulta_medico');
     Route::post('/api/consultas/{id_consulta}/salvar-diagnostico', [ConsultaController::class, 'api_salvar_diagnostico_consulta_medico'])->name('api_salvar_diagnostico_consulta_medico');
     Route::get('/api/consultas/{id_consulta}/listar-diagnostico', [ConsultaController::class, 'api_listar_diagnostico_consulta_medico'])->name('api_listar_diagnostico_consulta_medico');

@@ -35,8 +35,8 @@
                     <a href="/listar-minhas-notificacoes" class="nav-link"><i class="fa-solid fa-bell"></i> Notificações</a>
                     @endif
                     @if (session('tipo_utilizador') == 'medico')
-                    <a href="/prontuarios" class="nav-link"><i class="fa-solid fa-file-medical"></i> Prontuarios</a>
-                    <a href="/consulta" class="nav-link"><i class="fa-solid fa-calendar-check"></i> Consultas</a>
+                    <a href="{{ route('mostrar_prontuarios_medico') }}" class="nav-link"><i class="fa-solid fa-file-medical"></i> Prontuarios</a>
+                    <a href="{{ route('mostrar_consultas_medico') }}" class="nav-link"><i class="fa-solid fa-calendar-check"></i> Consultas</a>
                     <a href="/horarios" class="nav-link"><i class="fa-solid fa-clock"></i> Horarios</a>
                     <a href="/relatorio_medico" class="nav-link"><i class="fa-solid fa-file-alt"></i> Relatórios</a>
                     @endif

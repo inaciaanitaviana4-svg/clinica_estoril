@@ -1,12 +1,12 @@
 @extends("layouts.painel")
-@section("titulo", "Consultas")
+@section("titulo", "Prontuarios")
 @section("conteudo")
     <section id="medico" class="section active painel">
 
         <div id="prontuarios" class="tab-content active">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title">Consultas</h2>
+                    <h2 class="card-title">Prontuarios</h2>
                   <!--  <a class="btn btn-primary" href="/agendar-consulta-paciente">agendar Consulta</a>-->
                 </div>
                 @if(session("erro"))
@@ -19,30 +19,26 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Tipo</th>
-                                <th>Serviço clinico</th>
-                                <th>Paciente</th>
-                                <th>Data</th>
-                                <th>Hora</th>
-                                <th>Estado</th>
+                                <th>Nome</th>
+                                <th>Idade</th>
+                                <th>Gênero</th>
+                                <th>Telefone</th>
+                                <th>Email</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($consultas as $consulta)
+                            @foreach ($pacientes as $paciente)
 
                                 <tr>
-                                    <td>{{ $consulta->tipo_consulta }}</td>
-                                    <td>{{ $consulta->nome_servico_clinico}}</td>
-                                    <td>{{ $consulta->nome_paciente}}</td>
-                                    <td>{{ $consulta->data }}</td>
-                                    <td>{{ $consulta->hora }}</td>
-                                    <td>
-                                      {{ badge_estados($consulta->estado) }}
-                                    </td>
+                                    <td>{{ $paciente->nome }}</td>
+                                    <td>  {{ date('Y') - date('Y', strtotime($paciente->data_nascimento)) }} ano(s)</td>
+                                    <td>{{ $paciente->genero }}</td>
+                                    <td>{{ $paciente->num_telefone }}</td>
+                                    <td>{{ $paciente->email }}</td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="{{ route('realizar_consulta_medico', $consulta->id_consulta) }}" class="btn btn-primary"><i class="fa-solid fa-stethoscope"></i></a>           
+                                            <a href="{{ route('mostrar_detalhes_prontuario_medico', $paciente->id_paciente) }}" class="btn btn-primary"><i class="fa-solid fa-stethoscope"></i></a>           
                                         </div>
                                     </td>
                                 </tr>

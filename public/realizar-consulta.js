@@ -493,7 +493,7 @@ async function imprimirReceita(id) {
             const data = await response.json();
             throw new Error(data?.erro || "Erro ao buscar receita");
         }
-
+ // definição do layout do PDF usando pdfMake
         const docDefinition = {
             pageSize: "A4",
             pageMargins: [40, 60, 40, 60],
@@ -593,10 +593,10 @@ async function imprimirReceita(id) {
                 iframe.contentWindow.print();
 
                 // Opcional: remover o iframe após um tempo para limpeza
-                setTimeout(() => {
-                    URL.revokeObjectURL(dataUrl);
-                    document.body.removeChild(iframe);
-                }, 1000);
+                 //setTimeout(() => {
+                     //URL.revokeObjectURL(dataUrl);
+                     //document.body.removeChild(iframe);
+               //  }, 1000);
             };
         });
     } catch (error) {
