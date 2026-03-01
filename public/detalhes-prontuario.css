@@ -9,7 +9,7 @@
     gap: var(--spacing-sm);
     box-shadow: var(--shadow-md);
     position: fixed;
-    top: 100px;
+    top: 70px;
     z-index: 100;
 }
 .topbar-back {
