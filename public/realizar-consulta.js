@@ -130,7 +130,7 @@ async function listarExames() {
             }
             novaLinha.innerHTML = `
                 <td style="align-content: center;">${exame.nome_exame}</td>
-                <td style="align-content: center;">${badge_estados(
+                <td style="align-content: center;">${badge_estados_exames(
                     exame.status,
                 )}</td>
                 <td style="align-content: center;">

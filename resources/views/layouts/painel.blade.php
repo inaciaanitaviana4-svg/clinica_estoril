@@ -78,6 +78,7 @@
     <script src="{{asset('jquery-3.2.1.slim.min.js')}}"></script>
     <script src="{{asset('popper.min.js')}}"></script>
     <script src="{{asset('bootstrap.min.js')}}"></script>
+        <script src="{{asset('script.js')}}"></script>
      <script src="{{asset('toastify-js.js')}}"></script>
     <script src="{{asset('toastify.js')}}"></script>
     <script src="{{asset('remover-modal.js')}}"></script>

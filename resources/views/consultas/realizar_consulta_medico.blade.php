@@ -209,25 +209,6 @@
         buscarReceita: "{{ route('api_buscar_receita_para_imprimir_consulta_medico', ['id_consulta' => $consulta->id_consulta]) }}"
     }
 
-    function badge_estados(estado) {
-        let cor = '#000000'; // Cor padrão
-        let estado_nome = '';
-        switch (estado) {
-            case 'PENDENTE':
-                cor = '#f59e0b';
-                estado_nome = 'Pendente';
-                break;
-
-            case 'REALIZADO':
-                cor = '#10b981';
-                estado_nome = 'Realizado';
-                break;
-
-        }
-
-        return `<span style='padding: 4px 8px; background-color: ${cor}; color: white; border-radius: 4px;'>${estado_nome}</span>`;
-
-    }
 </script>
 <script src="/realizar-consulta.js"></script>
 @endsection

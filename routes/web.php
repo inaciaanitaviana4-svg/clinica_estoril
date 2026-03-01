@@ -91,6 +91,7 @@ Route::middleware(["web"])->group(function () {
     Route::post('/api/consultas/{id_consulta}/remover-medicamento/{id_medicamento}', [ReceitaController::class, 'api_remover_medicamento_consulta_medico'])->name('api_remover_medicamento_consulta_medico');
     Route::post('/api/consultas/{id_consulta}/salvar-observacoes-receita', [ReceitaController::class, 'api_salvar_observacoes_receita_consulta_medico'])->name('api_salvar_observacoes_receita_consulta_medico');
     Route::get('/api/consultas/{id_consulta}/buscar-receita-imprimir', [ReceitaController::class, 'api_buscar_receita_para_imprimir_consulta_medico'])->name('api_buscar_receita_para_imprimir_consulta_medico');
+    Route::get('/api/prontuarios/consultas/{id_consulta}', [ProntuarioController::class, 'api_buscar_consultas_prontuario_medico'])->name('api_buscar_consultas_prontuario_medico');
 
     // ===== ROTAS DO ADMINISTRADOR =====
     Route::get('/admin/dashboard', [AdminController::class, 'mostrar_dashboard_admin']);

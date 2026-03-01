@@ -1,228 +1,214 @@
 @extends('layouts.painel')
-@section('titulo', 'detalhes do prontuario')
+@section('titulo', 'Detalhes do Prontuario')
+@section('estilo')
+<link rel="stylesheet" href="{{ asset('detalhes-prontuario.css') }}">
+@endsection
 @section('conteudo')
-    <section class="section active painel ">
-        <div class="login-card" id="userTypeCard">
-            <h2 style="text-align: center;"><strong>Detalhes do prontuário</strong> </h2>
-            <br><br>
-            @if (session('erro'))
-                <div style="background-color:red;color:white;text-align:center">
-                    {{ session('erro') }}
+
+<div class="topbar">
+    <a href="{{route('mostrar_prontuarios_medico')}}" class="topbar-back">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        Prontuários
+    </a>
+    <div class="topbar-divider"></div>
+    <span class="topbar-title">Detalhes do Prontuário</span>
+</div>
+
+<div class="page-container" style="padding-top: 170px;">
+    <!-- LEFT: Patient + Consultas -->
+    <div>
+        <div class="patient-card">
+            <div class="patient-card-header">
+                <div class="patient-avatar" id="patientInitials">{{ substr($paciente->nome, 0, 1) . substr($paciente->nome, strpos($paciente->nome, ' ') + 1, 1) }}</div>
+                <div class="patient-name" id="patientName">{{ $paciente->nome }}</div>
+                <div class="patient-sub" id="patientAge">{{ date('Y') - date('Y', strtotime($paciente->data_nascimento)) }} ano(s) · {{ strtolower($paciente->genero) === 'm'?'Masculino':'Feminino' }}</div>
+            </div>
+            <div class="patient-info-grid">
+                <div class="patient-info-item">
+                    <label>Telefone</label>
+                    <span id="patientPhone">{{ $paciente->num_telefone }}</span>
                 </div>
-            @endif
-
-            <div>
-                <!-- Informações do paciente -->
-                <div class="editar-perfil-section">
-                    <h2 class="editar-perfil-section-title">
-                        <span class="editar-perfil-section-icon"></span>
-                        Informações do paciente
-                    </h2>
-                    <div class="coluna-div">
-                        <div class="row">
-                            {{ label_detalhes($paciente, 'nome', 'Nome', 'col') }}
-                            {{ label_detalhes($paciente, 'email', 'Email', 'col') }}
-                            {{ label_detalhes($paciente, 'num_telefone', 'Telefone', 'col') }}
-                        </div>
-                        <div class="row">
-                            {{ label_detalhes($paciente, 'num_bi', 'BI', 'col') }}
-                            {{ label_detalhes($paciente, 'data_nascimento', 'Data de Nascimento', 'col') }}
-                            {{ label_detalhes($paciente, 'estado_civil', 'Estado civil', 'col') }}
-                        </div>
-                        <div class="row">
-                            {{ label_detalhes($paciente, 'seguro', 'Seguro', 'col') }}
-                            {{ label_detalhes($paciente, 'bairro', 'Bairro', 'col') }}
-                            {{ label_detalhes($paciente, 'cidade', 'Cidade', 'col') }}
-                        </div>
-                        {{ label_detalhes($paciente, 'morada', 'Morada') }}
-                    </div>
+                <div class="patient-info-item">
+                    <label>Consultas</label>
+                    <span id="patientConsultas">{{ $totalConsultas }} registros</span>
                 </div>
-                <!-- Informações da consulta-->
-                <div class="editar-perfil-section">
-                    <h2 class="editar-perfil-section-title">
-                        <span class="editar-perfil-section-icon"></span>
-                        Informações da consulta
-                    </h2>
-                    <div class="coluna-div">
-                        <div class="row">
-                            {{ label_detalhes($consulta, 'nome_tipo_consulta', 'Tipo de consulta', 'col') }}
-                            {{ label_detalhes($consulta, 'nome_servico_clinico', 'Serviço clínico', 'col') }}
-                            {{ label_detalhes($consulta, 'preco_servico_clinico', 'Preço do serviço clínico', 'col') }}
-                            {{ label_detalhes($consulta, 'nome_recepcionista', 'Recepcionista', 'col') }}
-                        </div>
-                        <div class="row">
-                            {{ label_detalhes($consulta, 'modalidade', 'Modalidade', 'col') }}
-                            {{ label_detalhes($consulta, 'data', 'Data', 'col') }}
-                            {{ label_detalhes($consulta, 'hora', 'Hora', 'col') }}
-                            {{ label_detalhes($consulta, 'estado', 'Estado', 'col') }}
-                        </div>
-                        {{ label_detalhes($consulta, 'observacao', 'Observação') }}
-                    </div>
-                    <div class="row mt-4">
-                        <form class="col"
-                            action="{{ route('mudar_estado_consulta_recepcionista', $consulta->id_consulta) }}"
-                            method="POST">
-                            {{ csrf_field() }}
-                            <input type="hidden" name="estado" value="cancelada">
-                            <button  type="submit" class="btn btn-danger">Cancelar consulta</button>
-                        </form>
-                        <form class="col"
-                            action="{{ route('mudar_estado_consulta_recepcionista', $consulta->id_consulta) }}"
-                            method="POST">
-                            {{ csrf_field() }}
-                            <input type="hidden" name="estado" value="agendada">
-                            <button style="background-color: #6366f1" type="submit" class="btn btn-success">Agendar consulta</button>
-                        </form>
-                        <form class="col"
-                            action="{{ route('mudar_estado_consulta_recepcionista', $consulta->id_consulta) }}"
-                            method="POST">
-                            {{ csrf_field() }}
-                            <input type="hidden" name="estado" value="confirmada">
-                            <button style="background-color: #3b82f6" type="submit" class="btn btn-success">Confirmar consulta</button>
-
-                        </form>
-                        <form class="col"
-                            action="{{ route('mudar_estado_consulta_recepcionista', $consulta->id_consulta) }}"
-                            method="POST">
-                            {{ csrf_field() }}
-                            <input type="hidden" name="estado" value="em_espera">
-                            <button style="background-color:#6b7280" type="submit" class="btn btn-success">Colocar em espera</button>
-
-                        </form>
-
-                    </div>
-
+                <div class="patient-info-item full">
+                    <label>E-mail</label>
+                    <span id="patientEmail">{{ $paciente->email }}</span>
                 </div>
+            </div>
 
-                <!-- Informaçoes do medico -->
-                <div class="editar-perfil-section">
-                    <h2 class="editar-perfil-section-title">
-                        <span class="editar-perfil-section-icon"></span>
-                        Informações do médico
-                    </h2>
-                    <div class="coluna-div">
-                        @if ($medico)
-                            <div class="row">
-                                {{ label_detalhes($medico, 'nome', 'Nome', 'col') }}
-                                {{ label_detalhes($medico, 'email', 'Email', 'col') }}
-                                {{ label_detalhes($medico, 'num_telefone', 'Telefone', 'col') }}
-                                {{ label_detalhes($medico, 'especialidade', 'Especialidade', 'col') }}
+            <div class="consultas-section">
+                <div class="consultas-section-title">Consultas</div>
+                <div id="consultasList">
+                    @foreach($consultas as $consulta)
+                    <div class="consulta-item" data-id="{{ $consulta->id }}" onclick="selectConsulta({{$consulta->id_consulta}})">
+                        <div class="consulta-item-header">
+                            <span class="consulta-date">{{ date('d/m/Y', strtotime($consulta->data)) }} · {{ date('H:i', strtotime($consulta->hora)) }}</span>
+                            <div class="badge">
+                                {{badge_estados($consulta->estado)}}
                             </div>
-                            <form class=""
-                                action="{{ route('desassociar_medico_consulta_recepcionista', $consulta->id_consulta) }}"
-                                method="POST">
-                                {{ csrf_field() }}
-                                <button type="submit" class="btn btn-danger">Desassociar médico</button>
-                            </form>
-                        @else
-                            <form class="row"
-                                action="{{ route('associar_medico_consulta_recepcionista', $consulta->id_consulta) }}"
-                                method="POST">
-                                {{ csrf_field() }}
-                                <div class="w-100 form-group">
-                                    <label for="id_medico">Medico</label>
-                                    <select class="w-100" id="id_medico" name="id_medico">
-                                        <option value="">Selecione um medico</option>
-                                        @foreach ($medicos as $medico)
-                                            <option value="{{ $medico->id_medico }}">{{ $medico->nome }}</option>
-                                        @endforeach
 
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Associar médico</button>
-                            </form>
-                        @endif
-                    </div>
-                </div>
-
-
-                <!-- Informações de pagamentos -->
-                <div class="editar-perfil-section">
-                    <h2 class="editar-perfil-section-title">
-                        <span class="editar-perfil-section-icon"></span>
-                        Informações de pagamento
-                    </h2>
-                    <form class=""
-                        action="{{ route('fazer_pagamento_consulta_recepcionista', $consulta->id_consulta) }}"
-                        method="POST">
-                        {{ csrf_field() }}
-                        <div class="row">
-                            <div class="col form-group">
-                                <label for="id_servico_clinico">Serviços clínicos</label>
-                                <select class="w-100" id="id_servico_clinico" name="id_servico_clinico">
-                                    <option value="">Selecione o serviço clínico</option>
-                                    @foreach ($servicos_clinicos as $servico)
-                                        <option value="{{ $servico->id_servico_clinico }}">{{ $servico->nome }} ->
-                                            {{ number_format($servico->preco, 2, ',', '.') }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col form-group">
-                                <label for="id_metodo_pagamento">Método de pagamento</label>
-                                <select class="w-100" id="id_metodo_pagamento" name="id_metodo_pagamento">
-                                    <option value="">Selecione um método de pagamento</option>
-                                    @foreach ($metodos_pagamento as $metodo)
-                                        <option value="{{ $metodo->id_metodo_pagamento }}">{{ $metodo->nome }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col form-group">
-                                <label for="valor_pago">Valor pago</label>
-                                <input type="number" id="valor_pago" name="valor_pago" min="0" step="0.01">
-                            </div>
                         </div>
-                        <div>
-                            <button type="submit" class="btn btn-primary">Fazer pagamento</button>
-                        </div>
-                    </form>
-
-                    <div class="table-responsive-sm mt-4">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Serviço clínico</th>
-                                    <th scope="col">Método de pagamento</th>
-                                    <th scope="col">Valor pago</th>
-                                    <th scope="col">Estado</th>
-                                    <th scope="col">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($pagamentos as $pagamento)
-                                    <tr>
-                                        <th scope="row">{{ $pagamento->id_pagamento }}</th>
-                                        <td>{{ $pagamento->nome_servico_clinico }}</td>
-                                        <td>{{ $pagamento->nome_metodo_pagamento }}</td>
-                                        <td>{{ number_format($pagamento->total_pago, 2, ',', '.') }}</td>
-                                        <td>{{ $pagamento->estado }}</td>
-                                        <td>
-                                            <a href="{{ route('cancelar_pagamento_consulta_recepcionista', $pagamento->id_pagamento) }}"
-                                                class="btn btn-sm btn-outline-danger">Cancelar</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th scope="row" colspan="4"></th>
-                                    <th scope="row" colspan="">Total pago:</th>
-                                    <th scope="row" colspan="">Saldo total:</th>
-                                </tr>
-                                <tr>
-                                    <td scope="row" colspan="4"></td>
-                                    <td scope="row">{{ number_format($resumo['total_pago'], 2, ',', '.') }}</td>
-                                    <td scope="row">{{ number_format($resumo['saldo_total'], 2, ',', '.') }}</td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                        <div class="consulta-medico">{{ $consulta->nome_medico }}</div>
                     </div>
+                    @endforeach
                 </div>
-
             </div>
         </div>
-    </section>
+    </div>
+
+    <!-- RIGHT: Detail Panel -->
+    <div class="right-panel" id="rightPanel">
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+            <h3>Nenhuma consulta selecionada</h3>
+            <p>Selecione uma consulta na lista ao lado para visualizar os detalhes.</p>
+        </div>
+    </div>
+</div>
 @endsection
 @section('script')
-    <script></script>
+<script>
+    const csrfToken = "{{ csrf_token() }}";
+
+    const badgeEstados = (estado) => "{{ badge_estados(" + estado + ")}} ";
+
+    // ---- RENDER CONSULTAS LIST ----
+    function formatDate(d) {
+        const [y, m, day] = d.split('-');
+        return `${day}/${m}/${y}`;
+    }
+    // ---- SELECT CONSULTA ----
+    async function selectConsulta(id) {
+        const apiUrl = `{{ route('api_buscar_consultas_prontuario_medico', ['id_consulta' => ':id_consulta']) }}`.replace(':id_consulta', id);
+
+        document.querySelectorAll('.consulta-item').forEach(el => el.classList.remove('active'));
+        const activeEl = document.querySelector(`.consulta-item[data-id="${id}"]`);
+        if (activeEl) activeEl.classList.add('active');
+
+
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrfToken,
+                },
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error("Erro ao buscar dados da consulta: " + data?.erro || "");
+            }
+
+            renderDetail(data);
+        } catch (erro) {
+            console.log(erro)
+        }
+    }
+
+    function renderDetail(consulta) {
+        const panel = document.getElementById('rightPanel');
+
+        const diagHTML = consulta.diagnosticos.length ?
+            consulta.diagnosticos.map(d => `<div class="diag-item"><div class="diag-bullet"></div><div>${d.descricao}</div></div>`).join('') :
+            `<div class="no-data">Nenhum diagnóstico registrado.</div>`;
+
+        const examesHTML = consulta.exames.length ?
+            `<table class="exames-table">
+          <thead><tr>
+            <th>Serviço</th>
+            <th>Resultado</th>
+            <th>Observações</th>
+            <th>Status</th>
+          </tr></thead>
+          <tbody>
+          ${consulta.exames.map(e => `
+            <tr>
+              <td style="font-weight:500">${e.servico_clinico}</td>
+              <td>${e.resultado || '—'}</td>
+              <td style="color:var(--text-gray);font-size:12px">${e.observacoes || '—'}</td>
+              <td>${badge_estados_exames(e.status)}</td>
+            </tr>
+          `).join('')}
+          </tbody>
+        </table>` :
+            `<div class="no-data">Nenhum exame solicitado.</div>`;
+
+        const receitasHTML = consulta.receitas.length ?
+            consulta.receitas.map(r => `
+          ${r.observacoes ? `<div class="receita-obs">${r.observacoes}</div>` : ''}
+          ${r.itens.map(item => `
+            <div class="med-item">
+              <div class="med-name">💊 ${item.medicamento}</div>
+              <div class="med-detail"><span>Dosagem</span>${item.dosagem}</div>
+              <div class="med-detail"><span>Frequência</span>${item.frequencia}</div>
+              <div class="med-detail"><span>Duração</span>${item.duracao}</div>
+            </div>
+          `).join('')}
+        `).join('') :
+            `<div class="no-data">Nenhuma receita emitida.</div>`;
+
+        panel.innerHTML = `
+      <div class="detail-header">
+        <div class="detail-header-left">
+          <h2>Consulta — ${formatDate(consulta.data)}</h2>
+          <div class="detail-meta">
+            <div class="meta-chip">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+              ${consulta.medico}
+            </div>
+            <div class="meta-chip">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              ${consulta.hora}
+            </div>
+            <div>
+                ${badge_todos_estados(consulta.estado)}
+            </div>
+          </div>
+          ${consulta.observacao ? `<div class="obs-box">${consulta.observacao}</div>` : ''}
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-title">
+          <div class="card-icon card-icon-blue">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          </div>
+          Diagnósticos
+        </div>
+        <div class="detail-card-body">${diagHTML}</div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-title">
+          <div class="card-icon card-icon-blue">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+          </div>
+          Exames Solicitados
+        </div>
+        <div class="detail-card-body">${examesHTML}</div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-title">
+          <div class="card-icon card-icon-green">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          Receitas
+        </div>
+        <div class="detail-card-body">${receitasHTML}</div>
+      </div>
+    `;
+    }
+</script>
 @endsection
