@@ -323,7 +323,7 @@ class ConsultaController extends Controller
     {
         $utilizador = verificar_medico();
         if (! $utilizador) {
-            return response()->json(['erro' => 'Não tem permissão para acessar esta API'], 403);
+            return response()->json(['erro' => 'Não tem permissão para acessar esta API'], status: 403);
         }
         $consulta = Consulta::find($id_consulta);
         if (! $consulta) {

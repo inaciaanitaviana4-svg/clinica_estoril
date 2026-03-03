@@ -48,7 +48,7 @@
                                 class="fa-solid fa-calendar-check"></i> Consultas</a>
                         <a href="{{ route('mostrar_horarios_medico') }}" class="nav-link"><i
                                 class="fa-solid fa-clock"></i> Horarios</a>
-                        <a href="/relatorio_medico" class="nav-link"><i class="fa-solid fa-file-alt"></i> Relatórios</a>
+                        <a href="{{ route('mostrar_relatorios_medico') }}" class="nav-link"><i class="fa-solid fa-file-alt"></i> Relatórios</a>
                     @endif
                     @if (session('tipo_utilizador') == 'recepcionista')
                         <a href="{{ route('mostrar_consultas_recepcionista') }}"
