@@ -6,9 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Clínica Estoril - A sua saude nas melhores mãos ">
     <title>Clínica Estoril - @yield('titulo')</title>
-    <link rel="stylesheet" href="{{asset('styles.css')}}">
-        <link rel="stylesheet" href="{{asset('all.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('toastify.min.css')}}" />
+    <link rel="stylesheet" href="{{ asset('styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('all.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('toastify.min.css') }}" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     @yield('estilo')
 </head>
 
@@ -182,10 +187,10 @@
     <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">
         <i class="fas fa-arrow-up"></i>
     </button>
-    <script src="{{asset('script.js')}}"></script>
-    <script src="{{asset('chatbot.js')}}"></script>
-    <script src="{{asset('auth.js')}}"></script>
-    <script src="{{asset('main.js')}}"></script>
+    <script src="{{ asset('script.js') }}"></script>
+    <script src="{{ asset('chatbot.js') }}"></script>
+    <script src="{{ asset('auth.js') }}"></script>
+    <script src="{{ asset('main.js') }}"></script>
     @yield('script')
     <script>
         const url = window.location.pathname
@@ -195,9 +200,9 @@
             const menu = menus.item(i)
             menu.classList.remove("active")
             const href = menu.getAttribute("href")
-            if (href === '/'&& url === '/') {
+            if (href === '/' && url === '/') {
                 menu.classList.add("active")
-            } else if  ( url.startsWith(href) && href !== '/') {
+            } else if (url.startsWith(href) && href !== '/') {
                 menu.classList.add("active")
             }
         }

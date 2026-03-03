@@ -24,7 +24,7 @@
                 <div class="about-image">
                     <img src="imagem/Imagem WhatsApp 2025-12-14 às 16.11.19_f4fcf821.jpg" alt="Clínica Estoril">
                     <div class="about-badge">
-                        <span class="badge-number">10+</span>
+                        <span class="badge-number">{{ $anosExperiencia }}</span>
                         <span class="badge-text">Anos de<br>Excelência</span>
                     </div>
                 </div>

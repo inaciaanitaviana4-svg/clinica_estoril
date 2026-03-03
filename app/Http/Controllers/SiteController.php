@@ -30,7 +30,14 @@ class SiteController extends Controller
 
     public function sobre(): View
     {
-        return view("sobre");
+         $config = Configuracao::first();
+        $anoAtual = Carbon::now()->year;
+
+
+        $anosExperiencia = $anoAtual - ($config ? $config->ano_fundacao : 0);
+
+        return view("sobre", compact("anosExperiencia",));
+
     }
 
     public function servicos(): View

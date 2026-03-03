@@ -6,11 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Clínica Estoril - A sua saude nas melhores mãos ">
     <title>Clínica Estoril - @yield('titulo')</title>
-    <link rel="stylesheet" href="{{asset('styles.css')}}">
-    <link rel="stylesheet" href="{{asset('all.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('toastify.min.css')}}" />
-    <link rel="stylesheet" href="{{asset('styles-painel.css')}}">
-    <link rel="stylesheet" href="{{asset('bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('all.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('toastify.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('styles-painel.css') }}">
+    <link rel="stylesheet" href="{{ asset('bootstrap.min.css') }}">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     @yield('estilo')
     <style>
         .sidebar-menu-item {
@@ -36,7 +41,7 @@
                     <a href="/">
                         <div
                             style="display: flex; justify-content: center; align-items: center; gap: 4px; height: 52px;">
-                            <img style="height: 40px; width: 40px; object-fit: cover;" src="/imagem/logo.jpg"
+                            <img style="height: 40px; width: 40px; object-fit: cover;" src="/imagem/logo.png"
                                 alt="logotipo da clinica">
                             <span style="font-weight: bold; font-size: 14pt;">Clínica Estoril</span>
                         </div>
@@ -47,8 +52,8 @@
                     <?php $menus = [['href' => '/admin/dashboard', 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'], ['href' => '/admin/pagamentos', 'titulo' => 'Pagamentos', 'icon' => 'fa-solid fa-credit-card'], ['href' => '/admin/cadastros', 'titulo' => 'Cadastros', 'icon' => 'fa-solid fa-users'], ['href' => '/admin/consultas', 'titulo' => 'Consultas', 'icon' => 'fa-solid fa-stethoscope'], ['href' => '/admin/prontuarios', 'titulo' => 'Prontuários', 'icon' => 'fa-solid fa-file-medical'], ['href' => '/admin/exames', 'titulo' => 'Exames', 'icon' => 'fa-solid fa-microscope'], ['href' => '/admin/relatorios-medicos', 'titulo' => 'Relatórios Medicos', 'icon' => 'fa-solid fa-file-alt']];
                     ?>
                     @foreach ($menus as $menu)
-                    <a class="sidebar-menu-item" style="padding: 12px 16px; font-weight: 500;"
-                        href="{{ $menu['href'] }}"><i class="{{ $menu['icon'] }}"></i> {{ $menu['titulo'] }}</a>
+                        <a class="sidebar-menu-item" style="padding: 12px 16px; font-weight: 500;"
+                            href="{{ $menu['href'] }}"><i class="{{ $menu['icon'] }}"></i> {{ $menu['titulo'] }}</a>
                     @endforeach
                     <a class="sidebar-menu-item" style="padding: 12px 16px; font-weight: 500; color:red;"
                         href="/sair"><i class="fa-solid fa-right-from-bracket"></i> <strong>Sair</strong></a>
@@ -79,16 +84,16 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
-    <script src="{{asset('pdfmake/pdfmake.min.js')}}"></script>
-    <script src="{{asset('pdfmake/vfs_fonts.js')}}"></script>
-    <script src="{{asset('jquery-3.2.1.slim.min.js')}}"></script>
-    <script src="{{asset('popper.min.js')}}"></script>
-    <script src="{{asset('bootstrap.min.js')}}"></script>
-    <script src="{{asset('script.js')}}"></script>
-    <script src="{{asset('auth.js')}}"></script>
-    <script src="{{asset('toastify-js.js')}}"></script>
-    <script src="{{asset('toastify.js')}}"></script>
-    <script src="{{asset('remover-modal.js')}}"></script>
+    <script src="{{ asset('pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('jquery-3.2.1.slim.min.js') }}"></script>
+    <script src="{{ asset('popper.min.js') }}"></script>
+    <script src="{{ asset('bootstrap.min.js') }}"></script>
+    <script src="{{ asset('script.js') }}"></script>
+    <script src="{{ asset('auth.js') }}"></script>
+    <script src="{{ asset('toastify-js.js') }}"></script>
+    <script src="{{ asset('toastify.js') }}"></script>
+    <script src="{{ asset('remover-modal.js') }}"></script>
 
     @yield('script')
 

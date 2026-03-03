@@ -8,13 +8,13 @@ async function mostrarRemoverItemModal(url, options) {
 }
 
 async function fetchRemoverItemModal(url, options) {
+    const headers = options?.headers || {};
+    const method = options?.method || 'GET';
+    const recarregarPagina = options?.recarregarPagina ?? true;
+    const callback = options?.callback;
     try {
-        const headers = options?.headers || {};
-        const recarregarPagina = options?.recarregarPagina ?? true;
-        const callback = options?.callback;
-
         const response = await fetch(url, {
-            method: "GET",
+            method,
             headers: {
                 ...headers,
             },
@@ -36,13 +36,13 @@ async function fetchRemoverItemModal(url, options) {
             $("#remover-modal-error").text(
                 "Erro ao remover item: " + mensagem?.erro || "",
             );
-            callback?.(false, mensagem?.erro || "");
+            if(callback) callback?.(false, mensagem?.erro || "");
             console.error("Erro ao remover item:", response);
         }
     } catch (error) {
         $("#remover-modal-error").attr("hidden", false);
         $("#remover-modal-error").text("Erro ao remover item");
         console.error("Erro ao remover item:", error);
-        callback?.(false, error);
+       if(callback) callback?.(false, error);
     }
 }
