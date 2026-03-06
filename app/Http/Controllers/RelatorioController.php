@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Clinica;
 use App\Models\Consulta;
+use App\Models\Diagnostico;
+use App\Models\ExameSolicitado;
 use App\Models\Paciente;
+use App\Models\Receita;
+use App\Models\ReceitaItem;
 use App\Models\recepcionista;
 use App\Models\ServicoClinico;
 use App\Models\TipoConsulta;
@@ -95,5 +99,64 @@ class RelatorioController extends Controller
         $consultas = $query->orderBy('consultas.data', 'desc')->get();
 
         return response()->json($consultas);
+    }
+
+    public function api_relatorio_prontuario_paciente($id_paciente)
+    {
+        $paciente = Paciente::find($id_paciente);
+        if (! $paciente) {
+            return response()->json(['erro' => 'Paciente nao encontrado'], status: 404);
+        }
+        $consultas = Consulta::where('id_paciente', $id_paciente)->get()->toArray();
+        $consultas = array_map(function ($consulta) {
+            $id_consulta = $consulta['id_consulta'];
+            $diagnosticos = Diagnostico::where('id_consulta', $id_consulta)
+                ->select('descricao')
+                ->get()
+                ->toArray();
+
+            $exames = ExameSolicitado::where('id_consulta', $id_consulta)
+                ->select('exames_solicitados.*', 'servicos_clinicos.nome as servico_clinico')
+                ->join('servicos_clinicos', 'exames_solicitados.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+                ->get()
+                ->toArray();
+
+            $receitas = Receita::where('id_consulta', $id_consulta)
+                ->select('receitas.*')
+                ->get()
+                ->toArray();
+
+            $receitas = array_map(function ($receita) {
+                $itens = ReceitaItem::where('id_receita', $receita['id_receita'])
+                    ->select('medicamento', 'dosagem', 'frequencia', 'duracao')
+                    ->get()
+                    ->toArray();
+
+                $receita['itens'] = array_map(function ($item) {
+                    return [
+                        'medicamento' => $item['medicamento'],
+                        'dosagem' => $item['dosagem'],
+                        'frequencia' => $item['frequencia'],
+                        'duracao' => $item['duracao'],
+                    ];
+                }, $itens);
+
+                return $receita;
+            }, $receitas);
+
+            return [
+                ...$consulta,
+                'diagnosticos' => $diagnosticos,
+                'exames' => $exames,
+                'receitas' => $receitas,
+            ];
+        }, $consultas);
+        $resultado = [
+            ...$paciente->toArray(),
+            'consultas' => $consultas,
+        ];
+
+        return response()->json($resultado);
+
     }
 }
