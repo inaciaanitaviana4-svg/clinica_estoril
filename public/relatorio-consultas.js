@@ -1,4 +1,4 @@
-function gerarRelatorioTabela(consultas, filtros) {
+function gerarRelatorioConsultasTabela(consultas, filtros) {
 
     let body = [
         [
@@ -15,14 +15,14 @@ function gerarRelatorioTabela(consultas, filtros) {
 
     consultas.forEach(c => {
         body.push([
-            c.paciente?.nome || '',
-            c.medico?.nome || '',
-            c.tipo_consulta?.nome || '',
-            c.servico_clinico?.nome || '',
+            c.paciente || '',
+            c.medico || '',
+            c.tipo_consulta || '',
+            c.servico_clinico|| '',
             c.data,
             c.hora,
             c.estado,
-            c.recepcionista?.nome || ''
+            c.recepcionista|| ''
         ]);
     });
 

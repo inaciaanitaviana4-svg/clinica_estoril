@@ -697,3 +697,27 @@ function badge_todos_estados($estado) {
 
     return `<span style='padding: 4px 8px; background-color: ${$cor}; color: white; border-radius: 4px;'>${$estado_nome}</span>`;
 }
+function obterImagemBase64(url) {
+  return new Promise((resolve, reject)=>{
+    var img = new Image();
+    
+    img.setAttribute('crossOrigin', 'anonymous');
+    
+    img.onload = function () {
+    var canvas = document.createElement("canvas");
+    canvas.width = this.width;
+    canvas.height = this.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(this, 0, 0);
+    var dataURL = canvas.toDataURL("image/png");
+    resolve(dataURL);
+    };
+    
+    img.onerror = function(e) {
+    reject("The image could not be loaded or CORS is blocking the request.", e);
+    }
+    
+    img.src = url;
+  });
+}
+   

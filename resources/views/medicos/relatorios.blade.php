@@ -24,6 +24,9 @@
                         </label>
                         <select name="id_paciente" id="id_paciente">
                             <option value="">Todos</option>
+                            @foreach ($pacientes as $paciente)
+                                <option value="{{ $paciente->id_paciente }}">{{ $paciente->nome }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group">
@@ -45,6 +48,9 @@
                         </label>
                         <select name="id_recepcionista" id="id_recepcionista">
                             <option value="">Todos</option>
+                            @foreach ($recepcionistas as $recepcionista)
+                                <option value="{{ $recepcionista->id_recepcionista }}">{{ $recepcionista->nome }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group">
@@ -53,6 +59,9 @@
                         </label>
                         <select name="id_tipo_consulta" id="id_tipo_consulta">
                             <option value="">Todos</option>
+                            @foreach ($tipos_consultas as $tipo_consulta)
+                                <option value="{{ $tipo_consulta->id_tipo_consulta }}">{{ $tipo_consulta->nome }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group">
@@ -61,21 +70,25 @@
                         </label>
                         <select name="id_servico_clinico" id="id_servico_clinico">
                             <option value="">Todos</option>
+                            @foreach ($servicos_clinicos as $servico_clinico)
+                                <option value="{{ $servico_clinico->id_servico_clinico }}">{{ $servico_clinico->nome }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="data_inicio">
                             Data de início
                         </label>
-                       <input  name="data_inicio" id="data_inicio"type="date"/>
+                        <input name="data_inicio" id="data_inicio"type="date" />
                     </div>
                     <div class="form-group">
                         <label for="data_fim">
                             Data final
                         </label>
-                       <input name="data_fim" id="data_fim" type="date"/>
+                        <input name="data_fim" id="data_fim" type="date" />
                     </div>
-                    <button type="submit" class="btn btn-primary btn-full" onclick="gerar_relatorio_consultas()">
+                    <button type="submit" class="btn btn-primary btn-full" id="gerar_relatorio_consultas_btn">
                         Gerar relatório
                     </button>
                 </form>
@@ -92,17 +105,59 @@
 
 @endsection
 @section('script')
-<script src="/tabs.js"></script>
-<script src="/relatorio-consultas.js"></script>
-<script>
-     const url = "{{ route('api_relatorio_consultas') }}"
-      const csrfToken = "{{ csrf_token() }}";
-      async function gerar_relatorio_consultas() {
-        try {
-            
-        } catch (error) {
-            
-        }
-      }
-</script>
+    <script src="/tabs.js"></script>
+    <script src="/relatorio-consultas.js"></script>
+    <script>
+        const url = "{{ route('api_relatorio_consultas') }}"
+        const logo_url = "{{ asset('imagem/logo.png') }}"
+        const csrfToken = "{{ csrf_token() }}";
+        const gerar_relatorio_consultas_btn = document.getElementById('gerar_relatorio_consultas_btn')
+        gerar_relatorio_consultas_btn.addEventListener('click', async (e) => {
+            const id_paciente = document.getElementById('id_paciente').value || null
+            const estado = document.getElementById('estado').value || null
+            const id_recepcionista = document.getElementById('id_recepcionista').value || null
+            const id_tipo_consulta = document.getElementById('id_tipo_consulta').value || null
+            const id_servico_clinico = document.getElementById('id_servico_clinico').value || null
+            const data_inicio = document.getElementById('data_inicio').value || null
+            const data_fim = document.getElementById('data_fim').value || null
+            try {
+                e.preventDefault()
+                const resultado = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken,
+                    },
+                    body: JSON.stringify({
+                        id_paciente,
+                        estado,
+                        id_recepcionista,
+                        id_tipo_consulta,
+                        id_servico_clinico,
+                        data_inicio,
+                        data_fim
+                    }),
+                })
+                const dados = await resultado.json();
+                if (!resultado.ok) {
+                    throw new Error(
+                        dados?.erro || "Erro ao gerar relatório de consultas",
+                    );
+                }
+                const descricao = `${data_inicio} - ${data_fim} - ${estado}`
+
+                const logotipo = await obterImagemBase64(logo_url)
+                gerarRelatorioConsultasTabela(dados, {
+                    logotipo,
+                    descricao
+                })
+            } catch (error) {
+                console.error("Erro ao gerar relatório de consultas :", error);
+                mostrarMensagemErro(
+                    "Ocorreu um erro ao gerar relatório de consultas. Por favor, tente novamente.\n" +
+                    error?.message || "",
+                );
+            }
+        })
+    </script>
 @endsection

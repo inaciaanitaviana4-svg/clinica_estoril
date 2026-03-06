@@ -1,6 +1,6 @@
-@extends("layouts.site")
-@section("titulo","sobre")
-@section("conteudo")
+@extends('layouts.site')
+@section('titulo', 'sobre')
+@section('conteudo')
     <!-- PAGE HEADER -->
     <section class="page-header">
         <div class="page-header-overlay"></div>
@@ -10,8 +10,8 @@
                 <p class="page-subtitle">Excelência em cuidados de saúde há mais de 10 anos</p>
                 <nav class="breadcrumb">
                     <!--<a href="/">Início</a>
-                    <span>/</span>
-                    <span>Sobre</span>-->
+                                <span>/</span>
+                                <span>Sobre</span>-->
                 </nav>
             </div>
         </div>
@@ -21,36 +21,41 @@
     <section class="about-story">
         <div class="container">
             <div class="about-grid">
-                <div class="about-image">
-                    <img src="imagem/Imagem WhatsApp 2025-12-14 às 16.11.19_f4fcf821.jpg" alt="Clínica Estoril">
-                    <div class="about-badge">
-                        <span class="badge-number">{{ $anosExperiencia }}</span>
-                        <span class="badge-text">Anos de<br>Excelência</span>
+                <div>
+                    <div class="about-image">
+                        <img src="imagem/Imagem WhatsApp 2025-12-14 às 16.11.19_f4fcf821.jpg" alt="Clínica Estoril">
+                        <div class="about-badge">
+                            <span class="badge-number">{{ $anosExperiencia }}</span>
+                            <span class="badge-text">Anos de<br>Excelência</span>
+                        </div>
                     </div>
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3941.928197285598!2d13.252318269836412!3d-8.886268100347182!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1a51f43d11379f5f%3A0x4f47b5facc94e4f8!2sClinica%20Estoril!5e0!3m2!1spt-PT!2sao!4v1772750179940!5m2!1spt-PT!2sao"
+                        width="600" height="450" style="border:0; margin-top: 2rem;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
-
                 <div class="about-content">
                     <div class="section-label">Nossa História</div>
                     <h2 class="section-title">Tradição e Inovação em Cuidados de Saúde</h2>
                     <p class="about-text">
-                        Fundada em 2015, a Clínica Estoril nasceu com o propósito de ser uma referência 
+                        Fundada em 2015, a Clínica Estoril nasceu com o propósito de ser uma referência
                         em saúde e qualidade de vida em Angola. Ao longo dos anos, expandiu suas
 
-                         especialidades e consolidou-se pelo atendimento humanizado e pelas 
-                            excelência nos serviços médicos.
+                        especialidades e consolidou-se pelo atendimento humanizado e pelas
+                        excelência nos serviços médicos.
 
-                      Com unidades em Golf II – Vila Estoril, oferecemos consultas 24 horas em diversas
-                      áreas, incluindo Medicina Interna, Clínica Geral, Cirurgia, Pediatria, Ginecologia,
-                       Obstetrícia, Dermatologia e Cardiologia.
+                        Com unidades em Golf II – Vila Estoril, oferecemos consultas 24 horas em diversas
+                        áreas, incluindo Medicina Interna, Clínica Geral, Cirurgia, Pediatria, Ginecologia,
+                        Obstetrícia, Dermatologia e Cardiologia.
 
-                Mais do que cuidar, buscamos promover bem-estar e prevenção,
-                   participando ativamente em campanhas de saúde comunitária como
+                        Mais do que cuidar, buscamos promover bem-estar e prevenção,
+                        participando ativamente em campanhas de saúde comunitária como
                         Outubro Rosa e Novembro Azul..
                     </p>
                     </p>
                     <p class="about-text">
-                        Contamos com uma equipa multidisciplinar de mais de 20 médicos 
-                        especialistas, profissionais de enfermagem e técnicos altamente 
+                        Contamos com uma equipa multidisciplinar de mais de 20 médicos
+                        especialistas, profissionais de enfermagem e técnicos altamente
                         qualificados, todos comprometidos com o bem-estar dos nossos pacientes.
                     </p>
 
@@ -87,8 +92,8 @@
                     </div>
                     <h3>Nossa Missão</h3>
                     <p>
-                        Proporcionar cuidados de saúde de excelência, com atendimento 
-                        humanizado e tecnologia avançada, promovendo o bem-estar e a 
+                        Proporcionar cuidados de saúde de excelência, com atendimento
+                        humanizado e tecnologia avançada, promovendo o bem-estar e a
                         qualidade de vida dos nossos pacientes.
                     </p>
                 </div>
@@ -99,11 +104,12 @@
                     </div>
                     <h3>Nossa Visão</h3>
                     <p>
-                        Ser reconhecida como referência nacional em cuidados de saúde, 
-                        pela excelência dos nossos serviços, inovação constante e 
+                        Ser reconhecida como referência nacional em cuidados de saúde,
+                        pela excelência dos nossos serviços, inovação constante e
                         compromisso com a satisfação dos pacientes.
                     </p>
                 </div>
+
 
                 <div class="mission-card">
                     <div class="mission-icon">
@@ -118,6 +124,7 @@
                         <li><i class="fas fa-check"></i> Compromisso social</li>
                     </ul>
                 </div>
+
             </div>
         </div>
     </section>
@@ -147,15 +154,15 @@
                     <p class="stat-label-large">Especialidades Médicas</p>
 
 
-                <div class="stat-box">
-                    <div class="stat-icon-large">
-                        <i class="fas fa-award"></i>
+                    <div class="stat-box">
+                        <div class="stat-icon-large">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <h3 class="stat-number-large">98%</h3>
+                        <p class="stat-label-large">Taxa de Satisfação</p>
                     </div>
-                    <h3 class="stat-number-large">98%</h3>
-                    <p class="stat-label-large">Taxa de Satisfação</p>
                 </div>
             </div>
-        </div>
     </section>
 
     <!-- DIFERENCIAIS -->
@@ -173,7 +180,8 @@
                         <i class="fas fa-hospital"></i>
                     </div>
                     <h3>Infraestrutura Moderna</h3>
-                    <p>Instalações amplas e confortáveis, equipadas com tecnologia de última geração para diagnósticos precisos.</p>
+                    <p>Instalações amplas e confortáveis, equipadas com tecnologia de última geração para diagnósticos
+                        precisos.</p>
                 </div>
 
                 <div class="differential-card">
@@ -181,7 +189,8 @@
                         <i class="fas fa-user-nurse"></i>
                     </div>
                     <h3>Equipa Qualificada</h3>
-                    <p>Profissionais altamente capacitados e em constante atualização para oferecer o melhor atendimento.</p>
+                    <p>Profissionais altamente capacitados e em constante atualização para oferecer o melhor atendimento.
+                    </p>
                 </div>
 
                 <div class="differential-card">
@@ -241,5 +250,4 @@
         </div>
     </section>
 
-  @endsection
-  
+@endsection
