@@ -1,4 +1,4 @@
-function gerarRelatorioProntuarioPaciente(paciente, filtros) {
+function gerarRelatorioProntuarioPacienteTabela(paciente, filtros) {
 
     const dataGeracao = new Date().toLocaleString();
 

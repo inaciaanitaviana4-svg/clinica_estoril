@@ -49,7 +49,7 @@ class ProntuarioController extends Controller
             return response()->json(['erro' => 'Não tem permissão para acessar esta API'], 403);
         }
 
-        $consulta = Consulta::select("consultas.*", "medico.nome AS medico")
+        $consulta = Consulta::select("consultas.*", "medico.nome as medico")
             ->join("medico", "consultas.id_medico", "=", "medico.id_medico")
             ->where('id_consulta', $id_consulta)
             ->first();

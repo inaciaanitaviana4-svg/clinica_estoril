@@ -79,7 +79,8 @@ Route::middleware(["web"])->group(function () {
     Route::get('/painel-medico/consultas', [ConsultaController::class, 'mostrar_consultas_medico'])->name('mostrar_consultas_medico');
     Route::get('/painel-medico', [ConsultaController::class, 'painelmedico']);
     Route::get('/painel-medico/relatorios', [RelatorioController::class, 'mostrar_relatorios_medico'])->name('mostrar_relatorios_medico');
-    Route::post('/api/painel-medico/relatorios', [RelatorioController::class, 'api_relatorio_consultas'])->name('api_relatorio_consultas');
+    Route::post('/api/painel-medico/relatorio-consultas', [RelatorioController::class, 'api_relatorio_consultas'])->name('api_relatorio_consultas');
+    Route::get('/api/painel-medico/relatorio-prontuario/{id_paciente}', [RelatorioController::class, 'api_relatorio_prontuario_paciente'])->name('api_relatorio_prontuario_paciente');
     Route::get('/painel-medico/horarios', [HorarioController::class, 'mostrar_horarios_medico'])->name('mostrar_horarios_medico');
     Route::post('/painel-medico/horarios', [HorarioController::class, 'salvar_horarios_medico'])->name('salvar_horarios_medico');
     Route::delete('/painel-medico/remover-horario/{id_horario}', [HorarioController::class, 'remover_horario_medico'])->name('remover_horario_medico');

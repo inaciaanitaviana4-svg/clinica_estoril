@@ -105,9 +105,12 @@ class RelatorioController extends Controller
     {
         $paciente = Paciente::find($id_paciente);
         if (! $paciente) {
-            return response()->json(['erro' => 'Paciente nao encontrado'], status: 404);
+            return response()->json(['erro' => 'Paciente não encontrado'], status: 404);
         }
-        $consultas = Consulta::where('id_paciente', $id_paciente)->get()->toArray();
+        $consultas = Consulta::select('consultas.*', 'tipos_consultas.nome as tipo_consulta', 'servicos_clinicos.nome as servico_clinico')
+        ->join('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+        ->join('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
+        ->where('id_paciente', $id_paciente)->get()->toArray();
         $consultas = array_map(function ($consulta) {
             $id_consulta = $consulta['id_consulta'];
             $diagnosticos = Diagnostico::where('id_consulta', $id_consulta)
@@ -152,8 +155,10 @@ class RelatorioController extends Controller
             ];
         }, $consultas);
         $resultado = [
+            'idade'=>  date('Y') - date('Y', strtotime($paciente->data_nascimento)),
             ...$paciente->toArray(),
             'consultas' => $consultas,
+
         ];
 
         return response()->json($resultado);
