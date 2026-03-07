@@ -1,6 +1,6 @@
-@extends("layouts.admin")
-@section("titulo", "Cadastros")
-@section("conteudo")
+@extends('layouts.admin')
+@section('titulo', 'Cadastros')
+@section('conteudo')
     <section class="section active ">
         <div class="tabs">
             <a class="tab active" href="#">Utilizadores</a>
@@ -14,12 +14,22 @@
                     <h2 class="card-title">Utilizadores</h2>
                     <a class="btn btn-primary" href="/admin/cadastros/utilizadores/registro">Cadastrar</a>
                 </div>
-                @if(session("erro"))
+                @if (session('erro'))
                     <div style="background-color:red;color:white;text-align:center">
-                        {{ session("erro") }}
+                        {{ session('erro') }}
                     </div>
                 @endif
-
+                <form method="GET" action="{{ route('mostrar_cadastros_admin') }}">
+                    <div class="form-group" style="display:flex;flex-direction:row;gap:8px;margin-top:20px">
+                        <input name="pesquisar_utilizador" value="{{ request('pesquisar_utilizador') }}" type="text"
+                            id="searchInput" placeholder="Pesquisar...">
+                        <button class="btn btn-primary" type="submit" id="searchButton"><i
+                                class="fa fa-search"></i></button>
+                    </div>
+                    @if (request('pesquisar_utilizador'))
+                        <a style="margin-bottom: 12px" href="{{ route('mostrar_cadastros_admin') }}" class="btn btn-danger">Limpar pesquisa</a>
+                    @endif
+                </form>
                 <div class="table-container">
                     <table>
                         <thead>
@@ -34,13 +44,12 @@
                         </thead>
                         <tbody>
                             @foreach ($utilizadores as $utilizador)
-
                                 <tr>
                                     <td>{{ $utilizador->nome }}</td>
                                     <td>{{ $utilizador->email }}</td>
                                     <td>{{ $utilizador->num_telefone }}</td>
                                     <td>{{ $utilizador->genero }}</td>
-                                    @if($utilizador->nivel_acesso == 0)
+                                    @if ($utilizador->nivel_acesso == 0)
                                         <td>Administrador</td>
                                     @elseif($utilizador->nivel_acesso == 1)
                                         <td>Recepcionista</td>
@@ -53,8 +62,10 @@
 
                                         <div class="btn-group">
 
-                                            <button onclick="mostrarRemoverItemModal('{{route('remover_utilizador_admin',$utilizador->id_util)}}')" class="btn btn-bg-red btn-small">Remover</button>
-                                            <a href="/admin/cadastros/utilizadores/registro/{{$utilizador->id_util }}"
+                                            <button
+                                                onclick="mostrarRemoverItemModal('{{ route('remover_utilizador_admin', $utilizador->id_util) }}')"
+                                                class="btn btn-bg-red btn-small">Remover</button>
+                                            <a href="/admin/cadastros/utilizadores/registro/{{ $utilizador->id_util }}"
                                                 class="btn btn-primary btn-small">Editar</a>
                                         </div>
                                     </td>
@@ -72,7 +83,17 @@
                     <h2 class="card-title">Especialidades</h2>
                     <a class="btn btn-primary" href="/admin/cadastros/especialidades/registro">Adicionar</a>
                 </div>
-
+ <form method="GET" action="{{ route('mostrar_cadastros_admin') }}">
+                    <div class="form-group" style="display:flex;flex-direction:row;gap:8px;margin-top:20px">
+                        <input name="pesquisar_especialidade" value="{{ request('pesquisar_especialidade') }}" type="text"
+                            id="searchInput" placeholder="Pesquisar...">
+                        <button class="btn btn-primary" type="submit" id="searchButton"><i
+                                class="fa fa-search"></i></button>
+                    </div>
+                    @if (request('pesquisar_especialidade'))
+                        <a style="margin-bottom: 12px" href="{{ route('mostrar_cadastros_admin') }}" class="btn btn-danger">Limpar pesquisa</a>
+                    @endif
+                </form>
 
                 <div class="table-container">
                     <table>
@@ -86,16 +107,17 @@
                         </thead>
                         <tbody>
                             @foreach ($especialidades as $especialidade)
-
                                 <tr>
                                     <td>{{ $especialidade->nome }}</td>
                                     <td>{{ $especialidade->descricao }}</td>
-                                    <td>{{ $especialidade->activo ? "Sim" : "Não"}}</td>
+                                    <td>{{ $especialidade->activo ? 'Sim' : 'Não' }}</td>
 
                                     <td>
                                         <div class="btn-group">
 
-                                            <button onclick="mostrarRemoverItemModal('{{route('remover_especialidade_admin',$especialidade->id_espec)}}')" class="btn btn-bg-red btn-small">Remover</button>
+                                            <button
+                                                onclick="mostrarRemoverItemModal('{{ route('remover_especialidade_admin', $especialidade->id_espec) }}')"
+                                                class="btn btn-bg-red btn-small">Remover</button>
 
                                             <a href="{{ route('mostrar_registro_especialidade_admin', $especialidade->id_espec) }}"
                                                 class="btn btn-primary btn-small">Editar</a>
@@ -111,6 +133,6 @@
     </section>
 
 @endsection
-@section("script")
+@section('script')
     <script src="/tabs.js"></script>
 @endsection

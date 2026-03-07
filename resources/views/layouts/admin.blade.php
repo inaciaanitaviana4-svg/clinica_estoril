@@ -61,7 +61,7 @@
             </aside>
         </div>
         <header
-            style="position: fixed; top: 0px; left:240px;right: 0px; background-color: white; padding: 8px; height: 52px;">
+            style="position: fixed; top: 0px; left:240px;right: 0px; background-color: white; padding: 8px; height: 52px;z-index: 100;" >
             <div style="display: flex; align-items: center; height: 100%; justify-content: space-between;">
                 <span style="font-weight: bold; font-size: px;">@yield('titulo')</span>
                 <a href="/visualizar-perfil"

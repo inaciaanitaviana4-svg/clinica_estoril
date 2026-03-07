@@ -1,7 +1,7 @@
 @extends("layouts.painel")
 @section("titulo", "notificações paciente")
 @section("conteudo")
-    <section class="section active painel">
+    <section class="section active">
         <div class="card">
             <div style="border:none;"class="card-header">
                 <h2 class="card-title">Notificação</h2>

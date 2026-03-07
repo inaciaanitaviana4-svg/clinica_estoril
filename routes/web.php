@@ -42,7 +42,7 @@ Route::middleware(["web"])->group(function () {
     Route::post('/editar-perfil', [UtilizadoresController::class, 'editar_perfil_salvar']);
 
     // ===== ROTAS DO PACIENTE =====
-    Route::get('/consultas-paciente', [PacienteController::class, 'consultas_paciente']);
+    Route::get('/consultas-paciente', [PacienteController::class, 'consultas_paciente'])->name('mostrar_consultas_paciente');
     Route::get('/perfil-paciente', [PacienteController::class, 'perfil_paciente']);
     Route::get('/agendar-consulta-paciente', [PacienteController::class, 'agendar_consulta_paciente']);
     Route::post('/agendar-consulta-paciente', [PacienteController::class, 'agendar_consulta_paciente_salvar']);
@@ -50,7 +50,7 @@ Route::middleware(["web"])->group(function () {
     Route::post('/confirmar-consulta-paciente/{id_consulta}', [PacienteController::class, 'confirmar_consulta_paciente']);
 
     // ===== ROTAS DE NOTIFICAÇÕES =====
-    Route::get('/listar-minhas-notificacoes', [NotificacoesController::class, 'listar_minhas_notificacoes']);
+    Route::get('/listar-minhas-notificacoes', [NotificacoesController::class, 'listar_minhas_notificacoes'])->name('listar_minhas_notificacoes');
     Route::get('/ler-notificacao/{id_notificacao}', [NotificacoesController::class, 'ler_notificacao']);
     Route::get('/ler-todas-notificacoes', [NotificacoesController::class, 'ler_todas_notificacoes']);
 

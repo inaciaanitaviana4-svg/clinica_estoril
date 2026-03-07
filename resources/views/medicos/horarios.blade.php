@@ -1,7 +1,7 @@
 @extends('layouts.painel')
 @section('titulo', 'Horários')
 @section('conteudo')
-    <section id="medico" class="section active painel">
+    <section id="medico" class="section active">
 
         <div id="horarios" class="tab-content active">
             @if (session('erro'))

@@ -1,7 +1,7 @@
 @extends('layouts.painel')
 @section('titulo', 'Relatorios')
 @section('conteudo')
-    <section class="section active painel ">
+    <section class="section active ">
         @if (session('erro'))
             <div style="background-color:red;color:white;text-align:center">
                 {{ session('erro') }}

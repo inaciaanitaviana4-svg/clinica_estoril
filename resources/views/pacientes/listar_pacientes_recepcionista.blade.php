@@ -1,7 +1,7 @@
 @extends("layouts.painel")
 @section("titulo", "Pacientes")
 @section("conteudo")
-    <section id="medico" class="section active painel">
+    <section id="medico" class="section active">
 
         <div id="prontuarios" class="tab-content active">
             <div class="card">

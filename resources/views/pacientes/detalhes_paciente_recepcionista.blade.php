@@ -1,7 +1,7 @@
 @extends('layouts.painel')
 @section('titulo', 'detalhes do paciente')
 @section('conteudo')
-    <section class="section active painel ">
+    <section class="section active ">
         <div class="login-card" id="userTypeCard">
             <h2 style="text-align: center;"><strong>Detalhes do paciente</strong> </h2>
             <br><br>

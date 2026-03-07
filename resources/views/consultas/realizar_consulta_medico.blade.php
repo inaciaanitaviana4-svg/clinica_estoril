@@ -1,7 +1,7 @@
 @extends('layouts.painel')
 @section('titulo', 'Realizar Consulta')
 @section('conteudo')
-<section id="medico" class="section active painel ">
+<section id="medico" class="section active ">
 
     <div class="card">
         <h2 class="text-primary-color">{{ $paciente->nome }}</h2>

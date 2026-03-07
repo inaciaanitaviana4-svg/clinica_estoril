@@ -2,7 +2,7 @@
 @section("titulo", "Atendimento & Agendamento")
 @section("conteudo")
 
-    <section class="login-section">
+    <section >
         <div class="login-container">
             <!-- Seleção de Tipo de Usuário -->
             <div class="login-card" id="userTypeCard">

@@ -16,7 +16,7 @@
     <span class="topbar-title">Detalhes do Prontuário</span>
 </div>
 
-<div class="page-container" style="padding-top: 170px;">
+<div class="page-container" style="">
     <!-- LEFT: Patient + Consultas -->
     <div>
         <div class="patient-card">

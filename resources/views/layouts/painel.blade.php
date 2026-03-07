@@ -1,6 +1,32 @@
+<?php
+$menus = [
+   // ['href' => '/admin/dashboard', 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'], 
+  
+    ];
+      if (session('tipo_utilizador') == 'medico'){
+        $menus=[
+            ['href'=>route('mostrar_prontuarios_medico'),'titulo'=>'Prontuarios','icon'=>'fa-solid fa-file-medical'],
+            ['href'=>route('mostrar_consultas_medico'),'titulo'=>'Consultas','icon'=>'fa-solid fa-calendar-check'],
+            ['href'=>route('mostrar_horarios_medico'),'titulo'=>'Horarios','icon'=>'fa-solid fa-clock'],
+            ['href'=>route('mostrar_relatorios_medico'),'titulo'=>'Relatórios','icon'=>'fa-solid fa-file-alt'],
+        ];
+    } 
+      if (session('tipo_utilizador') == 'recepcionista'){
+        $menus=[
+            ['href'=>route('mostrar_consultas_recepcionista'),'titulo'=>'Agendamentos','icon'=>'fa-solid fa-stethoscope'],
+            ['href'=>route('mostrar_pagamentos_recepcionista'),'titulo'=>'Pagamentos','icon'=>'fa-solid fa-credit-card'],
+            ['href'=>route('mostrar_pacientes_recepcionista'),'titulo'=>'Pacientes','icon'=>'fa-solid fa-users'],
+        ];
+            }
+              if (session('tipo_utilizador') == 'paciente'){
+                $menus=[
+                    ['href'=>route('mostrar_consultas_paciente'),'titulo'=>'Consultas','icon'=>'fa-solid fa-stethoscope'],
+                    ['href'=>route('listar_minhas_notificacoes'),'titulo'=>'Notificações','icon'=>'fa-solid fa-bell'],
+                ];
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-PT">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,67 +43,63 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     @yield('estilo')
+    <style>
+        .sidebar-menu-item {
+            text-decoration: none;
+        }
+
+        .sidebar-menu-item-active {
+            background-color: #0066cc;
+            color: white;
+        }
+
+        .sidebar-menu-item:hover {
+            background-color: #0066cc30;
+        }
+    </style>
 </head>
 
 <body class="bg-light">
+    <div style="display: flex;">
+        <div style="position: fixed; width: 240px; top:0px; height: 100%; background-color: white;">
+            <aside>
+                <div style="padding: 8px;">
+                    <a href="/">
+                        <div
+                            style="display: flex; justify-content: center; align-items: center; gap: 4px; height: 52px;">
+                            <img style="height: 40px; width: 40px; object-fit: cover;" src="/imagem/logo.png"
+                                alt="logotipo da clinica">
+                            <span style="font-weight: bold; font-size: 14pt;">Clínica Estoril</span>
+                        </div>
+                    </a>
+                </div>
 
-    <!-- HEADER E NAVEGAÇÃO -->
-    <header class="header">
-        <div class="container">
-            <div class="nav-wrapper">
-                <!-- Logo -->
-                <a href="/">
-                    <div class="logo">
-                        <img src="/imagem/logo.jpg" alt="logotipo da clinica">
-                        <span>Clínica Estoril</span>
-                    </div>
-                </a>
+                <div style="display: flex; flex-direction: column; margin-top: 20px;">
 
-                <!-- Navegação Desktop   active -->
-                <nav class="nav-menu">
-                    @if (session('tipo_utilizador') == 'paciente')
-                        <a href="/consultas-paciente" class="nav-link"><i class="fa-solid fa-stethoscope"></i>
-                            Consultas</a>
-                        <a href="/listar-minhas-notificacoes" class="nav-link"><i class="fa-solid fa-bell"></i>
-                            Notificações</a>
-                    @endif
-                    @if (session('tipo_utilizador') == 'medico')
-                        <a href="{{ route('mostrar_prontuarios_medico') }}" class="nav-link"><i
-                                class="fa-solid fa-file-medical"></i> Prontuarios</a>
-                        <a href="{{ route('mostrar_consultas_medico') }}" class="nav-link"><i
-                                class="fa-solid fa-calendar-check"></i> Consultas</a>
-                        <a href="{{ route('mostrar_horarios_medico') }}" class="nav-link"><i
-                                class="fa-solid fa-clock"></i> Horarios</a>
-                        <a href="{{ route('mostrar_relatorios_medico') }}" class="nav-link"><i class="fa-solid fa-file-alt"></i> Relatórios</a>
-                    @endif
-                    @if (session('tipo_utilizador') == 'recepcionista')
-                        <a href="{{ route('mostrar_consultas_recepcionista') }}"
-                            class="nav-link {{ link_ativo('mostrar_consultas_recepcionista') }}"><i
-                                class="fa-solid fa-stethoscope"></i> Consultas/Agendamentos</a>
-                        <a href="{{ route('mostrar_pagamentos_recepcionista') }}"
-                            class="nav-link {{ link_ativo('mostrar_pagamentos_recepcionista') }}"><i
-                                class="fa-solid fa-credit-card"></i> Pagamentos</a>
-                        <a href="{{ route('mostrar_pacientes_recepcionista') }}"
-                            class="nav-link {{ link_ativo('mostrar_pacientes_recepcionista') }}"><i
-                                class="fa-solid fa-users"></i> Pacientes</a>
-                    @endif
-                    <a class="nav-link" style=" font-weight: 500; color:red;" href="/sair"><strong><i
-                                class="fa-solid fa-right-from-bracket"></i> Sair</strong></a>
-                    <a href="/visualizar-perfil" class="nav-link"><i style="font-size: 28px; color: #0066cc"
-                            class="fa-solid fa-circle-user"></i></a>
-                </nav>
+                    @foreach ($menus as $menu)
+                        <a class="sidebar-menu-item" style="padding: 12px 16px; font-weight: 500;"
+                            href="{{ $menu['href'] }}"><i class="{{ $menu['icon'] }}"></i> {{ $menu['titulo'] }}</a>
+                    @endforeach
+                    <a class="sidebar-menu-item" style="padding: 12px 16px; font-weight: 500; color:red;"
+                        href="/sair"><i class="fa-solid fa-right-from-bracket"></i> <strong>Sair</strong></a>
+                </div>
+            </aside>
+        </div>
+        <header
+            style="position: fixed; top: 0px; left:240px;right: 0px; background-color: white; padding: 8px; height: 52px; z-index: 100;">
+            <div style="display: flex; align-items: center; height: 100%; justify-content: space-between;">
+                <span style="font-weight: bold; font-size: px;">@yield('titulo')</span>
+                <a href="/visualizar-perfil"
+                    style="display: flex; justify-items: center; align-items: center; height: fit-content;"><i
+                        style="font-size: 28px; color: #0066cc" class="fa-solid fa-circle-user"></i></a>
             </div>
-            <!-- Menu Mobile Toggle -->
-            <button class="mobile-menu-toggle" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-        </div>
-    </header>
+        </header>
 
-    @yield('conteudo')
+    </div>
+
+    <main style="margin-left: 240px; margin-top: 52px; padding: 16px">
+        @yield('conteudo')
+    </main>
 
     <!-- Modal Remover -->
     @include('components.remover_modal')
@@ -93,11 +115,27 @@
     <script src="{{ asset('popper.min.js') }}"></script>
     <script src="{{ asset('bootstrap.min.js') }}"></script>
     <script src="{{ asset('script.js') }}"></script>
+    <script src="{{ asset('auth.js') }}"></script>
     <script src="{{ asset('toastify-js.js') }}"></script>
     <script src="{{ asset('toastify.js') }}"></script>
     <script src="{{ asset('remover-modal.js') }}"></script>
+
     @yield('script')
 
+    <script>
+        const url = window.location.pathname
+        const menus = document.getElementsByClassName("sidebar-menu-item")
+
+        for (let i = 0; i < menus.length; i++) {
+            const menu = menus.item(i)
+            menu.classList.remove("sidebar-menu-item-active")
+            const href = menu.getAttribute("href")
+            if (url.startsWith(href)) {
+                menu.classList.add("sidebar-menu-item-active")
+            }
+        }
+    </script>
 </body>
+
 
 </html>
