@@ -1,6 +1,58 @@
 @extends("layouts.admin")
-@section("titulo","pagamentos")
+@section("titulo", "Pagamentos")
 @section("conteudo")
+    <section id="medico" class="section active">
 
+        <div id="prontuarios" class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Pagamentos</h2>
+                </div>
+                @if(session("erro"))
+                    <div style="background-color:red;color:white;text-align:center">
+                        {{ session("erro") }}
+                    </div>
+                @endif
 
- @endsection
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Data</th>
+                                <th>Paciente</th>
+                                <th>Recepcionista</th>
+                                <th>Metodo de Pagamento</th>
+                                <th>Total Pago</th>
+                                <th>Estado</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($pagamentos as $pagamento)
+
+                                <tr>
+                                    <td>{{ $pagamento->id_pagamento }}</td>
+                                    <td>{{ $pagamento->data }}</td>
+                                    <td>{{ $pagamento->nome_paciente }}</td>
+                                    <td>{{ $pagamento->nome_recepcionista }}</td>
+                                    <td>{{ $pagamento->metodo_pagamento }}</td>
+                                    <td>{{ $pagamento->total_pago }}</td>
+                                    <td>{{ badge_estados($pagamento->estado) }}</td>                               
+                                    <td>
+                                        <button
+                                                onclick="mostrarRemoverItemModal('{{ route('remover_pagamento_admin', $pagamento->id_pagamento) }}')"
+                                                style="color:red;border:none;background-color:transparent" ><i class="fa fa-trash" aria-hidden="true"></i></button>
+
+                                         <a  href="{{ route('detalhes_pagamentos_admin',$pagamento->id_pagamento) }}"class="btn  btn-small"><i class="fa-solid fa-eye"></i></a>
+                                    </td>
+
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+@endsection

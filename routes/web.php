@@ -105,8 +105,11 @@ Route::middleware(["web"])->group(function () {
 
     // ===== ROTAS DO ADMINISTRADOR =====
     Route::get('/admin/dashboard', [AdminController::class, 'mostrar_dashboard_admin']);
-    Route::get('/admin/pagamentos', [AdminController::class, 'mostrar_pagamentos_admin']);
-
+    Route::get('/admin/pagamentos', [AdminController::class, 'mostrar_pagamentos_admin'])->name('mostrar_pagamentos_admin');
+    Route::get('/admin/pagamentos/{id_pagamento}', [PagamentosController::class, 'detalhes_pagamentos_admin'])->name('detalhes_pagamentos_admin');
+    Route::post('/admin/pagamentos/{id_pagamento}/mudar-estado', [PagamentosController::class, 'mudar_estado_pagamento_admin'])->name('mudar_estado_pagamento_admin');
+    Route::get('/admin/pagamentos/{id_pagamento}/remover', [PagamentosController::class, 'remover_pagamento_admin'])->name('remover_pagamento_admin');
+    
     // Gerenciamento de utilizadores
     Route::get('/admin/cadastros', [AdminController::class, 'mostrar_cadastros_admin'])->name('mostrar_cadastros_admin');
     Route::get('/admin/cadastros/utilizadores/remover/{id_util}', [UtilizadoresController::class, 'remover_utilizador_admin'])->name('remover_utilizador_admin');
@@ -128,6 +131,7 @@ Route::middleware(["web"])->group(function () {
 
     // Visualizações do admin
     Route::get('/admin/consultas', [AdminController::class, 'mostrar_consultas_admin']);
+    Route::get('/admin/consultas/{id_consulta}', [ConsultaController::class, 'detalhes_consulta_admin'])->name('detalhes_consulta_admin');
     Route::get('/admin/prontuarios', [AdminController::class, 'mostrar_prontuarios_admin']);
     Route::get('/admin/exames', [AdminController::class, 'mostrar_exames_admin']);
 });

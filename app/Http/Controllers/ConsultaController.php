@@ -13,6 +13,7 @@ use App\Models\MetodoPagamento;
 use App\Models\Notificacao;
 use App\Models\Paciente;
 use App\Models\Receita;
+use App\Models\ReceitaItem;
 use App\Models\ServicoClinico;
 use App\Models\TipoConsulta;
 use App\Models\Utilizador;
@@ -155,6 +156,96 @@ class ConsultaController extends Controller
         ]);
 
         return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
+    }
+
+    public function detalhes_consulta_admin($id_consulta)
+    {
+        $utilizador = verificar_admin();
+        if (! $utilizador) {
+            return back()->with('erro', 'Não tem permissão para acessar esta página');
+        }
+        $consulta = Consulta::select(
+            'consultas.*',
+            'tipos_consultas.nome as nome_tipo_consulta',
+            'servicos_clinicos.nome as nome_servico_clinico',
+            'servicos_clinicos.preco as preco_servico_clinico',
+            'recepcionista.nome as nome_recepcionista'
+        )
+            ->leftJoin('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+            ->leftJoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
+            ->leftJoin('recepcionista', 'consultas.id_recepcionista', '=', 'recepcionista.id_recepcionista')
+            ->where('id_consulta', $id_consulta)->first();
+        if (! $consulta) {
+            return back()->with('erro', 'consulta não encontrado');
+        }
+        $paciente = Paciente::find($consulta->id_paciente);
+        $medico = $consulta->id_medico ? Medico::select('medico.nome', 'medico.email', 'medico.num_telefone', 'medico.especialidade')
+            ->where('id_medico', $consulta->id_medico)->first() : null;
+        $medicos = ! $consulta->id_medico ? Medico::select('id_medico', 'nome', 'especialidade')->get() : [];
+        $metodos_pagamento = MetodoPagamento::select('id_metodo_pagamento', 'nome')->get();
+        $servicos_clinicos = ServicoClinico::where('activo', true)->get();
+        $diagnosticos = Diagnostico::where('id_consulta', $id_consulta)
+            ->select('descricao')
+            ->get();
+            
+
+        $exames = ExameSolicitado::where('id_consulta', $id_consulta)
+            ->select('exames_solicitados.*', 'servicos_clinicos.nome as servico_clinico')
+            ->join('servicos_clinicos', 'exames_solicitados.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+            ->get();
+
+        $receitas = Receita::where('id_consulta', $id_consulta)
+            ->select('receitas.*')
+            ->get()
+            ->toArray();
+
+
+        $receitas = array_map(function ($receita) {
+            $itens = ReceitaItem::where('id_receita', $receita['id_receita'])
+                ->select('medicamento', 'dosagem', 'frequencia', 'duracao')
+                ->get()
+                ->toArray();
+
+            $receita['itens'] = array_map(function ($item) {
+                return [
+                    'medicamento' => $item['medicamento'],
+                    'dosagem' => $item['dosagem'],
+                    'frequencia' => $item['frequencia'],
+                    'duracao' => $item['duracao'],
+                ];
+            }, $itens);
+
+            return $receita;
+        }, $receitas);
+        $pagamentos = ItemPagamento::select(
+            'items_pagamentos.*',
+            'pagamentos.total_pago',
+            'pagamentos.estado',
+            'servicos_clinicos.nome as nome_servico_clinico',
+            'servicos_clinicos.preco as preco_servico_clinico',
+            'metodos_pagamentos.nome as nome_metodo_pagamento'
+        )
+            ->leftJoin('pagamentos', 'items_pagamentos.id_pagamento', '=', 'pagamentos.id_pagamento')
+            ->leftJoin('servicos_clinicos', 'items_pagamentos.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+            ->leftJoin('metodos_pagamentos', 'pagamentos.id_metodo_pagamento', '=', 'metodos_pagamentos.id_metodo_pagamento')
+            ->where('pagamentos.id_consulta', $id_consulta)
+            ->get();
+        $total_pago = 0;
+        $total_servicos = 0;
+        foreach ($pagamentos as $pagamento) {
+            if ($pagamento->estado == 'sucesso') {
+                $total_pago += $pagamento->total_pago;
+                $total_servicos += $pagamento->total;
+            }
+        }
+        $saldo_total = $total_servicos - $total_pago;
+        $resumo = [
+            'total_pago' => $total_pago,
+            'total_servicos' => $total_servicos,
+            'saldo_total' => $saldo_total,
+        ];
+
+        return view('consultas.detalhes_consulta_admin', compact('consulta', 'paciente', 'medico', 'pagamentos', 'medicos', 'metodos_pagamento', 'servicos_clinicos', 'resumo', 'diagnosticos', 'exames', 'receitas'));
     }
 
     public function detalhes_consulta_recepcionista($id_consulta)
@@ -313,7 +404,7 @@ class ConsultaController extends Controller
 
             );
         } catch (\Exception $e) {
-            return response()->json(['erro' => 'Erro ao salvar diagnóstico: ' . $e->getMessage()], 500);
+            return response()->json(['erro' => 'Erro ao salvar diagnóstico: '.$e->getMessage()], 500);
         }
 
         return response()->json(['sucesso' => 'Diagnóstico salvo com sucesso']);
@@ -378,8 +469,8 @@ class ConsultaController extends Controller
         }
 
         $exame_existe = ExameSolicitado::where([
-            "id_consulta" => $id_consulta,
-            "id_servico_clinico" => $request->id_servico_clinico
+            'id_consulta' => $id_consulta,
+            'id_servico_clinico' => $request->id_servico_clinico,
         ])->first();
 
         if ($exame_existe) {
@@ -402,13 +493,13 @@ class ConsultaController extends Controller
                         'id_servico_clinico' => $request->id_servico_clinico,
                         'status' => 'PENDENTE',
                         'criado_em' => date('Y-m-d H:i:s'),
-                        'actualizado_em' => date('Y-m-d H:i:s')
+                        'actualizado_em' => date('Y-m-d H:i:s'),
                     ],
 
                 );
             }
         } catch (\Exception $e) {
-            return response()->json(['erro' => 'Erro ao registrar exame: ' . $e->getMessage()], 500);
+            return response()->json(['erro' => 'Erro ao registrar exame: '.$e->getMessage()], 500);
         }
 
         return response()->json(['sucesso' => 'Exame registrado com sucesso']);
@@ -438,7 +529,7 @@ class ConsultaController extends Controller
             $exame->actualizado_em = date('Y-m-d H:i:s');
             $exame->save();
         } catch (\Exception $e) {
-            return response()->json(['erro' => 'Erro ao salvar resultado do exame: ' . $e->getMessage()], 500);
+            return response()->json(['erro' => 'Erro ao salvar resultado do exame: '.$e->getMessage()], 500);
         }
 
         return response()->json(['sucesso' => 'Resultado do exame salvo com sucesso']);
@@ -452,7 +543,7 @@ class ConsultaController extends Controller
         }
         $exame = ExameSolicitado::select('exames_solicitados.*', 'servicos_clinicos.nome as nome_exame')
             ->join('servicos_clinicos', 'exames_solicitados.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
-            ->where("id_exame_solicitado", $id_exame)
+            ->where('id_exame_solicitado', $id_exame)
             ->first();
 
         if (! $exame) {

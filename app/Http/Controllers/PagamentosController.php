@@ -246,6 +246,27 @@ class PagamentosController extends Controller
 
         return view('pagamentos.detalhes_pagamento_recepcionista', compact('pagamento', 'itens_pagamento'));
     }
+    public function detalhes_pagamentos_admin($id_pagamento)
+    {
+        $utilizador = verificar_admin();
+        if (! $utilizador) {
+            return back()->with('erro', 'Não tem permissão para acessar esta página');
+        }
+        $pagamento = Pagamento::select('pagamentos.*', 'paciente.nome as nome_paciente', 'metodos_pagamentos.nome as metodo_pagamento')
+            ->where('id_pagamento', $id_pagamento)
+            ->join('paciente', 'pagamentos.id_paciente', '=', 'paciente.id_paciente')
+            ->join('metodos_pagamentos', 'pagamentos.id_metodo_pagamento', '=', 'metodos_pagamentos.id_metodo_pagamento')
+            ->first();
+        if (! $pagamento) {
+            return redirect()->back()->with('erro', 'Pagamento não encontrado.');
+        }
+        $itens_pagamento = ItemPagamento::select('items_pagamentos.*', 'servicos_clinicos.nome as nome_servico_clinico')
+            ->where('id_pagamento', $id_pagamento)
+            ->join('servicos_clinicos', 'items_pagamentos.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+            ->get();
+
+        return view('pagamentos.detalhes_pagamento_admin', compact('pagamento', 'itens_pagamento'));
+    }
 
     public function mudar_estado_pagamento_recepcionista(Request $request, $id_pagamento)
     {
@@ -273,5 +294,55 @@ class PagamentosController extends Controller
         }
 
         return redirect()->route('detalhes_pagamento_recepcionista', ['id_pagamento' => $id_pagamento])->with('success', 'Estado do pagamento atualizado com sucesso.');
+    }
+    public function mudar_estado_pagamento_admin(Request $request, $id_pagamento)
+    {
+        $utilizador = verificar_admin();
+        if (! $utilizador) {
+            return back()->with('erro', 'Não tem permissão para acessar esta página');
+        }
+        $pagamento = Pagamento::find($id_pagamento);
+        if (! $pagamento) {
+            return redirect()->back()->with('erro', 'Pagamento não encontrado.');
+        }
+        $novo_estado = $request->input('estado');
+        if (! in_array($novo_estado, ['sucesso', 'cancelado'])) {
+            return redirect()->back()->with('erro', 'Estado de pagamento inválido.');
+        }
+        try {
+            DB::beginTransaction();
+            $pagamento->estado = $novo_estado;
+            $pagamento->save();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()->back()->with('erro', 'Ocorreu um erro ao atualizar o estado do pagamento: ');
+        }
+
+        return redirect()->route('detalhes_pagamentos_admin', ['id_pagamento' => $id_pagamento])->with('success', 'Estado do pagamento atualizado com sucesso.');
+    }
+    public function remover_pagamento_admin($id_pagamento)
+    {
+        $utilizador = verificar_admin();
+        if (! $utilizador) {
+            return back()->with('erro', 'Não tem permissão para acessar esta página');
+        }
+        $pagamento = Pagamento::find($id_pagamento);
+        if (! $pagamento) {
+            return redirect()->back()->with('erro', 'Pagamento nao encontrado.');
+        }
+        try {
+            DB::beginTransaction();
+            $pagamento->delete();
+            ItemPagamento::where('id_pagamento', $id_pagamento)->delete(); //deleta os itens do tempagame
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()->back()->with('erro', 'Ocorreu um erro ao remover o pagamento: ');
+        }
+
+        return redirect()->route('mostrar_pagamentos_admin')->with('success', 'Pagamento removido com sucesso.');
     }
 }

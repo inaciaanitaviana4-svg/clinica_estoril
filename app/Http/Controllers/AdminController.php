@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Consulta;
 use App\Models\Especialidade;
+use App\Models\Pagamento;
 use App\Models\ServicoClinico;
 use App\Models\TipoConsulta;
 use App\Models\Utilizador;
@@ -44,8 +46,13 @@ class AdminController extends Controller
         if (! $this->verificar_admin()) {
             return redirect('/login');
         }
+        $pagamentos = Pagamento::select('pagamentos.*', 'paciente.nome as nome_paciente', 'metodos_pagamentos.nome as metodo_pagamento', 'recepcionista.nome as nome_recepcionista')
+            ->join('recepcionista', 'pagamentos.id_recepcionista', '=', 'recepcionista.id_recepcionista')
+            ->join('paciente', 'pagamentos.id_paciente', '=', 'paciente.id_paciente')
+            ->join('metodos_pagamentos', 'pagamentos.id_metodo_pagamento', '=', 'metodos_pagamentos.id_metodo_pagamento')
+            ->get();
 
-        return view('admin.pagamentos');
+        return view('admin.pagamentos', compact('pagamentos'));
     }
 
     public function mostrar_cadastros_admin(Request $request)
@@ -75,8 +82,30 @@ class AdminController extends Controller
         if (! $this->verificar_admin()) {
             return redirect('/login');
         }
+         $consultas = Consulta::select(
+            'consultas.id_consulta',
+            'tipos_consultas.nome as tipo_consulta',
+            'consultas.modalidade',
+            'consultas.data',
+            'consultas.hora',
+            'consultas.estado',
+            'paciente.nome as nome_paciente',
+            'medico.nome as nome_medico',
+            'recepcionista.nome as nome_recepcionista',
+            'servicos_clinicos.nome as nome_servico_clinico',
+            'servicos_clinicos.preco as preco_servico_clinico'
+        )
+            ->join('paciente', 'consultas.id_paciente', '=', 'paciente.id_paciente')
+            ->join('medico', 'consultas.id_medico', '=', 'medico.id_medico')
+            ->join('recepcionista', 'consultas.id_recepcionista', '=', 'recepcionista.id_recepcionista')
+            ->leftJoin('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+            ->leftJoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
+            ->whereIn('estado', ['agendada', 'concluida', 'em_andamento', 'confirmada'])
+            ->orderBy('data', 'asc')
+            ->orderBy('hora', 'asc')
+            ->get();
 
-        return view('admin.consultas');
+        return view('admin.consultas', compact('consultas',));
     }
 
     public function mostrar_prontuarios_admin()
