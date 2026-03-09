@@ -10,6 +10,8 @@ use App\Http\Controllers\PagamentosController;
 use App\Http\Controllers\ProntuarioController;
 use App\Http\Controllers\ReceitaController;
 use App\Http\Controllers\RelatorioController;
+use App\Http\Controllers\ServicoClinicoController;
+use App\Http\Controllers\TipoConsultaController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\SiteController;
@@ -115,6 +117,14 @@ Route::middleware(["web"])->group(function () {
     Route::get('/admin/cadastros/especialidades/remover/{id_espec}', [EspecialidadesController::class, 'remover_especialidade_admin'])->name('remover_especialidade_admin');
     Route::get('/admin/cadastros/especialidades/registro/{id_espec?}', [EspecialidadesController::class, 'mostrar_registro_especialidade_admin'])->name('mostrar_registro_especialidade_admin');
     Route::post('/admin/cadastros/especialidades/registro/{id_espec?}', [EspecialidadesController::class, 'salvar_registro_especialidade_admin'])->name('salvar_registro_especialidade_admin');
+    // Gerenciamento de Tipo de Consulta
+    Route::get('/admin/cadastros/tipo_consulta/remover/{id_tipo_consulta}', [TipoConsultaController::class, 'remover_tipo_consulta_admin'])->name('remover_tipo_consulta_admin');
+    Route::get('/admin/cadastros/tipo_consulta/registro/{id_tipo_consulta?}', [TipoConsultaController::class, 'mostrar_registro_tipo_consulta_admin'])->name('mostrar_registro_tipo_consulta_admin');
+    Route::post('/admin/cadastros/tipo_consulta/registro/{id_tipo_consulta?}', [TipoConsultaController::class, 'salvar_registro_tipo_consulta_admin'])->name('salvar_registro_tipo_consulta_admin');
+    // Gerenciamento de servicos clinicos
+    Route::get('/admin/cadastros/servicos_clinico/remover/{id_servico_clinico}', [ServicoClinicoController::class, 'remover_servico_clinico_admin'])->name('remover_servico_clinico_admin');
+    Route::get('/admin/cadastros/servicos_clinico/registro/{id_servico_clinico?}', [ServicoClinicoController::class, 'mostrar_registro_servico_clinico_admin'])->name('mostrar_registro_servico_clinico_admin');
+    Route::post('/admin/cadastros/servicos_clinico/registro/{id_servico_clinico?}', [ServicoClinicoController::class, 'salvar_registro_servico_clinico_admin'])->name('salvar_registro_servico_clinico_admin');
 
     // Visualizações do admin
     Route::get('/admin/consultas', [AdminController::class, 'mostrar_consultas_admin']);

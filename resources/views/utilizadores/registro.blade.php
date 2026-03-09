@@ -1,13 +1,13 @@
-@extends("layouts.admin")
-@section("titulo", "Registro de usuário")
-@section("conteudo")
+@extends('layouts.admin')
+@section('titulo', 'Registro de usuário')
+@section('conteudo')
     <section class="section active ">
         <div class="login-card" id="userTypeCard">
             <h2 style="text-align: center;"><strong>Registro de utilizador</strong> </h2>
             <br><br>
-            @if(session("erro"))
+            @if (session('erro'))
                 <div style="background-color:red;color:white;text-align:center">
-                    {{ session("erro") }}
+                    {{ session('erro') }}
                 </div>
             @endif
 
@@ -36,34 +36,36 @@
                         </div>
                         <div class="editar-perfil-field">
                             <label class="editar-perfil-label editar-perfil-label--required">Nome Completo</label>
-                            <input name="nome" type="text" class="editar-perfil-input" value="{{ $utilizador->nome ?? '' }}"
-                                placeholder="Digite seu nome completo">
+                            <input name="nome" type="text" class="editar-perfil-input"
+                                value="{{ $utilizador->nome ?? '' }}" placeholder="Digite seu nome completo">
                         </div>
                         <div class="editar-perfil-field">
                             <label class="editar-perfil-label editar-perfil-label--required">Gênero</label>
                             <select name="genero" class="editar-perfil-select">
                                 <option value="">Selecione...</option>
-                                <option value="M" {{ $utilizador->genero ?? '' == 'M' ? 'selected' : '' }}>Masculino</option>
-                                <option value="F" {{ $utilizador->genero ?? '' == 'F' ? 'selected' : '' }}>Feminino</option>
+                                <option value="M" {{ ($utilizador->genero ?? '') == 'M' ? 'selected' : '' }}>Masculino
+                                </option>
+                                <option value="F" {{ ($utilizador->genero ?? '') == 'F' ? 'selected' : '' }}>Feminino
+                                </option>
                             </select>
                         </div>
                         <div class="editar-perfil-field" data-input="data_nascimento">
                             <label class="editar-perfil-label editar-perfil-label--required">Data de Nascimento</label>
                             <input name="data_nascimento" type="date" class="editar-perfil-input"
-                                value="{{ $dados["paciente"]->data_nascimento ?? '' }}">
+                                value="{{ $dados['paciente']->data_nascimento ?? '' }}">
                         </div>
                         <div class="editar-perfil-field" data-input="estado_civil">
                             <label class="editar-perfil-label">Estado Civil</label>
                             <select name="estado_civil" class="editar-perfil-select">
                                 <option value="">Selecione...</option>
-                                <option value="solteiro" @selected($dados["paciente"]->estado_civil ?? '' == 'solteiro')>
+                                <option value="solteiro" @selected($dados['paciente']->estado_civil ?? '' == 'solteiro')>
                                     Solteiro(a)</option>
-                                <option value="casado" @selected($dados["paciente"]->estado_civil ?? '' == 'casado')>
+                                <option value="casado" @selected($dados['paciente']->estado_civil ?? '' == 'casado')>
                                     Casado(a)
                                 </option>
-                                <option value="divorciado" @selected($dados["paciente"]->estado_civil ?? '' == 'divorciado')>
+                                <option value="divorciado" @selected($dados['paciente']->estado_civil ?? '' == 'divorciado')>
                                     Divorciado(a)</option>
-                                <option value="viuvo" @selected($dados["paciente"]->estado_civil ?? '' == 'viuvo')>
+                                <option value="viuvo" @selected($dados['paciente']->estado_civil ?? '' == 'viuvo')>
                                     Viúvo(a)
                                 </option>
                             </select>
@@ -71,8 +73,8 @@
                         <div class="editar-perfil-field" data-input="num_bi">
                             <label class="editar-perfil-label editar-perfil-label--required">Número do BI</label>
                             <input name="num_bi" type="text" class="editar-perfil-input"
-                                value="{{ $dados["paciente"]->num_bi ?? '' }}" placeholder="000000000LA000" max="14"
-                                min="14" >
+                                value="{{ $dados['paciente']->num_bi ?? '' }}" placeholder="000000000LA000" max="14"
+                                min="14">
                         </div>
                     </div>
                 </div>
@@ -93,7 +95,8 @@
                         <div class="editar-perfil-field" data-input="num_telefone">
                             <label class="editar-perfil-label editar-perfil-label--required">Número de Telefone</label>
                             <input name="num_telefone" type="tel" class="editar-perfil-input"
-                                value="{{ $utilizador->num_telefone ?? '' }}" placeholder=" 900000000" maxlength="9" minlength="9" >
+                                value="{{ $utilizador->num_telefone ?? '' }}" placeholder=" 900000000" maxlength="9"
+                                minlength="9">
                         </div>
                     </div>
                 </div>
@@ -107,23 +110,22 @@
                     <div class="editar-perfil-grid">
                         <div class="editar-perfil-field editar-perfil-field--full" data-input="morada">
                             <label class="editar-perfil-label editar-perfil-label--required">Morada</label>
-                            <textarea name="morada" class="editar-perfil-textarea"
-                                placeholder="Rua, número, edifício, andar, apartamento...">{{ $dados["paciente"]->morada ?? $dados["admin"]->morada ?? $dados["recepcionista"]->morada ?? $dados["medico"]->morada ?? ''}}</textarea>
+                            <textarea name="morada" class="editar-perfil-textarea" placeholder="Rua, número, edifício, andar, apartamento...">{{ $dados['paciente']->morada ?? ($dados['admin']->morada ?? ($dados['recepcionista']->morada ?? ($dados['medico']->morada ?? ''))) }}</textarea>
                         </div>
                         <div class="editar-perfil-field" data-input="cidade">
                             <label class="editar-perfil-label editar-perfil-label--required">Cidade</label>
                             <input name="cidade" type="text" class="editar-perfil-input"
-                                value="{{ $dados["paciente"]->cidade ?? ''}}" placeholder="Digite a cidade">
+                                value="{{ $dados['paciente']->cidade ?? '' }}" placeholder="Digite a cidade">
                         </div>
                         <div class="editar-perfil-field" data-input="bairro">
                             <label class="editar-perfil-label editar-perfil-label--required">Bairro</label>
                             <input name="bairro" type="text" class="editar-perfil-input"
-                                value="{{ $dados["paciente"]->bairro ?? '' }}" placeholder="Digite o bairro">
+                                value="{{ $dados['paciente']->bairro ?? '' }}" placeholder="Digite o bairro">
                         </div>
                         <div class="editar-perfil-field editar-perfil-field--full" data-input="seguro">
                             <label class="editar-perfil-label">Seguro</label>
                             <input name="seguro" type="text" class="editar-perfil-input"
-                                value="{{ $dados["paciente"]->seguro ?? ''}}"
+                                value="{{ $dados['paciente']->seguro ?? '' }}"
                                 placeholder="Informações do seguro profissional">
                         </div>
                     </div>
@@ -137,7 +139,8 @@
                     <div class="editar-perfil-grid">
                         <div class="editar-perfil-field">
                             <label class="editar-perfil-label editar-perfil-label--required">Senha</label>
-                            <input name="senha" type="password" class="editar-perfil-input" placeholder="Digite sua senha">
+                            <input name="senha" type="password" class="editar-perfil-input"
+                                placeholder="Digite sua senha">
                         </div>
                     </div>
                 </div>
@@ -162,7 +165,8 @@
                         <div class="editar-perfil-field" data-input="ano_experiencia">
                             <label class="editar-perfil-label editar-perfil-label--required">Anos de Experiência</label>
                             <input name="ano_experiencia" type="number" class="editar-perfil-input"
-                                value="{{ $dados["medico"]->ano_experiencia ?? '' }}" placeholder="0" min="0" max="70">
+                                value="{{ $dados['medico']->ano_experiencia ?? '' }}" placeholder="0" min="0"
+                                max="70">
                         </div>
                     </div>
                 </div>
@@ -177,18 +181,18 @@
         </div>
     </section>
 @endsection
-@section("script")
+@section('script')
     <script>
-
         const select_tipo = document.querySelector('[name="tipo"]')
-        select_tipo.addEventListener("change", function () {
+        select_tipo.addEventListener("change", function() {
             const valor_selecionado = this.value
             mostrar_campos_por_tipo(valor_selecionado)
         })
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const valor_selecionado = select_tipo.value
             mostrar_campos_por_tipo(valor_selecionado)
         })
+
         function mostrar_campos_por_tipo(valor_selecionado) {
             const data_nascimento = document.querySelector('[data-input="data_nascimento"]')
             const num_bi = document.querySelector('[data-input="num_bi"]')

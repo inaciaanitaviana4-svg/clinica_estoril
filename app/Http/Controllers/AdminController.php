@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Especialidade;
+use App\Models\ServicoClinico;
+use App\Models\TipoConsulta;
 use App\Models\Utilizador;
 use Illuminate\Http\Request;
 
@@ -52,14 +54,20 @@ class AdminController extends Controller
             return redirect('/login');
         }
         $pesquisar = $request->query('pesquisar_utilizador') ?? '';
-        $pesquisar_especialidade = $request->query('pesquisar_especialidade') ?? '';
         $utilizadores = Utilizador::where('id_util', '<>', session('id_utilizador'))
             ->where(function ($query) use ($pesquisar) {
                 $query->where('nome', 'like', "%$pesquisar%")->orWhere('email', 'like', "%$pesquisar%")->orWhere('num_telefone', 'like', "%$pesquisar%");
-            })->get();
-        $especialidades = Especialidade::where('nome','like',"%$pesquisar_especialidade%")->get();
+            })->paginate(10);
+        $pesquisar_especialidade = $request->query('pesquisar_especialidade') ?? '';
+        $especialidades = Especialidade::where('nome', 'like', "%$pesquisar_especialidade%")->paginate(10);
+        $pesquisar_tipo_consulta = $request->query('pesquisar_tipo_consulta') ?? '';
+        $tipo_consultas = TipoConsulta::where('nome', 'like', "%$pesquisar_tipo_consulta%")->paginate(10);
+        $pesquisar_servico_clinico = $request->query('pesquisar_servico_clinico') ?? '';
+        $servicos_clinicos = ServicoClinico::select('servicos_clinicos.*', 'tipos_consultas.nome as tipo_consulta')
+            ->join('tipos_consultas', 'tipos_consultas.id_tipo_consulta', '=', 'servicos_clinicos.id_tipo_consulta')
+            ->where('servicos_clinicos.nome', 'like', "%$pesquisar_servico_clinico%")->paginate(10);
 
-        return view('admin.cadastros', compact('utilizadores', 'especialidades'));
+        return view('admin.cadastros', compact('utilizadores', 'especialidades', 'tipo_consultas', 'servicos_clinicos'));
     }
 
     public function mostrar_consultas_admin()
