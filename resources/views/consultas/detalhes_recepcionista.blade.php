@@ -60,21 +60,21 @@
                     </div>
                     <div class="row mt-4">
                         <form class="col"
-                            action="{{ route('mudar_estado_consulta_recepcionista', $consulta->id_consulta) }}"
+                            action="{{ route('mudar_estado_consulta', ['id_consulta'=>$consulta->id_consulta,'view'=>'recepcionista']) }}"
                             method="POST">
                             {{ csrf_field() }}
                             <input type="hidden" name="estado" value="cancelada">
                             <button  type="submit" class="btn btn-danger">Cancelar consulta</button>
                         </form>
                         <form class="col"
-                            action="{{ route('mudar_estado_consulta_recepcionista', $consulta->id_consulta) }}"
+                            action="{{ route('mudar_estado_consulta', ['id_consulta'=>$consulta->id_consulta,'view'=>'recepcionista']) }}"
                             method="POST">
                             {{ csrf_field() }}
                             <input type="hidden" name="estado" value="agendada">
                             <button style="background-color: #6366f1" type="submit" class="btn btn-success">Agendar consulta</button>
                         </form>
                         <form class="col"
-                            action="{{ route('mudar_estado_consulta_recepcionista', $consulta->id_consulta) }}"
+                            action="{{ route('mudar_estado_consulta', ['id_consulta'=>$consulta->id_consulta,'view'=>'recepcionista']) }}"
                             method="POST">
                             {{ csrf_field() }}
                             <input type="hidden" name="estado" value="confirmada">
@@ -82,7 +82,7 @@
 
                         </form>
                         <form class="col"
-                            action="{{ route('mudar_estado_consulta_recepcionista', $consulta->id_consulta) }}"
+                            action="{{ route('mudar_estado_consulta', ['id_consulta'=>$consulta->id_consulta,'view'=>'recepcionista']) }}"
                             method="POST">
                             {{ csrf_field() }}
                             <input type="hidden" name="estado" value="em_espera">
@@ -109,14 +109,14 @@
                                 {{ label_detalhes($medico, 'especialidade', 'Especialidade', 'col') }}
                             </div>
                             <form class=""
-                                action="{{ route('desassociar_medico_consulta_recepcionista', $consulta->id_consulta) }}"
+                                action="{{route('desassociar_medico_consulta', ['id_consulta'=>$consulta->id_consulta,'view'=>'recepcionista'])}}"
                                 method="POST">
                                 {{ csrf_field() }}
                                 <button type="submit" class="btn btn-danger">Desassociar médico</button>
                             </form>
                         @else
                             <form class="row"
-                                action="{{ route('associar_medico_consulta_recepcionista', $consulta->id_consulta) }}"
+                                action="{{ route('associar_medico_consulta', ['id_consulta'=>$consulta->id_consulta,'view'=>'recepcionista']) }}"
                                 method="POST">
                                 {{ csrf_field() }}
                                 <div class="w-100 form-group">

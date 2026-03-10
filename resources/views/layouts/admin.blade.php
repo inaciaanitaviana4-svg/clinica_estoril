@@ -49,7 +49,7 @@
                 </div>
 
                 <div style="display: flex; flex-direction: column; margin-top: 20px;">
-                    <?php $menus = [['href' => '/admin/dashboard', 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'], ['href' => '/admin/pagamentos', 'titulo' => 'Pagamentos', 'icon' => 'fa-solid fa-credit-card'], ['href' => '/admin/cadastros', 'titulo' => 'Cadastros', 'icon' => 'fa-solid fa-users'], ['href' => '/admin/consultas', 'titulo' => 'Consultas', 'icon' => 'fa-solid fa-stethoscope'], ['href' => '/admin/prontuarios', 'titulo' => 'Prontuários', 'icon' => 'fa-solid fa-file-medical'], ['href' => '/admin/exames', 'titulo' => 'Exames', 'icon' => 'fa-solid fa-microscope'], ['href' => '/admin/relatorios-medicos', 'titulo' => 'Relatórios Medicos', 'icon' => 'fa-solid fa-file-alt']];
+                    <?php $menus = [['href' => '/admin/dashboard', 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'], ['href' => '/admin/pagamentos', 'titulo' => 'Pagamentos', 'icon' => 'fa-solid fa-credit-card'], ['href' => '/admin/cadastros', 'titulo' => 'Cadastros', 'icon' => 'fa-solid fa-users'], ['href' => '/admin/consultas', 'titulo' => 'Consultas', 'icon' => 'fa-solid fa-stethoscope'], ['href' => route('mostrar_prontuarios_medico_admin',), 'titulo' => 'Prontuários', 'icon' => 'fa-solid fa-file-medical'], ['href' => '/admin/relatorios', 'titulo' => 'Relatórios', 'icon' => 'fa-solid fa-file-alt']];
                     ?>
                     @foreach ($menus as $menu)
                         <a class="sidebar-menu-item" style="padding: 12px 16px; font-weight: 500;"

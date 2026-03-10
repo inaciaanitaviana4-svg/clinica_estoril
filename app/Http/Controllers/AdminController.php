@@ -116,13 +116,4 @@ class AdminController extends Controller
 
         return view('admin.prontuarios');
     }
-
-    public function mostrar_exames_admin()
-    {
-        if (! $this->verificar_admin()) {
-            return redirect('/login');
-        }
-
-        return view('admin.exames');
-    }
 }

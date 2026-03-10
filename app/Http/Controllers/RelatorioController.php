@@ -44,6 +44,29 @@ class RelatorioController extends Controller
         return view('medicos.relatorios', compact('pacientes', 'recepcionistas', 'tipos_consultas', 'servicos_clinicos', 'clinica'));
     }
 
+    public function mostrar_relatorios_admin()
+    {
+        if (! verificar_admin()) {
+            return back()->with('erro', 'não tem permissão para acessar essa pagina ');
+        }
+        $pacientes = Paciente::join('consultas', 'paciente.id_paciente', '=', 'consultas.id_paciente')
+            ->select('paciente.*')
+            ->distinct()->get();
+        $recepcionistas = recepcionista::join('consultas', 'recepcionista.id_recepcionista', '=', 'consultas.id_recepcionista')
+            ->select('recepcionista.*')
+            ->distinct()->get();
+
+        $tipos_consultas = TipoConsulta::join('consultas', 'tipos_consultas.id_tipo_consulta', '=', 'consultas.id_tipo_consulta')
+            ->select('tipos_consultas.*')
+            ->distinct()->get();
+        $servicos_clinicos = ServicoClinico::join('consultas', 'servicos_clinicos.id_servico_clinico', '=', 'consultas.id_servico_clinico')
+            ->select('servicos_clinicos.*')
+            ->distinct()->get();
+        $clinica = Clinica::first();
+
+        return view('admin.relatorios', compact('pacientes', 'recepcionistas', 'tipos_consultas', 'servicos_clinicos', 'clinica'));
+    }
+
     public function api_relatorio_consultas(Request $request)
     {
         $medico = verificar_medico();
@@ -103,14 +126,19 @@ class RelatorioController extends Controller
 
     public function api_relatorio_prontuario_paciente($id_paciente)
     {
+        $medico = verificar_medico();
+        $admin = verificar_admin();
+        if (! $medico && ! $admin) {
+            return response()->json(['erro' => 'Não tem permissão para acessar este relatório'], status: 403);
+        }
         $paciente = Paciente::find($id_paciente);
         if (! $paciente) {
             return response()->json(['erro' => 'Paciente não encontrado'], status: 404);
         }
         $consultas = Consulta::select('consultas.*', 'tipos_consultas.nome as tipo_consulta', 'servicos_clinicos.nome as servico_clinico')
-        ->join('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
-        ->join('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
-        ->where('id_paciente', $id_paciente)->get()->toArray();
+            ->join('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+            ->join('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
+            ->where('id_paciente', $id_paciente)->get()->toArray();
         $consultas = array_map(function ($consulta) {
             $id_consulta = $consulta['id_consulta'];
             $diagnosticos = Diagnostico::where('id_consulta', $id_consulta)
@@ -155,7 +183,7 @@ class RelatorioController extends Controller
             ];
         }, $consultas);
         $resultado = [
-            'idade'=>  date('Y') - date('Y', strtotime($paciente->data_nascimento)),
+            'idade' => date('Y') - date('Y', strtotime($paciente->data_nascimento)),
             ...$paciente->toArray(),
             'consultas' => $consultas,
 

@@ -190,6 +190,15 @@ if (! function_exists('badge_estados')) {
                 $estado_nome = 'Sucesso';
                 break;
 
+            case 'PENDENTE':
+                $cor = '#f59e0b';
+                $estado_nome = 'Pendente';
+                break;
+
+            case 'REALIZADO':
+                $cor = '#10b981';
+                $estado_nome = 'Realizado';
+                break;
         }
 
         echo "<span style='padding: 4px 8px; background-color: $cor; color: white; border-radius: 4px;'>$estado_nome</span>";

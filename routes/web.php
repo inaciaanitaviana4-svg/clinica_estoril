@@ -70,12 +70,12 @@ Route::middleware(["web"])->group(function () {
     Route::get('/painel-recepcionista/pacientes/{id_paciente}', [PacienteController::class, 'detalhes_paciente_recepcionista'])->name("detalhes_paciente_recepcionista");
     Route::get('/painel-recepcionista/atendimento', [ConsultaController::class, 'mostrar_atendimento_recepcionista'])->name("mostrar_atendimento_recepcionista");
     Route::post('/painel-recepcionista/atendimento', [ConsultaController::class, 'salvar_atendimento_recepcionista'])->name("salvar_atendimento_recepcionista");
-    Route::post('/painel-recepcionista/associar-medico/{id_consulta}', [ConsultaController::class, 'associar_medico_consulta_recepcionista'])->name("associar_medico_consulta_recepcionista");
-    Route::post('/painel-recepcionista/desassociar-medico/{id_consulta}', [ConsultaController::class, 'desassociar_medico_consulta_recepcionista'])->name("desassociar_medico_consulta_recepcionista");
+    Route::post('/consultas/{id_consulta}/associar-medico/{view?}', [ConsultaController::class, 'associar_medico_consulta'])->name("associar_medico_consulta");
+    Route::post('/consultas/{id_consulta}/desassociar-medico/{view?}', [ConsultaController::class, 'desassociar_medico_consulta'])->name("desassociar_medico_consulta");
     Route::post('/painel-recepcionista/fazer-pagamento/{id_consulta}', [PagamentosController::class, 'fazer_pagamento_consulta_recepcionista'])->name("fazer_pagamento_consulta_recepcionista");
     Route::get('/painel-recepcionista/cancelar-pagamento/{id_pagamento}', [PagamentosController::class, 'cancelar_pagamento_consulta_recepcionista'])->name("cancelar_pagamento_consulta_recepcionista");
     Route::get('/painel-recepcionista/atendimento/{id_consulta}', [ConsultaController::class, 'detalhes_consulta_recepcionista'])->name("detalhes_consulta_recepcionista");
-    Route::post('/painel-recepcionista/estado-consulta/{id_consulta}', [ConsultaController::class, 'mudar_estado_consulta_recepcionista'])->name("mudar_estado_consulta_recepcionista");
+    Route::post('/consultas/{id_consulta}/mudar-estado-consulta/{view?}', [ConsultaController::class, 'mudar_estado_consulta'])->name("mudar_estado_consulta");
 
     // ===== ROTAS DO MÉDICO =====
     Route::get('/painel-medico/consultas', [ConsultaController::class, 'mostrar_consultas_medico'])->name('mostrar_consultas_medico');
@@ -132,6 +132,7 @@ Route::middleware(["web"])->group(function () {
     // Visualizações do admin
     Route::get('/admin/consultas', [AdminController::class, 'mostrar_consultas_admin']);
     Route::get('/admin/consultas/{id_consulta}', [ConsultaController::class, 'detalhes_consulta_admin'])->name('detalhes_consulta_admin');
-    Route::get('/admin/prontuarios', [AdminController::class, 'mostrar_prontuarios_admin']);
-    Route::get('/admin/exames', [AdminController::class, 'mostrar_exames_admin']);
+    Route::get('/admin/prontuarios', [ProntuarioController::class, 'mostrar_prontuarios_admin'])->name('mostrar_prontuarios_medico_admin');
+    Route::get('/admin/prontuarios/{id_paciente}', [ProntuarioController::class, 'mostrar_detalhes_prontuario_admin'])->name('mostrar_detalhes_prontuario_admin');
+    Route::get('/admin/relatorios', [RelatorioController::class, 'mostrar_relatorios_admin'])->name('mostrar_relatorios_admin');
 });

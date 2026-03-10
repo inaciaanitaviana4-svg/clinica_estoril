@@ -187,7 +187,6 @@ class ConsultaController extends Controller
         $diagnosticos = Diagnostico::where('id_consulta', $id_consulta)
             ->select('descricao')
             ->get();
-            
 
         $exames = ExameSolicitado::where('id_consulta', $id_consulta)
             ->select('exames_solicitados.*', 'servicos_clinicos.nome as servico_clinico')
@@ -198,7 +197,6 @@ class ConsultaController extends Controller
             ->select('receitas.*')
             ->get()
             ->toArray();
-
 
         $receitas = array_map(function ($receita) {
             $itens = ReceitaItem::where('id_receita', $receita['id_receita'])
@@ -305,10 +303,11 @@ class ConsultaController extends Controller
         return view('consultas.detalhes_recepcionista', compact('consulta', 'paciente', 'medico', 'pagamentos', 'medicos', 'metodos_pagamento', 'servicos_clinicos', 'resumo'));
     }
 
-    public function associar_medico_consulta_recepcionista(Request $request, $id_consulta)
+    public function associar_medico_consulta(Request $request, $id_consulta, $view = null)
     {
-        $utilizador = verificar_recepcionista();
-        if (! $utilizador) {
+       $recepcionista = verificar_recepcionista();
+        $admin = verificar_admin();
+        if (! $admin && ! $recepcionista) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
         $consulta = Consulta::find($id_consulta);
@@ -321,14 +320,18 @@ class ConsultaController extends Controller
         }
         $consulta->id_medico = $request->id_medico;
         $consulta->save();
-
-        return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
+        if ($view == 'recepcionista') {
+            return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
+        } elseif ($view == 'admin') {
+            return redirect(route('detalhes_consulta_admin', $consulta->id_consulta));
+        }
     }
 
-    public function desassociar_medico_consulta_recepcionista(Request $request, $id_consulta)
+    public function desassociar_medico_consulta($id_consulta, $view = null)
     {
-        $utilizador = verificar_recepcionista();
-        if (! $utilizador) {
+        $recepcionista = verificar_recepcionista();
+        $admin = verificar_admin();
+        if (! $admin && ! $recepcionista) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
         $consulta = Consulta::find($id_consulta);
@@ -338,14 +341,19 @@ class ConsultaController extends Controller
 
         $consulta->id_medico = null;
         $consulta->save();
+        if ($view == 'recepcionista') {
+            return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
+        } elseif ($view == 'admin') {
+            return redirect(route('detalhes_consulta_admin', $consulta->id_consulta));
+        }
 
-        return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
     }
 
-    public function mudar_estado_consulta_recepcionista(Request $request, $id_consulta)
+    public function mudar_estado_consulta(Request $request, $id_consulta, $view = null)
     {
-        $utilizador = verificar_recepcionista();
-        if (! $utilizador) {
+        $recepcionista = verificar_recepcionista();
+        $admin = verificar_admin();
+        if (! $admin && ! $recepcionista) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
         $consulta = Consulta::find($id_consulta);
@@ -354,8 +362,11 @@ class ConsultaController extends Controller
         }
         $consulta->estado = $request->estado;
         $consulta->save();
-
-        return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
+        if ($view == 'recepcionista') {
+            return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
+        } elseif ($view == 'admin') {
+            return redirect(route('detalhes_consulta_admin', $consulta->id_consulta));
+        }
     }
 
     public function realizar_consulta_medico($id_consulta)

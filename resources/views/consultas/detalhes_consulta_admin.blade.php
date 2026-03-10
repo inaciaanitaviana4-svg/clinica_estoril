@@ -1,5 +1,8 @@
 @extends('layouts.admin')
 @section('titulo', 'detalhes da consulta')
+@section('estilo')
+<link rel="stylesheet" href="{{ asset('detalhes-prontuario.css') }}">
+@endsection
 @section('conteudo')
     <section class="section active ">
         <div class="login-card" id="userTypeCard">
@@ -60,14 +63,14 @@
                     </div>
                     <div class="row mt-4">
                         <form class="col"
-                            action="{{ route('mudar_estado_consulta_recepcionista', $consulta->id_consulta) }}"
+                            action="{{ route('mudar_estado_consulta', ['id_consulta'=>$consulta->id_consulta,'view'=>'admin']) }}"
                             method="POST">
                             {{ csrf_field() }}
                             <input type="hidden" name="estado" value="cancelada">
                             <button type="submit" class="btn btn-danger">Cancelar consulta</button>
                         </form>
                         <form class="col"
-                            action="{{ route('mudar_estado_consulta_recepcionista', $consulta->id_consulta) }}"
+                            action="{{ route('mudar_estado_consulta', ['id_consulta'=>$consulta->id_consulta,'view'=>'admin']) }}"
                             method="POST">
                             {{ csrf_field() }}
                             <input type="hidden" name="estado" value="agendada">
@@ -75,7 +78,7 @@
                                 consulta</button>
                         </form>
                         <form class="col"
-                            action="{{ route('mudar_estado_consulta_recepcionista', $consulta->id_consulta) }}"
+                            action="{{ route('mudar_estado_consulta', ['id_consulta'=>$consulta->id_consulta,'view'=>'admin']) }}"
                             method="POST">
                             {{ csrf_field() }}
                             <input type="hidden" name="estado" value="confirmada">
@@ -84,7 +87,7 @@
 
                         </form>
                         <form class="col"
-                            action="{{ route('mudar_estado_consulta_recepcionista', $consulta->id_consulta) }}"
+                            action="{{ route('mudar_estado_consulta', ['id_consulta'=>$consulta->id_consulta,'view'=>'admin']) }}"
                             method="POST">
                             {{ csrf_field() }}
                             <input type="hidden" name="estado" value="em_espera">
@@ -112,14 +115,14 @@
                                 {{ label_detalhes($medico, 'especialidade', 'Especialidade', 'col') }}
                             </div>
                             <form class=""
-                                action="{{ route('desassociar_medico_consulta_recepcionista', $consulta->id_consulta) }}"
+                                action="{{ route('desassociar_medico_consulta', ['id_consulta'=>$consulta->id_consulta,'view'=>'admin']) }}"
                                 method="POST">
                                 {{ csrf_field() }}
                                 <button type="submit" class="btn btn-danger">Desassociar médico</button>
                             </form>
                         @else
                             <form class="row"
-                                action="{{ route('associar_medico_consulta_recepcionista', $consulta->id_consulta) }}"
+                                action="{{route('associar_medico_consulta', ['id_consulta'=>$consulta->id_consulta,'view'=>'admin']) }}"
                                 method="POST">
                                 {{ csrf_field() }}
                                 <div class="w-100 form-group">
@@ -174,7 +177,7 @@
                                         <td style="font-weight:500">{{ $exame->servico_clinico }}</td>
                                         <td>{{ $exame->resultado }}</td>
                                         <td style="color:var(--text-gray);font-size:12px">{{ $exame->observacoes }}</td>
-                                        <td>{{ $exame->status }}</td>
+                                        <td>{{ badge_estados($exame->status) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
