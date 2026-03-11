@@ -25,10 +25,10 @@ function gerarRelatorioPagamentosTabela(pagamentos, filtros) {
         }
 
         body.push([
-            p.paciente?.nome || '',
-            p.recepcionista?.nome || '',
-            p.consulta?.tipo_consulta || '',
-            p.consulta?.servico_clinico || '',
+            p.paciente || '',
+            p.recepcionista || '',
+            p.tipo_consulta || '',
+            p.servico_clinico || '',
             p.data || '',
             p.metodo_pagamento || '',
             p.estado || '',
