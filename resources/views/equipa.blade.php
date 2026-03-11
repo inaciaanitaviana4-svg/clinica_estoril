@@ -41,11 +41,10 @@
                 <!-- Médico 1 -->
                 <div class="team-card">
                     <div class="team-photo">
-                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop" alt="Dr. João Silva">
+                        <img src="imagem/silva joao.jpg" alt="Dr. João Silva">
                         <div class="team-overlay">
                             <div class="team-social">
                                 <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
                             </div>
                         </div>
                     </div>
@@ -56,18 +55,17 @@
                             Especialista em Cardiologia com mais de 15 anos de experiência. 
                             Doutorado pela Universidade de Lisboa.
                         </p>
-                        <a href="login.html" class="team-btn">Agendar Consulta</a>
+                        <a href="/login" class="team-btn">Agendar Consulta</a>
                     </div>
                 </div>
 
                 <!-- Médico 2 -->
                 <div class="team-card">
                     <div class="team-photo">
-                        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop" alt="Dra. Maria Santos">
+                        <img src="imagem/Maria .jpg" alt="Dra. Maria Santos">
                         <div class="team-overlay">
                             <div class="team-social">
                                 <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
                             </div>
                         </div>
                     </div>
@@ -78,14 +76,14 @@
                             Pediatra com formação internacional. Especializada em 
                             neonatologia e cuidados pediátricos gerais.
                         </p>
-                        <a href="Consulta.html" class="team-btn">Agendar Consulta</a>
+                        <a href="/login" class="team-btn">Agendar Consulta</a>
                     </div>
                 </div>
 
                 <!-- Médico 3 -->
                 <div class="team-card">
                     <div class="team-photo">
-                        <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop" alt="Dr. Pedro Costa">
+                        <img src="imagem/pedro.jpg" alt="Dr. Pedro Costa">
                         <div class="team-overlay">
                             <div class="team-social">
                                 <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>

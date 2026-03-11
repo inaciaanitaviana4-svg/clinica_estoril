@@ -139,7 +139,6 @@ Route::middleware(["web"])->group(function () {
 
      // erros
    Route::get('/',[SiteController::class, 'inicio']);
-Route::get('/contacto',[SiteController::class, 'inicio']);
 
 Route::fallback(function () {
     return view('errors.404');
