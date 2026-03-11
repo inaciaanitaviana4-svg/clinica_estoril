@@ -135,4 +135,12 @@ Route::middleware(["web"])->group(function () {
     Route::get('/admin/prontuarios', [ProntuarioController::class, 'mostrar_prontuarios_admin'])->name('mostrar_prontuarios_medico_admin');
     Route::get('/admin/prontuarios/{id_paciente}', [ProntuarioController::class, 'mostrar_detalhes_prontuario_admin'])->name('mostrar_detalhes_prontuario_admin');
     Route::get('/admin/relatorios', [RelatorioController::class, 'mostrar_relatorios_admin'])->name('mostrar_relatorios_admin');
+
+     // erros
+   Route::get('/',[SiteController::class, 'inicio']);
+Route::get('/contacto',[SiteController::class, 'inicio']);
+
+Route::fallback(function () {
+    return view('errors.404');
+});
 });
