@@ -105,11 +105,12 @@ Route::middleware(["web"])->group(function () {
 
     // ===== ROTAS DO ADMINISTRADOR =====
     Route::get('/admin/dashboard', [AdminController::class, 'mostrar_dashboard_admin']);
+    Route::get('/api/dashboard', [AdminController::class, 'api_obter_dados_dashboard'])->name('api_obter_dados_dashboard');
     Route::get('/admin/pagamentos', [AdminController::class, 'mostrar_pagamentos_admin'])->name('mostrar_pagamentos_admin');
     Route::get('/admin/pagamentos/{id_pagamento}', [PagamentosController::class, 'detalhes_pagamentos_admin'])->name('detalhes_pagamentos_admin');
     Route::post('/admin/pagamentos/{id_pagamento}/mudar-estado', [PagamentosController::class, 'mudar_estado_pagamento_admin'])->name('mudar_estado_pagamento_admin');
     Route::get('/admin/pagamentos/{id_pagamento}/remover', [PagamentosController::class, 'remover_pagamento_admin'])->name('remover_pagamento_admin');
-    
+
     // Gerenciamento de utilizadores
     Route::get('/admin/cadastros', [AdminController::class, 'mostrar_cadastros_admin'])->name('mostrar_cadastros_admin');
     Route::get('/admin/cadastros/utilizadores/remover/{id_util}', [UtilizadoresController::class, 'remover_utilizador_admin'])->name('remover_utilizador_admin');
@@ -130,7 +131,7 @@ Route::middleware(["web"])->group(function () {
     Route::post('/admin/cadastros/servicos_clinico/registro/{id_servico_clinico?}', [ServicoClinicoController::class, 'salvar_registro_servico_clinico_admin'])->name('salvar_registro_servico_clinico_admin');
 
     // Visualizações do admin
-    Route::get('/admin/consultas', [AdminController::class, 'mostrar_consultas_admin']);
+    Route::get('/admin/consultas', [AdminController::class, 'mostrar_consultas_admin'])->name('mostrar_consultas_admin');
     Route::get('/admin/consultas/{id_consulta}', [ConsultaController::class, 'detalhes_consulta_admin'])->name('detalhes_consulta_admin');
     Route::get('/admin/prontuarios', [ProntuarioController::class, 'mostrar_prontuarios_admin'])->name('mostrar_prontuarios_medico_admin');
     Route::get('/admin/prontuarios/{id_paciente}', [ProntuarioController::class, 'mostrar_detalhes_prontuario_admin'])->name('mostrar_detalhes_prontuario_admin');
