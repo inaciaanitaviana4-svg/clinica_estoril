@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ClÃ­nica Estoril - A sua saude nas melhores mÃ£os ">
+    <meta name="description" content="Clí­nica Estoril - A sua saude nas melhores mãos ">
     <link rel="icon" type="image/jpg" href="imagem/logo.jpg">
     <link rel="stylesheet" href="/styles.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
