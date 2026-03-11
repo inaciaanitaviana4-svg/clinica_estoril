@@ -10,19 +10,19 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Horario extends Model
 {
-    // Define a chave primária customizada (note: há typo "id_horaro" em vez de "id_horario")
+    // Define a chave primária customizada 
     protected $primaryKey = "id_horario";
-    
+
     // Desativa timestamps automáticos
     public $timestamps = false;
 
     // Define o nome da tabela
     protected $table = "horarios";
-    
+
     // Define colunas editáveis
     protected $fillable = [
         "hora",                 // Horário disponível (ex: 10:00, 14:30)
-        "dia_semana",  
+        "dia_semana",
         "activo",               // Status ativo/inativo
         "id_medico",            // FK: associa o horário ao médico
     ];

@@ -21,7 +21,6 @@ class Diagnostico extends Model
 
     // Define colunas editáveis
     protected $fillable = [
-        "id",                  // Chave primária
         "id_consulta",         // FK: consulta associada
         "descricao",           // Descrição do diagnóstico
         "criado_em",           // Data/hora de criação (nullable)

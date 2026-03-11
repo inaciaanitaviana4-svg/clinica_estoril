@@ -697,6 +697,7 @@ function badge_todos_estados($estado) {
 
     return `<span style='padding: 4px 8px; background-color: ${$cor}; color: white; border-radius: 4px;'>${$estado_nome}</span>`;
 }
+
 function obterImagemBase64(url) {
   return new Promise((resolve, reject)=>{
     var img = new Image();

@@ -44,7 +44,7 @@
                 <div class="consultas-section-title">Consultas</div>
                 <div id="consultasList">
                     @foreach($consultas as $consulta)
-                    <div class="consulta-item" data-id="{{ $consulta->id }}" onclick="selectConsulta({{$consulta->id_consulta}})">
+                    <div class="consulta-item" data-id="{{ $consulta->id }}" onclick="selectConsulta({{ $consulta->id_consulta }})">
                         <div class="consulta-item-header">
                             <span class="consulta-date">{{ date('d/m/Y', strtotime($consulta->data)) }} · {{ date('H:i', strtotime($consulta->hora)) }}</span>
                             <div class="badge">
