@@ -11,7 +11,7 @@
             <a class="tab active" href="#">Consultas</a>
             <a class="tab" href="#">Prontuários</a>
             <a class="tab" href="#">Pagamentos</a>
-            <a class="tab" href="#">Agenda Médica</a>
+
 
         </div>
         <div class="tab-content active">
@@ -200,29 +200,6 @@
                 </form>
             </div>
         </div>
-        <div class="tab-content">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">Agenda Médica</h2>
-                </div>
-                <form>
-                    <div class="form-group">
-                        <label for="id_paciente">
-                            Paciente
-                        </label>
-                        <select name="id_paciente_prontuario" id="id_paciente_prontuario">
-                            @foreach ($pacientes as $paciente)
-                                <option value="{{ $paciente->id_paciente }}">{{ $paciente->nome }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-full" id="gerar_relatorio_prontuario_btn">
-                        Gerar relatório
-                    </button>
-                </form>
-            </div>
-        </div>
     </section>
 
 @endsection
@@ -336,7 +313,7 @@
          
         const gerar_relatorio_prontuario_btn = document.getElementById('gerar_relatorio_prontuario_btn')
         gerar_relatorio_prontuario_btn.addEventListener('click', async (e) => {
-            const id_paciente = document.getElementById('id_paciente_p')
+            const id_paciente = document.getElementById('id_paciente_prontuario')
             const rota = "{{ route('api_relatorio_prontuario_paciente', ['id_paciente' => ':id']) }}"
             const url = rota.replace(':id', id_paciente.value)
             try {

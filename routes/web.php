@@ -3,6 +3,7 @@
 // Importação dos Controllers
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ConsultaController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EspecialidadesController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\NotificacoesController;
@@ -138,6 +139,14 @@ Route::middleware(['web'])->group(function () {
     Route::post('/api/relatorios/consultas', [RelatorioController::class, 'api_relatorio_consultas'])->name('api_relatorio_consultas');
     Route::post('/api/relatorios/pagamentos', [RelatorioController::class, 'api_relatorio_pagamentos'])->name('api_relatorio_pagamentos');
     Route::get('/api/relatorios/prontuario/{id_paciente}', [RelatorioController::class, 'api_relatorio_prontuario_paciente'])->name('api_relatorio_prontuario_paciente');
+ //dashboard
+    Route::get('/painel-medico/dashboard', [DashboardController::class, 'mostrar_dashboard_medico'])->name('mostrar_dashboard_medico');
+    Route::get('/painel-recepcionista/dashboard', [DashboardController::class, 'mostrar_dashboard_recepcionista'])->name('mostrar_dashboard_recepcionista');
+    Route::get('/painel-paciente/dashboard', [DashboardController::class, 'mostrar_dashboard_paciente'])->name('mostrar_dashboard_paciente');
+
+
+   
+
     // erros
     Route::get('/', [SiteController::class, 'inicio']);
 

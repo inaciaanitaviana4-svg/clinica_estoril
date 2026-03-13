@@ -24,7 +24,7 @@ class ProntuarioController extends Controller
             ->select('paciente.*')
             ->distinct()->get();
 
-        return view('admin.prontuarios', compact('pacientes'));
+        return view('medicos.prontuarios', compact('pacientes'));
     }
 
     public function mostrar_prontuarios_admin()

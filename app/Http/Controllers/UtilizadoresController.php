@@ -574,7 +574,7 @@ class UtilizadoresController extends Controller
         $nivel_acesso = 0; // Padrão = admin
 
         // Processa tipo administrador
-        $admin = $id_util ? $admin : new Admi;
+        $admin = ($utilizador->id_admi??null) ? $admin : new Admi;
         if ($tipo == 'administrador') {
             $admin->morada = $request['morada'];
             $admin->num_telefone = $request['num_telefone'];
@@ -586,7 +586,7 @@ class UtilizadoresController extends Controller
         }
 
         // Processa tipo paciente
-        $paciente = $utilizador->id_paciente ? $paciente : new Paciente;
+        $paciente = ($utilizador->id_paciente ??null)? $paciente : new Paciente;
         if ($tipo == 'paciente') {
             $nivel_acesso = 3; // Código 3 = paciente
             $paciente->morada = $request['morada'];
@@ -606,7 +606,7 @@ class UtilizadoresController extends Controller
         }
 
         // Processa tipo recepcionista
-        $recepcionista = $utilizador->id_recepcionista ? $recepcionista : new Recepcionista;
+        $recepcionista =( $utilizador->id_recepcionista??null) ? $recepcionista : new Recepcionista;
         if ($tipo == 'recepcionista') {
             $nivel_acesso = 1; // Código 1 = recepcionista
             $recepcionista->morada = $request['morada'];
@@ -620,7 +620,7 @@ class UtilizadoresController extends Controller
         }
 
         // Processa tipo médico
-        $medico = $utilizador->id_medico ? $medico : new Medico;
+        $medico = ($utilizador->id_medico??null) ? $medico : new Medico;
         if ($tipo == 'medico') {
             $nivel_acesso = 2; // Código 2 = médico
             $medico->morada = $request['morada'];

@@ -5,6 +5,7 @@ $menus = [
     ];
       if (session('tipo_utilizador') == 'medico'){
         $menus=[
+            ['href' => route('mostrar_dashboard_medico'), 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'],
             ['href'=>route('mostrar_prontuarios_medico'),'titulo'=>'Prontuarios','icon'=>'fa-solid fa-file-medical'],
             ['href'=>route('mostrar_consultas_medico'),'titulo'=>'Consultas','icon'=>'fa-solid fa-calendar-check'],
             ['href'=>route('mostrar_horarios_medico'),'titulo'=>'Horarios','icon'=>'fa-solid fa-clock'],
@@ -13,6 +14,7 @@ $menus = [
     } 
       if (session('tipo_utilizador') == 'recepcionista'){
         $menus=[
+            ['href' => route('mostrar_dashboard_recepcionista'), 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'],
             ['href'=>route('mostrar_consultas_recepcionista'),'titulo'=>'Agendamentos','icon'=>'fa-solid fa-stethoscope'],
             ['href'=>route('mostrar_pagamentos_recepcionista'),'titulo'=>'Pagamentos','icon'=>'fa-solid fa-credit-card'],
             ['href'=>route('mostrar_pacientes_recepcionista'),'titulo'=>'Pacientes','icon'=>'fa-solid fa-users'],
@@ -20,6 +22,7 @@ $menus = [
             }
               if (session('tipo_utilizador') == 'paciente'){
                 $menus=[
+                    ['href' => route('mostrar_dashboard_paciente'), 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'],
                     ['href'=>route('mostrar_consultas_paciente'),'titulo'=>'Consultas','icon'=>'fa-solid fa-stethoscope'],
                     ['href'=>route('listar_minhas_notificacoes'),'titulo'=>'Notificações','icon'=>'fa-solid fa-bell'],
                 ];
