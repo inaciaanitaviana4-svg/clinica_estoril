@@ -142,7 +142,7 @@
                     <div class="stat-icon-large">
                         <i class="fas fa-users"></i>
                     </div>
-                    <h3 class="stat-number-large">20.000+</h3>
+                     <span class="badge-number">{{ $totalPacientes }}</span>
                     <p class="stat-label-large">Pacientes Atendidos Anualmente</p>
                 </div>
 
@@ -150,7 +150,7 @@
                     <div class="stat-icon-large">
                         <i class="fas fa-stethoscope"></i>
                     </div>
-                    <h3 class="stat-number-large">20+</h3>
+                     <span class="badge-number">{{ $totalEspecialidades }}</span>
                     <p class="stat-label-large">Especialidades Médicas</p>
 
 

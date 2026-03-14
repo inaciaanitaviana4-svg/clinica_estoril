@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Configuracao;
 use App\Models\Especialidade;
+use App\Models\Paciente;
 use Carbon\Carbon;
 use Illuminate\View\View;
-use App\Models\Paciente;
 
 class SiteController extends Controller
 {
@@ -18,91 +18,95 @@ class SiteController extends Controller
         $config = Configuracao::first();
         $anoAtual = Carbon::now()->year;
 
-
         $anosExperiencia = $anoAtual - ($config ? $config->ano_fundacao : 0);
 
         $totalPacientes = Paciente::count();
         $totalEspecialidades = Especialidade::count();
         $especialidades = Especialidade::all();
 
-        return view("index", compact("anosExperiencia", "totalPacientes", "totalEspecialidades", "especialidades"));
+        return view('index', compact('anosExperiencia', 'totalPacientes', 'totalEspecialidades', 'especialidades'));
     }
 
     public function sobre(): View
     {
-         $config = Configuracao::first();
+        $config = Configuracao::first();
         $anoAtual = Carbon::now()->year;
-
+        $totalPacientes = Paciente::count();
+        $totalEspecialidades = Especialidade::count();
 
         $anosExperiencia = $anoAtual - ($config ? $config->ano_fundacao : 0);
 
-        return view("sobre", compact("anosExperiencia",));
+        return view('sobre', compact('anosExperiencia','totalPacientes','totalEspecialidades'));
 
     }
 
     public function servicos(): View
     {
-        return view("servicos");
+        return view('servicos');
     }
 
     public function especialidades(): View
     {
-        return view("especialidades");
+        return view('especialidades');
     }
 
     public function equipa(): View
     {
-        return view("equipa");
+        return view('equipa');
     }
 
     public function contacto(): View
     {
-        return view("contacto");
+        return view('contacto');
     }
 
     public function blog(): View
     {
-        return view("blog");
+        return view('blog');
     }
 
     public function chatbot(): View
     {
-        return view("chat");
+        return view('chat');
     }
 
     public function login()
     {
-        if (session()->has("id_utilizador")) {
-            return redirect("/");
+        if (session()->has('id_utilizador')) {
+            return redirect('/');
         }
-        return view("login");
+
+        return view('login');
     }
 
     public function paineladmin()
     {
-        $tipo = session("tipo_utilizador");
+        $tipo = session('tipo_utilizador');
 
         if ($tipo !== 'admi') {
             return redirect('/');
         }
-        return view("painel_admin");
+
+        return view('painel_admin');
     }
 
     public function painelmedico()
     {
-        $tipo = session("tipo_utilizador");
+        $tipo = session('tipo_utilizador');
         if ($tipo !== 'medico') {
             return redirect('/');
         }
-        return view("painel_medico");
+
+        return view('painel_medico');
     }
 
     public function painelrecepcionista()
     {
-        $tipo = session("tipo_utilizador");
+        $tipo = session('tipo_utilizador');
         if ($tipo !== 'recep') {
             return redirect('/');
         }
-        return view("painel_recepcionista");
-    }
+
+        return view('painel_recepcionista');
+     }
 }
