@@ -1,3 +1,28 @@
+:root {
+  --primary:      #0066cc;
+  --primary-dark: #004999;
+  --primary-light:#3385d6;
+  --secondary:    #00a86b;
+  --accent:       #ff6b35;
+  --teal:         #0891b2;
+  --text-dark:    #1a1a1a;
+  --text-gray:    #666;
+  --text-light:   #999;
+  --bg-light:     #f4f7fb;
+  --bg-white:     #fff;
+  --border:       #e4e9f0;
+  --shadow-sm:    0 2px 8px rgba(0,0,0,.07);
+  --shadow-md:    0 4px 20px rgba(0,0,0,.10);
+  --shadow-lg:    0 8px 40px rgba(0,0,0,.14);
+  --grad:         linear-gradient(135deg,#0066cc 0%,#004999 100%);
+  --grad-teal:    linear-gradient(135deg,#0891b2 0%,#0e7490 100%);
+  --sidebar-w:    260px;
+  --topbar-h:     64px;
+  --radius:       14px;
+  --trans:        all .25s ease;
+}
+
+
 /* ── CONTENT ─────────────────────────────── */
 .content {
     flex: 1;
