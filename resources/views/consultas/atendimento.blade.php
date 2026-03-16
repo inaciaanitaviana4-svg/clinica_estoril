@@ -1,12 +1,12 @@
 @extends("layouts.painel")
-@section("titulo", "Atendimento & Agendamento")
+@section("titulo", "Agendamento")
 @section("conteudo")
 
     <section >
         <div class="login-container">
             <!-- Seleção de Tipo de Usuário -->
             <div class="login-card" id="userTypeCard">
-                <h2 style="text-align: center;"><strong>Atendimento/Agendamento</strong> </h2>
+                <h2 style="text-align: center;"><strong>Agendamento</strong> </h2>
                 <br><br>
                 @if(session("erro"))
                     <div style="background-color:red;color:white;text-align:center">

@@ -9,7 +9,7 @@
             <div class="hero-text">
                 <h1 class="hero-title">
                     Clínica Estoril<br>
-                    <marquee> <span class="highlight">A sua saúde nas melhores mãos</span></marquee>
+            <span class="highlight">A sua saúde nas melhores mãos</span>
                 </h1>
                 <p class="hero-subtitle">
                      Clínica Estoril, a sua saúde nas melhores mãos.

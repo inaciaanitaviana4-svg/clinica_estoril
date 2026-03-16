@@ -30,6 +30,7 @@
             background: linear-gradient(to right, #2563eb, #1d4ed8);
             color: white;
             padding: 24px;
+            margin-top:87px;
             display: flex;
             align-items: center;
             gap: 16px;

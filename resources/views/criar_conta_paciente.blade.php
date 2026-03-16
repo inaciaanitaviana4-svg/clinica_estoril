@@ -148,8 +148,7 @@
                     <div class="social-links">
                         <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
                         <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                       
                     </div>
                 </div>
 
@@ -161,21 +160,11 @@
                         <li><a href="/sobre">Sobre Nós</a></li>
                         <li><a href="/servicos">Serviços</a></li>
                         <li><a href="/especialidades">Especialidades</a></li>
-                        <li><a href="/equipa.">Nossa Equipa</a></li>
+                        <li><a href="/equipa">Nossa Equipa</a></li>
                     </ul>
                 </div>
 
-                <!-- Especialidades -->
-                <div class="footer-section">
-                    <h4 class="footer-title">Especialidades</h4>
-                    <ul class="footer-links">
-                        <li><a href="/especialidades">Cardiologia</a></li>
-                        <li><a href="/especialidades">Neurologia</a></li>
-                        <li><a href="/especialidades">Ortopedia</a></li>
-                        <li><a href="/especialidades">Pediatria</a></li>
-                        <li><a href="/especialidades">Ginecologia</a></li>
-                    </ul>
-                </div>
+               
 
                 <!-- Contacto -->
                 <div class="footer-section">

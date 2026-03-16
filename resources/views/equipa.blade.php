@@ -87,7 +87,6 @@
                         <div class="team-overlay">
                             <div class="team-social">
                                 <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
                             </div>
                         </div>
                     </div>
@@ -120,18 +119,17 @@
                             Ginecologista e obstetra com vasta experiência em 
                             gestações de alto risco e cirurgias ginecológicas.
                         </p>
-                        <a href="Consulta.html" class="team-btn">Agendar Consulta</a>
+                        <a href="/Consulta" class="team-btn">Agendar Consulta</a>
                     </div>
                 </div>
 
                 <!-- Médico 5 -->
                 <div class="team-card">
                     <div class="team-photo">
-                        <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=400&h=400&fit=crop" alt="Dr. Ricardo Alves">
+                        <img src="imagem/ricardo.jpg" alt="Dr. Ricardo Alves">
                         <div class="team-overlay">
                             <div class="team-social">
                                 <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
                             </div>
                         </div>
                     </div>
@@ -142,7 +140,7 @@
                             Neurologista especializado em doenças neurodegenerativas 
                             e distúrbios do movimento.
                         </p>
-                        <a href="Consulta.html" class="team-btn">Agendar Consulta</a>
+                        <a href="/Consulta" class="team-btn">Agendar Consulta</a>
                     </div>
                 </div>
 
@@ -153,7 +151,6 @@
                         <div class="team-overlay">
                             <div class="team-social">
                                 <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
                             </div>
                         </div>
                     </div>
@@ -164,7 +161,7 @@
                             Dermatologista com especialização em dermatologia 
                             estética e tratamento de doenças de pele.
                         </p>
-                        <a href="Consulta.html" class="team-btn">Agendar Consulta</a>
+                        <a href="/Consulta" class="team-btn">Agendar Consulta</a>
                     </div>
                 </div>
 
@@ -175,8 +172,7 @@
                         <div class="team-overlay">
                             <div class="team-social">
                                 <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                            </div>
+                                                           </div>
                         </div>
                     </div>
                     <div class="team-info">
@@ -197,7 +193,7 @@
                         <div class="team-overlay">
                             <div class="team-social">
                                 <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        
                             </div>
                         </div>
                     </div>
@@ -219,7 +215,6 @@
                         <div class="team-overlay">
                             <div class="team-social">
                                 <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
                             </div>
                         </div>
                     </div>
@@ -230,7 +225,7 @@
                             Gastroenterologista especializado em endoscopia 
                             digestiva e doenças inflamatórias intestinais.
                         </p>
-                        <a href="Consulta.html" class="team-btn">Agendar Consulta</a>
+                        <a href="/Consulta" class="team-btn">Agendar Consulta</a>
                     </div>
                 </div>
             </div>

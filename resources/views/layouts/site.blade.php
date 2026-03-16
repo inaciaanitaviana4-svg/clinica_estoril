@@ -135,16 +135,7 @@
                 </div>
 
                 <!-- Especialidades -->
-                <div class="footer-section">
-                    <h4 class="footer-title">Especialidades</h4>
-                    <ul class="footer-links">
-                        <li><a href="/especialidades">Cardiologia</a></li>
-                        <li><a href="/especialidades">Neurologia</a></li>
-                        <li><a href="/especialidades">Ortopedia</a></li>
-                        <li><a href="/especialidades">Pediatria</a></li>
-                        <li><a href="/especialidades">Ginecologia</a></li>
-                    </ul>
-                </div>
+                
 
                 <!-- Contacto -->
                 <div class="footer-section">

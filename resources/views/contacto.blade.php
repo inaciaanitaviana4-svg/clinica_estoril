@@ -109,21 +109,6 @@
         </div>
     </section>
 
-    <!-- MAPA -->
-    <section class="map-section">
-        <div class="map-container">
-            <iframe 
-               idth="100%" 
-                height="450" 
-                style="border:0;" 
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade"
-                title="Localização da Clínica Estoril">
-            </iframe>
-        </div>
-    </section>
-
     <!-- FAQ -->
     <section class="faq-section">
         <div class="container">

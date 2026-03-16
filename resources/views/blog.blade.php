@@ -25,10 +25,11 @@
         }
         
         body {
-            font-family: 'Inter', sans-serif;
-            color: var(--texto-principal);
-            line-height: 1.6;
-            background-color: var(--branco);
+           font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Oxygen, Ubuntu, Cantarell, sans-serif;
+    color: var(--text-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
         }
         
         h1, h2, h3, h4 {
@@ -86,13 +87,13 @@
         
         .hero-subtitle {
             font-size: 1.25rem;
-            color: var(--texto-secundario);
+            color: white;
             margin-bottom: 1rem;
             font-weight: 500;
         }
         
         .hero-description {
-            color: var(--texto-secundario);
+            color: white;
             margin-bottom: 2rem;
             line-height: 1.8;
         }
@@ -689,7 +690,9 @@
 <body>
 
     <!-- Hero Section -->
-    <section class="hero" id="main-sections">
+    <section class="page-header" id="main-sections">
+        <div class="page-header-overlay"></div>
+    
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text fade-in">
@@ -697,13 +700,7 @@
                     <p class="hero-subtitle">Informação confiável baseada em orientações médicas internacionais.</p>
                     <p class="hero-description">Conteúdos educativos sobre prevenção, doenças comuns, primeiros socorros, nutrição e bem-estar. Acesso à informação de qualidade para cuidar melhor da sua saúde e da sua família.</p>
                     
-                    <div class="search-bar">
-                        <input type="text" id="searchInput" placeholder="Pesquisar por doenças, sintomas, tratamentos...">
-                        <button onclick="handleSearch()">
-                            <span><i class="fa-solid fa-magnifying-glass"></i></span>
-                            <span>Pesquisar</span>
-                        </button>
-                    </div>
+                   
                 </div>
                 
                 <div class="hero-image fade-in">
