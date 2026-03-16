@@ -107,8 +107,8 @@
                         Cuidamos de você e da sua família.
                     </p>
                     <div class="social-links">
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/c.estoril/" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/clinica_estoril?igsh=cXRuMzBwYW5oM2ti" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
 
@@ -150,7 +150,7 @@
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2025 Clínica Estoril. Todos os direitos reservados.</p>
+                <p>&copy; 2026 Clínica Estoril. Todos os direitos reservados.</p>
                 <div class="footer-bottom-links">
                     <a href="#">Política de Privacidade</a>
                     <span>|</span>
