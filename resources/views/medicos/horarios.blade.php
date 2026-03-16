@@ -15,7 +15,7 @@
                 </div>
                 <form action="{{ route('salvar_horarios_medico') }}" style="margin-top: 12px" method="post">
                     {{ csrf_field() }}
-                    <input type="hidden" id="id_horario" name="id_horario"/>
+                    <input type="hidden" id="id_horario" name="id_horario" />
                     <div class="form-group">
                         <label for="dia_semana">
                             Dia da semana
@@ -72,10 +72,6 @@
                                     <td>{{ $horario->activo ? 'Sim' : 'Não' }}</td>
                                     <td>
                                         <div class="btn-group">
-
-                                            <button onclick="remover_horario({{ $horario->id_horario }})"
-                                                class="btn btn-bg-red btn-small">Remover</button>
-
                                             <button onclick="editar_horario({{ $horario }})"
                                                 class="btn btn-primary btn-small">Editar</button>
                                         </div>
@@ -93,27 +89,14 @@
     <script>
         function editar_horario(dados) {
             console.log(dados)
-          const id_horario=document.getElementById('id_horario')
-          const dia_semana=document.getElementById('dia_semana')
-          const hora=document.getElementById('hora')
-          const activo=document.getElementById('activo')
-          id_horario.value=dados.id_horario
-          dia_semana.value=dados.dia_semana
-          hora.value=dados.hora
-          activo.checked=dados.activo
-        }
-        const url = "{{ route('remover_horario_medico', ['id_horario' => ':id']) }}"
-      const csrfToken = "{{ csrf_token() }}";
-      function remover_horario(id_horario) {
-        
-          mostrarRemoverItemModal(
-              url.replace(':id', id_horario), {
-                  method: 'DELETE',
-                  headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    }
-                }
-            )
+            const id_horario = document.getElementById('id_horario')
+            const dia_semana = document.getElementById('dia_semana')
+            const hora = document.getElementById('hora')
+            const activo = document.getElementById('activo')
+            id_horario.value = dados.id_horario
+            dia_semana.value = dados.dia_semana
+            hora.value = dados.hora
+            activo.checked = dados.activo
         }
     </script>
 @endsection

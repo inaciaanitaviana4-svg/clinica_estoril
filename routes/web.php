@@ -84,7 +84,6 @@ Route::middleware(['web'])->group(function () {
 
     Route::get('/painel-medico/horarios', [HorarioController::class, 'mostrar_horarios_medico'])->name('mostrar_horarios_medico');
     Route::post('/painel-medico/horarios', [HorarioController::class, 'salvar_horarios_medico'])->name('salvar_horarios_medico');
-    Route::delete('/painel-medico/remover-horario/{id_horario}', [HorarioController::class, 'remover_horario_medico'])->name('remover_horario_medico');
     Route::get('/painel-medico/prontuarios', [ProntuarioController::class, 'mostrar_prontuarios_medico'])->name('mostrar_prontuarios_medico');
     Route::get('/painel-medico/prontuarios/{id_paciente}', [ProntuarioController::class, 'mostrar_detalhes_prontuario_medico'])->name('mostrar_detalhes_prontuario_medico');
     Route::get('/painel-medico/consultas/realizar/{id_consulta}', [ConsultaController::class, 'realizar_consulta_medico'])->name('realizar_consulta_medico');

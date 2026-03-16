@@ -51,7 +51,7 @@
                         <li><i class="fas fa-check"></i> Telemedicina disponível</li>
                         <li><i class="fas fa-check"></i> Seguimento personalizado</li>
                     </ul>
-                    <a href="/contacto" class="service-btn">
+                    <a href="/login" class="service-btn">
                         Agendar Consulta <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -72,7 +72,7 @@
                         <li><i class="fas fa-check"></i> Tomografia computorizada</li>
                         <li><i class="fas fa-check"></i> Ressonância magnética</li>
                     </ul>
-                    <a href="contacto.html" class="service-btn">
+                    <a href="/contacto" class="service-btn">
                         Mais Informações <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -93,7 +93,7 @@
                         <li><i class="fas fa-check"></i> Testes hormonais</li>
                         <li><i class="fas fa-check"></i> Testes microbiológicos</li>
                     </ul>
-                    <a href="contacto.html" class="service-btn">
+                    <a href="/contacto" class="service-btn">
                         Mais Informações <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -114,7 +114,7 @@
                         <li><i class="fas fa-check"></i> Cirurgias ambulatoriais</li>
                         <li><i class="fas fa-check"></i> Cirurgias especializadas</li>
                     </ul>
-                    <a href="contacto.html" class="service-btn">
+                    <a href="/contacto" class="service-btn">
                         Mais Informações <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -135,7 +135,7 @@
                         <li><i class="fas fa-check"></i> Refeições personalizadas</li>
                         <li><i class="fas fa-check"></i> Acompanhamento familiar</li>
                     </ul>
-                    <a href="contacto.html" class="service-btn">
+                    <a href="/contacto" class="service-btn">
                         Mais Informações <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -156,7 +156,7 @@
                         <li><i class="fas fa-check"></i> Equipamentos de emergência</li>
                         <li><i class="fas fa-check"></i> Observação e estabilização</li>
                     </ul>
-                    <a href="contacto.html" class="service-btn">
+                    <a href="/contacto" class="service-btn">
                         Emergência <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -198,7 +198,7 @@
                         <li><i class="fas fa-check"></i> Atestados de saúde ocupacional</li>
                         <li><i class="fas fa-check"></i> Programas de prevenção</li>
                     </ul>
-                    <a href="contacto.html" class="service-btn">
+                    <a href="/contacto" class="service-btn">
                         Solicitar Orçamento <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>

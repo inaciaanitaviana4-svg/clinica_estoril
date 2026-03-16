@@ -45,13 +45,4 @@ class HorarioController extends Controller
 
         return redirect(route('mostrar_horarios_medico'));
     }
-    public function remover_horario_medico($id_horario){
-        $horario = Horario::find($id_horario);
-        if (!$horario) {
-             return response()->json(['erro' => 'horario não encontrado '], 404);
-        }
-        $horario->delete();
-        return response()->json(['mensagem' => 'horario removido com secesso'], 200);
-
-    }
 }

@@ -1,6 +1,6 @@
-@extends("layouts.painel")
-@section("titulo", "Consultas paciente")
-@section("conteudo")
+@extends('layouts.painel')
+@section('titulo', 'Consultas paciente')
+@section('conteudo')
     <section id="medico" class="section active">
 
         <div id="prontuarios" class="tab-content active">
@@ -9,12 +9,24 @@
                     <h2 class="card-title">Consultas</h2>
                     <a class="btn btn-primary" href="/agendar-consulta-paciente">agendar Consulta</a>
                 </div>
-                @if(session("erro"))
+                @if (session('erro'))
                     <div style="background-color:red;color:white;text-align:center">
-                        {{ session("erro") }}
+                        {{ session('erro') }}
                     </div>
                 @endif
-
+                <form method="GET" action="{{ route('mostrar_consultas_paciente', ['tab' => request('tab')]) }}">
+                    <div class="form-group" style="display:flex;flex-direction:row;gap:8px;margin-top:20px">
+                        <input name="pesquisar_paciente" value="{{ request('pesquisar_paciente') }}" type="text"
+                            id="searchInput" placeholder="Pesquisar...">
+                        <button class="btn btn-primary" type="submit" id="searchButton"><i
+                                class="fa fa-search"></i></button>
+                    </div>
+                    @if (request('pesquisar_paciente'))
+                        <a style="margin-bottom: 12px"
+                            href="{{ route('mostrar_consultas_paciente', ['tab' => request('tab')]) }}"
+                            class="btn btn-danger">Limpar pesquisa</a>
+                    @endif
+                </form>
                 <div class="table-container">
                     <table>
                         <thead>
@@ -32,17 +44,17 @@
                         </thead>
                         <tbody>
                             @foreach ($consultas as $consulta)
-
                                 <tr>
                                     <td>{{ $consulta->modalidade }}</td>
                                     <td>{{ $consulta->tipo_consulta }}</td>
                                     <td>{{ $consulta->nome_servico_clinico }}</td>
                                     <td>{{ $consulta->preco_servico_clinico }}</td>
-                                    <td>{{ $consulta->nome_medico??"ainda não definido" }}</td>
+                                    <td>{{ $consulta->nome_medico ?? 'ainda não definido' }}</td>
                                     <td>{{ $consulta->data }}</td>
                                     <td>{{ $consulta->hora }}</td>
                                     <td>
-                                        <span style="
+                                        <span
+                                            style="
                                             padding: 4px 8px;
                                             border-radius: 6px;
                                             color: #fff;
@@ -61,8 +73,8 @@
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            @if($consulta->estado == "pendente" || $consulta->estado == "agendada")
-                                                <form action="/cancelar-consulta-paciente/{{$consulta->id_consulta }}"
+                                            @if ($consulta->estado == 'pendente' || $consulta->estado == 'agendada')
+                                                <form action="/cancelar-consulta-paciente/{{ $consulta->id_consulta }}"
                                                     method="post">
                                                     {{ csrf_field() }}
                                                     <button class="btn btn-bg-red btn-small">Cancelar</button>
@@ -70,8 +82,8 @@
                                                 </form>
                                             @endif
 
-                                              @if($consulta->estado == "agendada")
-                                                <form action="/confirmar-consulta-paciente/{{$consulta->id_consulta }}"
+                                            @if ($consulta->estado == 'agendada')
+                                                <form action="/confirmar-consulta-paciente/{{ $consulta->id_consulta }}"
                                                     method="post">
                                                     {{ csrf_field() }}
                                                     <button class="btn btn-primary btn-small">confirmar</button>

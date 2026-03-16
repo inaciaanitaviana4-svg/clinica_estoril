@@ -96,12 +96,6 @@
                             <a href="#" aria-label="Instagram">
                                 <i class="fab fa-instagram"></i>
                             </a>
-                            <a href="#" aria-label="LinkedIn">
-                                <i class="fab fa-linkedin"></i>
-                            </a>
-                            <a href="#" aria-label="YouTube">
-                                <i class="fab fa-youtube"></i>
-                            </a>
                         </div>
                     </div>
                 </div>

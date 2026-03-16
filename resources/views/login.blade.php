@@ -65,7 +65,7 @@
                             <input type="checkbox" name="remember">
                             <span>Lembrar-me</span>
                         </label>
-                        <a  href="recuperar_senha.html" class="forgot-password">Esqueci a senha</a>
+                        <a  href="/recuperar_senha" class="forgot-password">Esqueci a senha</a>
                     </div>
                     <button type="submit" class="btn btn-primary btn-full">
                         <i class="fas fa-sign-in-alt"></i>
@@ -109,8 +109,6 @@
                     <div class="social-links">
                         <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
                         <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
 
@@ -123,18 +121,6 @@
                         <li><a href="/servicos">Serviços</a></li>
                         <li><a href="/especialidades">Especialidades</a></li>
                         <li><a href="/equipa">Nossa Equipa</a></li>
-                    </ul>
-                </div>
-
-                <!-- Especialidades -->
-                <div class="footer-section">
-                    <h4 class="footer-title">Especialidades</h4>
-                    <ul class="footer-links">
-                        <li><a href="/especialidades">Cardiologia</a></li>
-                        <li><a href="/especialidades">Neurologia</a></li>
-                        <li><a href="/especialidades">Ortopedia</a></li>
-                        <li><a href="/especialidades">Pediatria</a></li>
-                        <li><a href="/especialidades">Ginecologia</a></li>
                     </ul>
                 </div>
 
