@@ -100,17 +100,17 @@ class UtilizadoresController extends Controller
                 if ($utilizador->nivel_acesso == 1) {
                     session(['tipo_utilizador' => 'recepcionista']);
 
-                    return redirect(route('mostrar_consultas_recepcionista'));
+                    return redirect(route('mostrar_dashboard_recepcionista'));
                 }
                 if ($utilizador->nivel_acesso == 2) {
                     session(['tipo_utilizador' => 'medico']);
 
-                    return redirect(route('mostrar_consultas_medico'));
+                    return redirect(route('mostrar_dashboard_medico'));
 
                 }
                 session(['tipo_utilizador' => 'paciente']);
 
-                return redirect('/consultas-paciente');
+                return redirect(route('mostrar_dashboard_paciente'));
             }
 
         }

@@ -189,6 +189,10 @@ if (! function_exists('badge_estados')) {
                 $cor = '#10b981';
                 $estado_nome = 'Sucesso';
                 break;
+            case 'concluida':
+                $cor = '#10b981';
+                $estado_nome = 'Concluida';
+                break;
 
             case 'PENDENTE':
                 $cor = '#f59e0b';

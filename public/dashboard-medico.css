@@ -16,7 +16,7 @@
   --shadow-md:    0 4px 20px rgba(0,0,0,.10);
   --shadow-lg:    0 8px 40px rgba(0,0,0,.14);
   --grad:         linear-gradient(135deg,#0066cc 0%,#004999 100%);
-  --grad-teal:    linear-gradient(135deg,#0891b2 0%,#0e7490 100%);
+  --grad-teal:    linear-gradient(135deg,#0066cc 0%,#004999  100%);
   --sidebar-w:    260px;
   --topbar-h:     64px;
   --radius:       14px;

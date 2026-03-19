@@ -305,7 +305,7 @@ class ConsultaController extends Controller
 
     public function associar_medico_consulta(Request $request, $id_consulta, $view = null)
     {
-       $recepcionista = verificar_recepcionista();
+        $recepcionista = verificar_recepcionista();
         $admin = verificar_admin();
         if (! $admin && ! $recepcionista) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
@@ -367,6 +367,25 @@ class ConsultaController extends Controller
         } elseif ($view == 'admin') {
             return redirect(route('detalhes_consulta_admin', $consulta->id_consulta));
         }
+    }
+
+    public function mudar_estado_consulta_medico(Request $request, $id_consulta)
+    {
+        $medico = verificar_medico();
+        if (! $medico) {
+            return back()->with('erro', 'Não tem permissão para acessar esta página');
+        }
+        $consulta = Consulta::find($id_consulta);
+        if (! $consulta) {
+            return back()->with('erro', 'Consulta não encontrada');
+        }
+        if ($consulta->id_medico != $medico->id_medico) {
+            return back()->with('erro', 'Não tem permissão para mudar o estado desta consulta');
+        }
+        $consulta->estado = $request->estado;
+        $consulta->save();
+
+        return redirect(route('realizar_consulta_medico', $consulta->id_consulta));
     }
 
     public function realizar_consulta_medico($id_consulta)

@@ -2,7 +2,7 @@
 @extends(Session::get('tipo_utilizador')=="admi"?"layouts.admin":"layouts.painel")
 @section("titulo", "Perfil")
 @section("conteudo")
-	<section class="section active {{ Session::get('tipo_utilizador')=="admi"?"":"painel" }}">
+	<section >
 		<div class="perfil-container">
 			<!-- Header com foto e botão editar -->
 			<div class="perfil-header">
