@@ -18,16 +18,29 @@ class HorarioController extends Controller
         return view('medicos.horarios', compact('horarios'));
     }
 
+    public function mostrar_horarios_recepcionista()
+    {
+        $utilizador = verificar_recepcionista();
+        if (! $utilizador) {
+            return back()->with('erro', 'Não tem permissão para acessar esta página');
+        }
+        $horarios = Horario::select('horarios.*', 'medico.nome as nome_medico')
+            ->join('medico', 'horarios.id_medico', '=', 'medico.id_medico')
+            ->get();
+
+        return view('recepcionistas.horarios', compact('horarios'));
+    }
+
     public function salvar_horarios_medico(Request $request)
     {
         $utilizador = verificar_medico();
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
-        $id_horario = $request->id_horario??null;
+        $id_horario = $request->id_horario ?? null;
         if ($id_horario) {
             $horario = Horario::find($id_horario);
-            if (!$horario) {
+            if (! $horario) {
                 return back()->with('erro', 'Horario não encontrado');
             }
             $horario->dia_semana = $request->dia_semana;
@@ -44,5 +57,21 @@ class HorarioController extends Controller
         }
 
         return redirect(route('mostrar_horarios_medico'));
+    }
+
+    public function remover_horario_medico_recepcionista($id_horario)
+    {
+        $utilizador = verificar_recepcionista();
+        if (! $utilizador) {
+            return response()->json(['erro' => 'Não tem permissão para acessar esta API'], status: 403);
+        }
+        $horario = Horario::find($id_horario);
+        if (! $horario) {
+            return response()->json(['erro' => 'horario não encontrado '], 404);
+        }
+        $horario->delete();
+
+        return response()->json(['mensagem' => 'horario removido com secesso'], 200);
+
     }
 }

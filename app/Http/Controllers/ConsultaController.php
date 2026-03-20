@@ -320,6 +320,13 @@ class ConsultaController extends Controller
         }
         $consulta->id_medico = $request->id_medico;
         $consulta->save();
+        Notificacao::create([
+            'titulo' => 'Associação de médico',
+            'mensagem' => 'O recepcionista '.$recepcionista->nome.' associou o medico '.$medico->nome.' a consulta '.$consulta->id_consulta,
+            'id_util' => Utilizador::where('id_paciente', $consulta->id_paciente)->first()->id_util ?? '',
+            'lida' => false,
+            'data' => date('Y-m-d H:i:s'),
+        ]);
         if ($view == 'recepcionista') {
             return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
         } elseif ($view == 'admin') {
@@ -338,9 +345,16 @@ class ConsultaController extends Controller
         if (! $consulta) {
             return back()->with('erro', 'Consulta não encontrada');
         }
-
+        $medico = Medico::find($consulta->id_medico);
         $consulta->id_medico = null;
         $consulta->save();
+        Notificacao::create([
+            'titulo' => 'Desassociação de médico',
+            'mensagem' => 'O recepcionista '.$recepcionista->nome.' desassociou o medico '.$medico->nome.' a consulta '.$consulta->id_consulta,
+            'id_util' => Utilizador::where('id_paciente', $consulta->id_paciente)->first()->id_util ?? '',
+            'lida' => false,
+            'data' => date('Y-m-d H:i:s'),
+        ]);
         if ($view == 'recepcionista') {
             return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
         } elseif ($view == 'admin') {
@@ -360,8 +374,16 @@ class ConsultaController extends Controller
         if (! $consulta) {
             return back()->with('erro', 'Consulta não encontrada');
         }
+        $medico = Medico::find($consulta->id_medico);
         $consulta->estado = $request->estado;
         $consulta->save();
+        Notificacao::create([
+            'titulo' => 'Mudança de estado de consulta',
+            'mensagem' => 'O recepcionista '.$recepcionista->nome.' mudou o estado de consulta '.$consulta->id_consulta.' para '.$consulta->estado,
+            'id_util' => Utilizador::where('id_paciente', $consulta->id_paciente)->first()->id_util ?? '',
+            'lida' => false,
+            'data' => date('Y-m-d H:i:s'),
+        ]);
         if ($view == 'recepcionista') {
             return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
         } elseif ($view == 'admin') {
@@ -384,6 +406,13 @@ class ConsultaController extends Controller
         }
         $consulta->estado = $request->estado;
         $consulta->save();
+        Notificacao::create([
+            'titulo' => 'Mudança de estado de consulta',
+            'mensagem' => 'O medico '.$medico->nome.' mudou o estado de consulta '.$consulta->id_consulta.' para '.$consulta->estado,
+            'id_util' => Utilizador::where('id_paciente', $consulta->id_paciente)->first()->id_util ?? '',
+            'lida' => false,
+            'data' => date('Y-m-d H:i:s'),
+        ]);
 
         return redirect(route('realizar_consulta_medico', $consulta->id_consulta));
     }

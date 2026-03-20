@@ -7,6 +7,7 @@ use App\Models\Horario;
 use App\Models\Medico;
 use App\Models\Notificacao;
 use App\Models\Paciente;
+use App\Models\Pagamento;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -127,5 +128,48 @@ class DashboardController extends Controller
             'horarios' => $horarios,
             'pacientes_recentes' => $pacientes_recentes,
         ]);
+    }
+
+    public function api_obter_dados_dashboard_recepcionista()
+    {
+        $utilizador = verificar_recepcionista();
+        if (! $utilizador) {
+            return response()->json(['erro' => 'Não tem permissão para acessar esta API'], status: 403);
+        }
+
+        $hoje = Carbon::today();
+        $mesAtual = Carbon::now()->month;
+        $anoAtual = Carbon::now()->year;
+        $stats = [
+            'hoje' => Consulta::where('id_recepcionista', $utilizador->id_recepcionista)->whereDate('data', $hoje)->whereYear('data', $anoAtual)->whereMonth('data', $mesAtual)->count(),
+            'hoje_agendadas' => Consulta::where('id_recepcionista', $utilizador->id_recepcionista)->where('estado', 'agendada')->whereDate('data', $hoje)->whereYear('data', $anoAtual)->whereMonth('data', $mesAtual)->count(),
+            'mes' => Consulta::where('id_recepcionista', $utilizador->id_recepcionista)->whereYear('data', $anoAtual)->whereMonth('data', $mesAtual)->count(),
+            'mes_agendadas' => Consulta::where('id_recepcionista', $utilizador->id_recepcionista)->where('estado', 'agendada')->whereYear('data', $anoAtual)->whereMonth('data', $mesAtual)->count(),
+            'receita_mes' => Pagamento::where('id_recepcionista', $utilizador->id_recepcionista)->where('estado', 'sucesso')->whereYear('data', $anoAtual)->whereMonth('data', $mesAtual)->sum('total_pago'),
+            'sem_recepcionista' => Consulta::where('id_recepcionista', null)->whereDate('data', $hoje)->whereYear('data', $anoAtual)->whereMonth('data', $mesAtual)->count(),
+        ];
+        $consultas_hoje = Consulta::select('consultas.*', 'paciente.nome as paciente', 'servicos_clinicos.nome as servico_clinico', 'tipos_consultas.nome as tipo_consulta', 'medico.nome as medico')
+            ->join('servicos_clinicos', 'servicos_clinicos.id_servico_clinico', '=', 'consultas.id_servico_clinico')
+            ->join('tipos_consultas', 'tipos_consultas.id_tipo_consulta', '=', 'consultas.id_tipo_consulta')
+            ->join('paciente', 'consultas.id_paciente', '=', 'paciente.id_paciente')
+            ->join('medico', 'medico.id_medico', '=', 'consultas.id_medico')
+            ->where('consultas.id_recepcionista', $utilizador->id_recepcionista)
+            ->whereDate('consultas.data', $hoje)
+            ->whereYear('consultas.data', $anoAtual)
+            ->whereMonth('consultas.data', $mesAtual)
+            ->get()
+            ->toArray();
+        $pagamentos_recentes = Pagamento::select('pagamentos.*', 'paciente.nome as paciente', 'metodos_pagamentos.nome as metodo_pagamento')
+            ->join('paciente', 'pagamentos.id_paciente', '=', 'paciente.id_paciente')
+            ->join('metodos_pagamentos', 'pagamentos.id_metodo_pagamento', '=', 'metodos_pagamentos.id_metodo_pagamento')
+            ->where('pagamentos.id_recepcionista', $utilizador->id_recepcionista)->where('pagamentos.estado', 'sucesso')->orderBy('pagamentos.data', 'desc')->limit(5)->get()->toArray();
+
+        return response()->json([
+            'recepcionista' => $utilizador,
+            'stats' => $stats,
+            'consultas_hoje' => $consultas_hoje,
+            'pagamentos_recentes' => $pagamentos_recentes,
+        ]);
+
     }
 }

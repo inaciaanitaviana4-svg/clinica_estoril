@@ -18,6 +18,7 @@ $menus = [
             ['href'=>route('mostrar_consultas_recepcionista'),'titulo'=>'Agendamentos','icon'=>'fa-solid fa-stethoscope'],
             ['href'=>route('mostrar_pagamentos_recepcionista'),'titulo'=>'Pagamentos','icon'=>'fa-solid fa-credit-card'],
             ['href'=>route('mostrar_pacientes_recepcionista'),'titulo'=>'Pacientes','icon'=>'fa-solid fa-users'],
+            ['href'=>route('mostrar_horarios_recepcionista'),'titulo'=>'Horarios','icon'=>'fa-solid fa-clock'],
         ];
             }
               if (session('tipo_utilizador') == 'paciente'){

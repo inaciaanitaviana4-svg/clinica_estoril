@@ -88,7 +88,7 @@
 
 /* ── HERO ──────────────────────────────── */
 .hero-card {
-    background: var(--grad-purple);
+    background: var(--grad);
     border-radius: 20px;
     padding: 28px 32px;
     color: #fff;

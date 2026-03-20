@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Consulta;
 use App\Models\ItemPagamento;
 use App\Models\MetodoPagamento;
+use App\Models\Notificacao;
 use App\Models\Paciente;
 use App\Models\Pagamento;
 use App\Models\ServicoClinico;
+use App\Models\Utilizador;
 use DB;
 use Illuminate\Http\Request;
 
@@ -62,6 +64,13 @@ class PagamentosController extends Controller
                 'valor' => $servico_clinico->preco,
                 'total' => $servico_clinico->preco,
             ]);
+            Notificacao::create([
+                'titulo' => 'Pagamento realizado',
+                'mensagem' => 'O recepcionista '.$utilizador->nome.' realizou um pagamento de '.$valor_pago.'kz',
+                'id_util' => Utilizador::where('id_paciente', $consulta->id_paciente)->first()->id_util ?? '',
+                'lida' => false,
+                'data' => date('Y-m-d H:i:s'),
+            ]);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -89,6 +98,13 @@ class PagamentosController extends Controller
             DB::beginTransaction();
             $pagamento->estado = 'cancelado';
             $pagamento->save();
+            Notificacao::create([
+                'titulo' => 'Pagamento cancelado',
+                'mensagem' => 'O recepcionista '.$utilizador->nome.' cancelou um pagamento de '.$pagamento->total_pago.'kz',
+                'id_util' => Utilizador::where('id_paciente', $pagamento->id_paciente)->first()->id_util ?? '',
+                'lida' => false,
+                'data' => date('Y-m-d H:i:s'),
+            ]);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -215,6 +231,13 @@ class PagamentosController extends Controller
             ItemPagamento::insert($itens);
             $pagamento->total_pago = $valor_pago;
             $pagamento->save();
+            Notificacao::create([
+                'titulo' => 'Pagamento realizado',
+                'mensagem' => 'O recepcionista '.$utilizador->nome.' realizou um pagamento de '.$pagamento->total_pago.'kz',
+                'id_util' => Utilizador::where('id_paciente', $pagamento->id_paciente)->first()->id_util ?? '',
+                'lida' => false,
+                'data' => date('Y-m-d H:i:s'),
+            ]);
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollback();
@@ -246,6 +269,7 @@ class PagamentosController extends Controller
 
         return view('pagamentos.detalhes_pagamento_recepcionista', compact('pagamento', 'itens_pagamento'));
     }
+
     public function detalhes_pagamentos_admin($id_pagamento)
     {
         $utilizador = verificar_admin();
@@ -286,6 +310,13 @@ class PagamentosController extends Controller
             DB::beginTransaction();
             $pagamento->estado = $novo_estado;
             $pagamento->save();
+            Notificacao::create([
+                'titulo' => 'Pagamento atualizado',
+                'mensagem' => 'O recepcionista '.$utilizador->nome.' atualizou o estado do pagamento de '.$pagamento->total_pago.'kz',
+                'id_util' => Utilizador::where('id_paciente', $pagamento->id_paciente)->first()->id_util ?? '',
+                'lida' => false,
+                'data' => date('Y-m-d H:i:s'),
+            ]);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -295,6 +326,7 @@ class PagamentosController extends Controller
 
         return redirect()->route('detalhes_pagamento_recepcionista', ['id_pagamento' => $id_pagamento])->with('success', 'Estado do pagamento atualizado com sucesso.');
     }
+
     public function mudar_estado_pagamento_admin(Request $request, $id_pagamento)
     {
         $utilizador = verificar_admin();
@@ -313,6 +345,13 @@ class PagamentosController extends Controller
             DB::beginTransaction();
             $pagamento->estado = $novo_estado;
             $pagamento->save();
+            Notificacao::create([
+                'titulo' => 'Pagamento atualizado',
+                'mensagem' => 'O admin '.$utilizador->nome.' atualizou o estado do pagamento de '.$pagamento->total_pago.'kz',
+                'id_util' => Utilizador::where('id_paciente', $pagamento->id_paciente)->first()->id_util ?? '',
+                'lida' => false,
+                'data' => date('Y-m-d H:i:s'),
+            ]);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -322,6 +361,7 @@ class PagamentosController extends Controller
 
         return redirect()->route('detalhes_pagamentos_admin', ['id_pagamento' => $id_pagamento])->with('success', 'Estado do pagamento atualizado com sucesso.');
     }
+
     public function remover_pagamento_admin($id_pagamento)
     {
         $utilizador = verificar_admin();
@@ -335,7 +375,14 @@ class PagamentosController extends Controller
         try {
             DB::beginTransaction();
             $pagamento->delete();
-            ItemPagamento::where('id_pagamento', $id_pagamento)->delete(); //deleta os itens do tempagame
+            ItemPagamento::where('id_pagamento', $id_pagamento)->delete(); // deleta os itens do tempagame
+            Notificacao::create([
+                'titulo' => 'Pagamento removido',
+                'mensagem' => 'O admin '.$utilizador->nome.' removeu um pagamento de '.$pagamento->total_pago.'kz',
+                'id_util' => Utilizador::where('id_paciente', $pagamento->id_paciente)->first()->id_util ?? '',
+                'lida' => false,
+                'data' => date('Y-m-d H:i:s'),
+            ]);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
