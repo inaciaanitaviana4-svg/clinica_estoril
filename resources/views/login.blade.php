@@ -61,10 +61,6 @@
                         </div>
                     </div>
                     <div class="form-options">
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="remember">
-                            <span>Lembrar-me</span>
-                        </label>
                         <a  href="/recuperar_senha" class="forgot-password">Esqueci a senha</a>
                     </div>
                     <button type="submit" class="btn btn-primary btn-full">
