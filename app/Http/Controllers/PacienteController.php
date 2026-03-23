@@ -27,7 +27,7 @@ class PacienteController extends Controller
         return view('pacientes.perfil', ['paciente' => $paciente]);
     }
 
-    public function consultas_paciente()
+    public function consultas_paciente( Request $request)
     {
         $utilizadorid = session('id_utilizador');
         $utilizador = Utilizador::find($utilizadorid);
@@ -37,7 +37,7 @@ class PacienteController extends Controller
         if (! $utilizador->id_paciente) {
             return redirect('/login')->with('erro', 'paciente sem permissão');
         }
-
+$pesquisar_consultas = $request->query('pesquisar_consultas')??'';
         $consultas = Consulta::select(
             'consultas.id_consulta',
             'tipos_consultas.nome as tipo_consulta',
@@ -53,6 +53,13 @@ class PacienteController extends Controller
             ->leftJoin('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
             ->leftJoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
             ->where('id_paciente', $utilizador->id_paciente)
+             ->where(function ($query) use ($pesquisar_consultas) {
+                $query->where('consultas.modalidade', 'like', "%$pesquisar_consultas%")
+                ->orWhere('tipos_consultas.nome', 'like', "%$pesquisar_consultas%")
+                ->orWhere('servicos_clinicos.nome', 'like', "%$pesquisar_consultas%")
+                ->orWhere('medico.nome', 'like', "%$pesquisar_consultas%");
+
+            })
             ->orderBy('data')
             ->orderBy('hora')
             ->get();
@@ -217,6 +224,7 @@ class PacienteController extends Controller
     {
         $utilizador = verificar_recepcionista();
         if (! $utilizador) {
+
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
 

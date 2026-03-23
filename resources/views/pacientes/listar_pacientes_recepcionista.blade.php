@@ -15,7 +15,7 @@
                     </div>
                 @endif
                   <form method="GET"
-                    action="{{ route('mostrar_cadastro_paciente_recepcionista', ['tab' => request('tab')]) }}">
+                    action="{{ route('mostrar_cadastro_paciente_recepcionista') }}">
                     <div class="form-group" style="display:flex;flex-direction:row;gap:8px;margin-top:20px">
                         <input name="pesquisar_paciente" value="{{ request('pesquisar_paciente') }}" type="text"
                             id="searchInput" placeholder="Pesquisar...">
@@ -24,7 +24,7 @@
                     </div>
                     @if (request('pesquisar_paciente'))
                         <a style="margin-bottom: 12px"
-                            href="{{ route('mostrar_cadastro_paciente_recepcionista', ['tab' => request('tab')]) }}"
+                            href="{{ route('mostrar_cadastro_paciente_recepcionista') }}"
                             class="btn btn-danger">Limpar pesquisa</a>
                     @endif
                 </form>

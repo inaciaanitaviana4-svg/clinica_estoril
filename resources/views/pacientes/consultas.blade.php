@@ -14,16 +14,16 @@
                         {{ session('erro') }}
                     </div>
                 @endif
-                <form method="GET" action="{{ route('mostrar_consultas_paciente', ['tab' => request('tab')]) }}">
+                <form method="GET" action="{{ route('mostrar_consultas_paciente') }}">
                     <div class="form-group" style="display:flex;flex-direction:row;gap:8px;margin-top:20px">
-                        <input name="pesquisar_paciente" value="{{ request('pesquisar_paciente') }}" type="text"
+                        <input name="pesquisar_consultas" value="{{ request('pesquisar_consultas') }}" type="text"
                             id="searchInput" placeholder="Pesquisar...">
                         <button class="btn btn-primary" type="submit" id="searchButton"><i
                                 class="fa fa-search"></i></button>
                     </div>
-                    @if (request('pesquisar_paciente'))
+                    @if (request('pesquisar_consultas'))
                         <a style="margin-bottom: 12px"
-                            href="{{ route('mostrar_consultas_paciente', ['tab' => request('tab')]) }}"
+                            href="{{ route('mostrar_consultas_paciente') }}"
                             class="btn btn-danger">Limpar pesquisa</a>
                     @endif
                 </form>
