@@ -115,17 +115,26 @@ class PagamentosController extends Controller
         return redirect()->route('detalhes_consulta_recepcionista', ['id_consulta' => $pagamento->id_consulta])->with('success', 'Pagamento cancelado com sucesso.');
     }
 
-    public function mostrar_pagamentos_recepcionista()
+    public function mostrar_pagamentos_recepcionista(Request $request)
     {
         $utilizador = verificar_recepcionista();
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
+         $pesquisar_pagamentos = $request->query('pesquisar_pagamentos') ?? '';
         $pagamentos = Pagamento::select('pagamentos.*', 'paciente.nome as nome_paciente', 'metodos_pagamentos.nome as metodo_pagamento')
             ->where('id_recepcionista', $utilizador->id_recepcionista)
             ->join('paciente', 'pagamentos.id_paciente', '=', 'paciente.id_paciente')
             ->join('metodos_pagamentos', 'pagamentos.id_metodo_pagamento', '=', 'metodos_pagamentos.id_metodo_pagamento')
-            ->get();
+                  ->where(function ($query) use ($pesquisar_pagamentos) {
+                $query->where('paciente.nome', 'like', "%$pesquisar_pagamentos%")
+                    ->orWhere('pagamentos.data', 'like', "%$pesquisar_pagamentos%")
+                    ->orWhere('metodos_pagamentos.nome', 'like', "%$pesquisar_pagamentos%")
+                    ->orWhere('pagamentos.total_pago', 'like', "%$pesquisar_pagamentos%")
+                    ->orWhere('pagamentos.estado', 'like', "%$pesquisar_pagamentos%");
+
+            })
+            ->paginate(10);
 
         return view('pagamentos.listar_pagamentos_recepcionista', compact('pagamentos'));
     }

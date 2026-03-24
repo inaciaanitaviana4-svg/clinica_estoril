@@ -15,16 +15,16 @@
                     </div>
                 @endif
                 <form method="GET"
-                    action="{{ route('mostrar_fazer_pagamento_recepcionista', ['tab' => request('tab')]) }}">
+                    action="{{ route('mostrar_pagamentos_recepcionista') }}">
                     <div class="form-group" style="display:flex;flex-direction:row;gap:8px;margin-top:20px">
-                        <input name="pesquisar_pagamento" value="{{ request('pesquisar_pagamento') }}" type="text"
+                        <input name="pesquisar_pagamentos" value="{{ request('pesquisar_pagamentos') }}" type="text"
                             id="searchInput" placeholder="Pesquisar...">
                         <button class="btn btn-primary" type="submit" id="searchButton"><i
                                 class="fa fa-search"></i></button>
                     </div>
-                    @if (request('pesquisar_pagamento'))
+                    @if (request('pesquisar_pagamentos'))
                         <a style="margin-bottom: 12px"
-                            href="{{ route('mostrar_fazer_pagamento_recepcionista', ['tab' => request('tab')]) }}"
+                            href="{{ route('mostrar_pagamentos_recepcionista') }}"
                             class="btn btn-danger">Limpar pesquisa</a>
                     @endif
                 </form>
@@ -60,6 +60,7 @@
                         </tbody>
                     </table>
                 </div>
+                 {{ $pagamentos->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </section>

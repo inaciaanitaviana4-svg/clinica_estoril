@@ -1,19 +1,31 @@
-@extends("layouts.painel")
-@section("titulo", "Consultas")
-@section("conteudo")
+@extends('layouts.painel')
+@section('titulo', 'Consultas')
+@section('conteudo')
     <section id="medico" class="section active">
 
         <div id="prontuarios" class="tab-content active">
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title">Consultas</h2>
-                  <!--  <a class="btn btn-primary" href="/agendar-consulta-paciente">agendar Consulta</a>-->
+                    <!--  <a class="btn btn-primary" href="/agendar-consulta-paciente">agendar Consulta</a>-->
                 </div>
-                @if(session("erro"))
+                @if (session('erro'))
                     <div style="background-color:red;color:white;text-align:center">
-                        {{ session("erro") }}
+                        {{ session('erro') }}
                     </div>
                 @endif
+                <form method="GET" action="{{ route('mostrar_consultas_medico') }}">
+                    <div class="form-group" style="display:flex;flex-direction:row;gap:8px;margin-top:20px">
+                        <input name="pesquisar_consultas" value="{{ request('pesquisar_consultas') }}" type="text"
+                            id="searchInput" placeholder="Pesquisar...">
+                        <button class="btn btn-primary" type="submit" id="searchButton"><i
+                                class="fa fa-search"></i></button>
+                    </div>
+                    @if (request('pesquisar_consultas'))
+                        <a style="margin-bottom: 12px" href="{{ route('mostrar_consultas_medico') }}"
+                            class="btn btn-danger">Limpar pesquisa</a>
+                    @endif
+                </form>
 
                 <div class="table-container">
                     <table>
@@ -30,19 +42,19 @@
                         </thead>
                         <tbody>
                             @foreach ($consultas as $consulta)
-
                                 <tr>
                                     <td>{{ $consulta->tipo_consulta }}</td>
-                                    <td>{{ $consulta->nome_servico_clinico}}</td>
-                                    <td>{{ $consulta->nome_paciente}}</td>
+                                    <td>{{ $consulta->nome_servico_clinico }}</td>
+                                    <td>{{ $consulta->nome_paciente }}</td>
                                     <td>{{ $consulta->data }}</td>
                                     <td>{{ $consulta->hora }}</td>
                                     <td>
-                                      {{ badge_estados($consulta->estado) }}
+                                        {{ badge_estados($consulta->estado) }}
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="{{ route('realizar_consulta_medico', $consulta->id_consulta) }}" class="btn btn-primary"><i class="fa-solid fa-stethoscope"></i></a>           
+                                            <a href="{{ route('realizar_consulta_medico', $consulta->id_consulta) }}"
+                                                class="btn btn-primary"><i class="fa-solid fa-stethoscope"></i></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -50,6 +62,7 @@
                         </tbody>
                     </table>
                 </div>
+                 {{ $consultas->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </section>

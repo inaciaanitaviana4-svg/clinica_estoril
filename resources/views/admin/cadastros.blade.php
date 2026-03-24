@@ -78,7 +78,7 @@
                         </tbody>
                     </table>
                 </div>
-                {{ $utilizadores->links('pagination::bootstrap-4') }}
+                {{ $utilizadores->appends([ 'tab' => request('tab')])->links('pagination::bootstrap-4') }}
             </div>
         </div>
         <!-- listagem de Especialidades-->
@@ -137,7 +137,7 @@
                         </tbody>
                     </table>
                 </div>
-                {{ $especialidades->links('pagination::bootstrap-4', ['tab' => 1]) }}
+                {{ $especialidades->appends([ 'tab' => request('tab')])->links('pagination::bootstrap-4') }}
             </div>
         </div>
         <!-- listagem de Tipo de Consultas-->
@@ -191,7 +191,7 @@
                         </tbody>
                     </table>
                 </div>
-                {{ $tipo_consultas->links('pagination::bootstrap-4', ['tab' => 2]) }}
+                {{ $tipo_consultas->appends(['tab' => request('tab')])->links('pagination::bootstrap-4') }}
             </div>
         </div>
         <!-- listagem de Serviços Clinicos-->
@@ -253,7 +253,7 @@
                         </tbody>
                     </table>
                 </div>
-                {{ $servicos_clinicos->links('pagination::bootstrap-4', ['tab' => 3]) }}
+                {{ $servicos_clinicos->appends([ 'tab' => request('tab')])->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </section>

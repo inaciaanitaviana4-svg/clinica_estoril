@@ -31,12 +31,13 @@ class ConsultaController extends Controller
         return view('agendar_consulta');
     }
 
-    public function mostrar_consultas_medico()
+    public function mostrar_consultas_medico(Request $request)
     {
         $utilizador = verificar_medico();
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
+        $pesquisar_consultas = $request->query('pesquisar_consultas')??'';
         $consultas = Consulta::select(
             'consultas.id_consulta',
             'tipos_consultas.nome as tipo_consulta',
@@ -53,19 +54,30 @@ class ConsultaController extends Controller
             ->leftJoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
             ->whereIn('estado', ['agendada', 'concluida', 'em_andamento', 'confirmada'])
             ->where('consultas.id_medico', $utilizador->id_medico)
+             ->where(function ($query) use ($pesquisar_consultas) {
+                $query->where('tipos_consultas.nome', 'like', "%$pesquisar_consultas%")
+                ->orWhere('servicos_clinicos.nome', 'like', "%$pesquisar_consultas%")
+                ->orWhere('paciente.nome', 'like', "%$pesquisar_consultas%")
+                ->orWhere('servicos_clinicos.preco', 'like', "%$pesquisar_consultas%")
+                ->orWhere('consultas.data', 'like', "%$pesquisar_consultas%")
+                ->orWhere('consultas.hora', 'like', "%$pesquisar_consultas%")
+                ->orWhere('consultas.estado', 'like', "%$pesquisar_consultas%");
+
+            })
             ->orderBy('data', 'asc')
             ->orderBy('hora', 'asc')
-            ->get();
+            ->paginate(10);
 
         return view('consultas.medico', compact('consultas'));
     }
 
-    public function mostrar_consultas_recepcionista()
+    public function mostrar_consultas_recepcionista(Request $request)
     {
         $utilizador = verificar_recepcionista();
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
+          $pesquisar_consultas = $request->query('pesquisar_consultas')??'';
         $consultas = Consulta::select(
             'consultas.id_consulta',
             'tipos_consultas.nome as tipo_consulta',
@@ -85,11 +97,23 @@ class ConsultaController extends Controller
             ->leftJoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
             ->where(function ($query) use ($utilizador) {
                 $query->where('id_recepcionista', null)
-                    ->orWhere('id_recepcionista', $utilizador->id_recepcionista);
+                    ->orWhere('id_recepcionista', $utilizador->id_recepcionista);  
+            })
+             ->where(function ($query) use ($pesquisar_consultas) {
+                $query->where('tipos_consultas.nome', 'like', "%$pesquisar_consultas%")
+                ->orWhere('servicos_clinicos.nome', 'like', "%$pesquisar_consultas%")
+                ->orWhere('paciente.nome', 'like', "%$pesquisar_consultas%")
+                ->orWhere('servicos_clinicos.preco', 'like', "%$pesquisar_consultas%")
+                ->orWhere('consultas.data', 'like', "%$pesquisar_consultas%")
+                ->orWhere('consultas.hora', 'like', "%$pesquisar_consultas%")
+                ->orWhere('consultas.estado', 'like', "%$pesquisar_consultas%")
+                ->orWhere('consultas.modalidade', 'like', "%$pesquisar_consultas%")
+                ->orWhere('medico.nome', 'like', "%$pesquisar_consultas%");
+
             })
             ->orderBy('data')
             ->orderBy('hora')
-            ->get();
+            ->paginate(10);
 
         return view('consultas.recepcionista', compact('consultas'));
     }

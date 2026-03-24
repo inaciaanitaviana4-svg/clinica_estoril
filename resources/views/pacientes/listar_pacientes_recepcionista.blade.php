@@ -15,16 +15,16 @@
                     </div>
                 @endif
                   <form method="GET"
-                    action="{{ route('mostrar_cadastro_paciente_recepcionista') }}">
+                    action="{{ route('mostrar_pacientes_recepcionista') }}">
                     <div class="form-group" style="display:flex;flex-direction:row;gap:8px;margin-top:20px">
-                        <input name="pesquisar_paciente" value="{{ request('pesquisar_paciente') }}" type="text"
+                        <input name="pesquisar_pacientes" value="{{ request('pesquisar_pacientes') }}" type="text"
                             id="searchInput" placeholder="Pesquisar...">
                         <button class="btn btn-primary" type="submit" id="searchButton"><i
                                 class="fa fa-search"></i></button>
                     </div>
-                    @if (request('pesquisar_paciente'))
+                    @if (request('pesquisar_pacientes'))
                         <a style="margin-bottom: 12px"
-                            href="{{ route('mostrar_cadastro_paciente_recepcionista') }}"
+                            href="{{ route('mostrar_pacientes_recepcionista') }}"
                             class="btn btn-danger">Limpar pesquisa</a>
                     @endif
                 </form>
@@ -60,6 +60,7 @@
                         </tbody>
                     </table>
                 </div>
+                 {{ $pacientes->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </section>

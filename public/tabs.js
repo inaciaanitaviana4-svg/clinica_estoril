@@ -3,7 +3,7 @@ const tabsContent = document.getElementsByClassName("tab-content")
 const tabActual = new URLSearchParams(window.location.search).get("tab")
 
 if (tabActual !== null) {
-    desactivarTodasTabs()
+   desactivarTodasTabs()
     tabs.item(tabActual).classList.add("active")
     tabsContent.item(tabActual).classList.add("active")
 }
@@ -22,6 +22,7 @@ for (let i = 0; i < tabs.length; i++) {
         tabsContent.item(i).classList.add("active")
         const url = new URL(window.location.href)
         url.searchParams.set("tab", i)
+        url.searchParams.delete("page")
         window.history.pushState({path: url.href}, "", url.href)
     })
 }

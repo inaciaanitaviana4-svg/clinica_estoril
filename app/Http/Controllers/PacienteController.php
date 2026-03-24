@@ -27,7 +27,7 @@ class PacienteController extends Controller
         return view('pacientes.perfil', ['paciente' => $paciente]);
     }
 
-    public function consultas_paciente( Request $request)
+    public function consultas_paciente(Request $request)
     {
         $utilizadorid = session('id_utilizador');
         $utilizador = Utilizador::find($utilizadorid);
@@ -37,7 +37,7 @@ class PacienteController extends Controller
         if (! $utilizador->id_paciente) {
             return redirect('/login')->with('erro', 'paciente sem permissão');
         }
-$pesquisar_consultas = $request->query('pesquisar_consultas')??'';
+        $pesquisar_consultas = $request->query('pesquisar_consultas') ?? '';
         $consultas = Consulta::select(
             'consultas.id_consulta',
             'tipos_consultas.nome as tipo_consulta',
@@ -53,16 +53,20 @@ $pesquisar_consultas = $request->query('pesquisar_consultas')??'';
             ->leftJoin('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
             ->leftJoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
             ->where('id_paciente', $utilizador->id_paciente)
-             ->where(function ($query) use ($pesquisar_consultas) {
+            ->where(function ($query) use ($pesquisar_consultas) {
                 $query->where('consultas.modalidade', 'like', "%$pesquisar_consultas%")
-                ->orWhere('tipos_consultas.nome', 'like', "%$pesquisar_consultas%")
-                ->orWhere('servicos_clinicos.nome', 'like', "%$pesquisar_consultas%")
-                ->orWhere('medico.nome', 'like', "%$pesquisar_consultas%");
+                    ->orWhere('tipos_consultas.nome', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('servicos_clinicos.nome', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('medico.nome', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('servicos_clinicos.preco', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('consultas.data', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('consultas.hora', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('consultas.estado', 'like', "%$pesquisar_consultas%");
 
             })
             ->orderBy('data')
             ->orderBy('hora')
-            ->get();
+            ->paginate(10);
 
         return view('pacientes.consultas', ['consultas' => $consultas]);
     }
@@ -193,14 +197,22 @@ $pesquisar_consultas = $request->query('pesquisar_consultas')??'';
         return view('pacientes.notificacoes');
     }
 
-    public function mostrar_pacientes_recepcionista()
+    public function mostrar_pacientes_recepcionista(Request $request)
     {
         $utilizador = verificar_recepcionista();
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
+        $pesquisar_pacientes = $request->query('pesquisar_pacientes') ?? '';
+        $pacientes = Paciente::where(function ($query) use ($pesquisar_pacientes) {
+            $query->where('paciente.nome', 'like', "%$pesquisar_pacientes%")
+                ->orWhere('paciente.data_nascimento', 'like', "%$pesquisar_pacientes%")
+                ->orWhere('paciente.num_telefone', 'like', "%$pesquisar_pacientes%")
+                ->orWhere('paciente.email', 'like', "%$pesquisar_pacientes%")
+                ->orWhere('paciente.genero', 'like', "%$pesquisar_pacientes%");
 
-        $pacientes = Paciente::all();
+        })
+            ->paginate(10);
 
         return view('pacientes.listar_pacientes_recepcionista', ['pacientes' => $pacientes]);
     }
@@ -233,7 +245,7 @@ $pesquisar_consultas = $request->query('pesquisar_consultas')??'';
 
     public function salvar_cadastro_paciente_recepcionista(Request $request)
     {
-        $totalPacientes= Paciente::count();
+        $totalPacientes = Paciente::count();
         $utilizador = verificar_recepcionista();
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');

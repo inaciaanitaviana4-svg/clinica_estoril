@@ -97,6 +97,7 @@
                         </tbody>
                     </table>
                 </div>
+                 {{ $consultas->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </section>

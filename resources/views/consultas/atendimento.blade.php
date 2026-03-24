@@ -1,19 +1,18 @@
-@extends("layouts.painel")
-@section("titulo", "Agendamento")
-@section("conteudo")
+@extends('layouts.painel')
+@section('titulo', 'Agendamento')
+@section('conteudo')
 
-    <section >
+    <section>
         <div class="login-container">
             <!-- Seleção de Tipo de Usuário -->
             <div class="login-card" id="userTypeCard">
                 <h2 style="text-align: center;"><strong>Agendamento</strong> </h2>
                 <br><br>
-                @if(session("erro"))
+                @if (session('erro'))
                     <div style="background-color:red;color:white;text-align:center">
-                        {{ session("erro") }}
+                        {{ session('erro') }}
                     </div>
                 @endif
-
                 <form method="post" action="{{ route('salvar_atendimento_recepcionista') }}">
                     {{ csrf_field() }}
                     <div class="row">
@@ -21,10 +20,10 @@
                             <label for="modalidade">Modalidade</label>
                             <select class="w-100" id="modalidade" name="modalidade">
                                 <option value="">Selecione a modalidade</option>
-                                    <option value="imediata">Imediata</option>
-                                    <option value="agendada">Agendada</option>
-                                   
-                              
+                                <option value="imediata">Imediata</option>
+                                <option value="agendada">Agendada</option>
+
+
                             </select>
                         </div>
                         <div class="col form-group">
@@ -42,7 +41,8 @@
 
                         <div class="col form-group">
                             <label for="data">Data da consulta</label>
-                            <input class="w-100" type="date" id="data" name="data" min="2025-01-01" max="2026-06-20">
+                            <input class="w-100" type="date" id="data" name="data" min="2025-01-01"
+                                max="2026-06-20">
 
                         </div>
                         <div class="col form-group">

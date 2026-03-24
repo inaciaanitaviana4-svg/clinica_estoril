@@ -8,34 +8,54 @@ use App\Models\ExameSolicitado;
 use App\Models\Paciente;
 use App\Models\Receita;
 use App\Models\ReceitaItem;
+use Illuminate\Http\Request;
 
 class ProntuarioController extends Controller
 {
-    public function mostrar_prontuarios_medico()
+    public function mostrar_prontuarios_medico(Request $request)
     {
         $medico = verificar_medico();
         if (! $medico) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
+        $pesquisar_prontuarios = $request->query('pesquisar_prontuarios') ?? '';
         $pacientes = $medico ? Paciente::join('consultas', 'paciente.id_paciente', '=', 'consultas.id_paciente')
             ->where('consultas.id_medico', '=', $medico->id_medico)
+            ->where(function ($query) use ($pesquisar_prontuarios) {
+                $query->where('paciente.nome', 'like', "%$pesquisar_prontuarios%")
+                    ->orWhere('paciente.data_nascimento', 'like', "%$pesquisar_prontuarios%")
+                    ->orWhere('paciente.num_telefone', 'like', "%$pesquisar_prontuarios%")
+                    ->orWhere('paciente.email', 'like', "%$pesquisar_prontuarios%")
+                    ->orWhere('paciente.genero', 'like', "%$pesquisar_prontuarios%");
+            })
             ->select('paciente.*')
-            ->distinct()->get() : Paciente::join('consultas', 'paciente.id_paciente', '=', 'consultas.id_paciente')
+            ->distinct()->paginate(10) : Paciente::join('consultas', 'paciente.id_paciente', '=', 'consultas.id_paciente')
             ->select('paciente.*')
-            ->distinct()->get();
+            ->distinct()
+           ->paginate(10);
 
         return view('medicos.prontuarios', compact('pacientes'));
     }
 
-    public function mostrar_prontuarios_admin()
+    public function mostrar_prontuarios_admin(Request $request)
     {
         $admin = verificar_admin();
         if (! $admin) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
+        $pesquisar_prontuarios = $request->query('pesquisar_prontuarios') ?? '';
         $pacientes = Paciente::join('consultas', 'paciente.id_paciente', '=', 'consultas.id_paciente')
+            ->where(function ($query) use ($pesquisar_prontuarios) {
+                $query->where('paciente.nome', 'like', "%$pesquisar_prontuarios%")
+                    ->orWhere('paciente.data_nascimento', 'like', "%$pesquisar_prontuarios%")
+                    ->orWhere('paciente.num_telefone', 'like', "%$pesquisar_prontuarios%")
+                    ->orWhere('paciente.email', 'like', "%$pesquisar_prontuarios%")
+                    ->orWhere('paciente.genero', 'like', "%$pesquisar_prontuarios%");
+
+            })
             ->select('paciente.*')
-            ->distinct()->get();
+            ->distinct()
+            ->paginate(10);
 
         return view('admin.prontuarios', compact('pacientes'));
     }

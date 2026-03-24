@@ -43,44 +43,44 @@ class AdminController extends Controller
             return redirect('/login');
         }
 
-        $hoje        = Carbon::today();
-        $mesAtual    = Carbon::now()->month;
-        $anoAtual    = Carbon::now()->year;
+        $hoje = Carbon::today();
+        $mesAtual = Carbon::now()->month;
+        $anoAtual = Carbon::now()->year;
         $mesAnterior = Carbon::now()->subMonth();
 
         // ════════════════════════════════════════════════════
         // 1. TOTAL DE PACIENTES
         // ════════════════════════════════════════════════════
-        $totalPacientes      = Paciente::count();
+        $totalPacientes = Paciente::count();
         $totalPacientes = [
-            'total'              => $totalPacientes
+            'total' => $totalPacientes,
         ];
 
         // ════════════════════════════════════════════════════
         // 2. TOTAL DE CONSULTAS
         // ════════════════════════════════════════════════════
-        $consultasMesAtual    = Consulta::whereMonth('data', $mesAtual)
+        $consultasMesAtual = Consulta::whereMonth('data', $mesAtual)
             ->whereYear('data', $anoAtual)
             ->count();
         $consultasMesAnterior = Consulta::whereMonth('data', $mesAnterior->month)
             ->whereYear('data', $mesAnterior->year)
             ->count();
-        $consultasHoje        = Consulta::whereDate('data', $hoje)->count();
+        $consultasHoje = Consulta::whereDate('data', $hoje)->count();
 
         $percentagemConsultas = $consultasMesAnterior > 0
             ? round((($consultasMesAtual - $consultasMesAnterior) / $consultasMesAnterior) * 100, 1)
             : ($consultasMesAtual > 0 ? 100.0 : 0.0);
 
         $totalConsultas = [
-            'total_mes'      => $consultasMesAtual,
-            'total_hoje'     => $consultasHoje,
-            'percentagem'    => $percentagemConsultas,
+            'total_mes' => $consultasMesAtual,
+            'total_hoje' => $consultasHoje,
+            'percentagem' => $percentagemConsultas,
         ];
 
         // ════════════════════════════════════════════════════
         // 3. TOTAL DE PAGAMENTOS (RECEITA DO MÊS)
         // ════════════════════════════════════════════════════
-        $receitaMesAtual    = Pagamento::whereMonth('data', $mesAtual)
+        $receitaMesAtual = Pagamento::whereMonth('data', $mesAtual)
             ->whereYear('data', $anoAtual)
             ->where('estado', 'sucesso')
             ->sum('total_pago');
@@ -95,8 +95,8 @@ class AdminController extends Controller
             : ($receitaMesAtual > 0 ? 100.0 : 0.0);
 
         $totalPagamentos = [
-            'receita_mes'  => round($receitaMesAtual, 2),
-            'percentagem'  => $percentagemReceita,
+            'receita_mes' => round($receitaMesAtual, 2),
+            'percentagem' => $percentagemReceita,
         ];
 
         // ════════════════════════════════════════════════════
@@ -114,25 +114,24 @@ class AdminController extends Controller
             ->count('especialidade');
 
         // Médicos do mês anterior para percentagem
-        $medicosMesAnterior  = 0; // Médicos raramente têm created_at relevante; ajuste se necessário
-        $percentagemMedicos  = 0.0;
+        $medicosMesAnterior = 0; // Médicos raramente têm created_at relevante; ajuste se necessário
+        $percentagemMedicos = 0.0;
 
         $totalMedicos = [
             'total_medicos_activos' => $totalMedicosActivos,
-            'total_especialidades'  => $totalEspecialidades,
-            'percentagem'           => $percentagemMedicos,
+            'total_especialidades' => $totalEspecialidades,
+            'percentagem' => $percentagemMedicos,
         ];
 
         // ════════════════════════════════════════════════════
         // 10. RESUMO DO SISTEMA
         // ════════════════════════════════════════════════════
         $resumoSistema = [
-            "especialidades" =>  Especialidade::where('activo', true)->count(),
-            "tipos_consulta" =>  TipoConsulta::count(),
-            "recepcionistas" =>  recepcionista::count(),
-            "metodos_pagamento" =>  MetodoPagamento::count(),
+            'especialidades' => Especialidade::where('activo', true)->count(),
+            'tipos_consulta' => TipoConsulta::count(),
+            'recepcionistas' => recepcionista::count(),
+            'metodos_pagamento' => MetodoPagamento::count(),
         ];
-
 
         return view('admin.dashboard', compact('totalPacientes', 'totalConsultas', 'totalPagamentos', 'totalMedicos', 'resumoSistema'));
     }
@@ -164,9 +163,9 @@ class AdminController extends Controller
         $agora = Carbon::now();
         for ($i = 5; $i >= 0; $i--) {
             $periodo = $agora->copy()->subMonths($i); // Meses passados
-            $m    = $periodo->month;
-            $a    = $periodo->year;
-            $chave = $meses_pt[$m] . '/' . $periodo->format('y'); // ex: "Jan/25"
+            $m = $periodo->month;
+            $a = $periodo->year;
+            $chave = $meses_pt[$m].'/'.$periodo->format('y'); // ex: "Jan/25"
 
             [$concluidas, $agendadas] = [
                 Consulta::whereMonth('data', $m)->whereYear('data', $a)->where('estado', 'concluida')->count(),
@@ -175,7 +174,7 @@ class AdminController extends Controller
 
             $consultasPorMes[] = [$chave => [
                 'concluidas' => $concluidas,
-                'agendadas'  => $agendadas,
+                'agendadas' => $agendadas,
             ]];
         }
 
@@ -191,9 +190,9 @@ class AdminController extends Controller
             ->groupBy('metodos_pagamentos.nome')
             ->orderByDesc('total')
             ->get()
-            ->map(fn($r) => [
+            ->map(fn ($r) => [
                 'metodo_pagamento' => $r->metodo_pagamento,
-                'total'            => round($r->total, 2),
+                'total' => round($r->total, 2),
             ])
             ->toArray();
 
@@ -209,18 +208,18 @@ class AdminController extends Controller
             'consultas.estado'
         )
             ->join('paciente', 'consultas.id_paciente', '=', 'paciente.id_paciente')
-            ->join('medico',   'consultas.id_medico',   '=', 'medico.id_medico')
+            ->join('medico', 'consultas.id_medico', '=', 'medico.id_medico')
             ->orderByDesc('consultas.data')
             ->orderByDesc('consultas.hora')
             ->limit(10)
             ->get()
-            ->map(fn($r) => [
-                'id'       => $r->id_consulta,
+            ->map(fn ($r) => [
+                'id' => $r->id_consulta,
                 'paciente' => $r->paciente,
-                'medico'   => $r->medico,
-                'data'     => $r->data,
-                'hora'     => $r->hora,
-                'estado'   => $r->estado,
+                'medico' => $r->medico,
+                'data' => $r->data,
+                'hora' => $r->hora,
+                'estado' => $r->estado,
             ])
             ->toArray();
 
@@ -232,15 +231,15 @@ class AdminController extends Controller
             'medico.especialidade',
             DB::raw('COUNT(consultas.id_consulta) as consultas')
         )
-            ->leftJoin('consultas',    'medico.id_medico',           '=', 'consultas.id_medico')
+            ->leftJoin('consultas', 'medico.id_medico', '=', 'consultas.id_medico')
             ->groupBy('medico.id_medico', 'medico.nome', 'medico.especialidade')
             ->orderByDesc('consultas')
             ->limit(10)
             ->get()
-            ->map(fn($r) => [
-                'medico'       => $r->medico,
+            ->map(fn ($r) => [
+                'medico' => $r->medico,
                 'especialidade' => $r->especialidade ?? '—',
-                'consultas'    => (int) $r->consultas,
+                'consultas' => (int) $r->consultas,
             ])
             ->toArray();
 
@@ -256,12 +255,11 @@ class AdminController extends Controller
             ->orderByDesc('total')
             ->limit(8)
             ->get()
-            ->map(fn($r) => [
+            ->map(fn ($r) => [
                 'servico' => $r->servico,
-                'total'   => (int) $r->total,
+                'total' => (int) $r->total,
             ])
             ->toArray();
-
 
         // ════════════════════════════════════════════════════
         // 11. PAGAMENTOS RECENTES
@@ -275,20 +273,20 @@ class AdminController extends Controller
             'pagamentos.total_pago as total',
             'pagamentos.estado'
         )
-            ->join('paciente',           'pagamentos.id_paciente',        '=', 'paciente.id_paciente')
+            ->join('paciente', 'pagamentos.id_paciente', '=', 'paciente.id_paciente')
             ->join('metodos_pagamentos', 'pagamentos.id_metodo_pagamento', '=', 'metodos_pagamentos.id_metodo_pagamento')
-            ->join('recepcionista',      'pagamentos.id_recepcionista',    '=', 'recepcionista.id_recepcionista')
+            ->join('recepcionista', 'pagamentos.id_recepcionista', '=', 'recepcionista.id_recepcionista')
             ->orderByDesc('pagamentos.data')
             ->limit(10)
             ->get()
-            ->map(fn($r) => [
-                'id'              => $r->id_pagamento,
-                'paciente'        => $r->paciente,
-                'data'            => $r->data,
+            ->map(fn ($r) => [
+                'id' => $r->id_pagamento,
+                'paciente' => $r->paciente,
+                'data' => $r->data,
                 'metodo_pagamento' => $r->metodo_pagamento,
-                'recepcionista'   => $r->recepcionista,
-                'total'           => round($r->total, 2),
-                'estado'          => $r->estado,
+                'recepcionista' => $r->recepcionista,
+                'total' => round($r->total, 2),
+                'estado' => $r->estado,
             ])
             ->toArray();
 
@@ -301,8 +299,8 @@ class AdminController extends Controller
             ->groupBy('metodos_pagamentos.id_metodo_pagamento', 'metodos_pagamentos.nome')
             ->orderByDesc('total')
             ->get()
-            ->map(fn($r) => [
-                'nome'  => $r->nome,
+            ->map(fn ($r) => [
+                'nome' => $r->nome,
                 'total' => round($r->total, 2),
             ])->toArray();
 
@@ -310,26 +308,36 @@ class AdminController extends Controller
         // RETORNO FINAL
         // ════════════════════════════════════════════════════
         return response()->json([
-            'consultas_por_mes'    => $consultasPorMes,
+            'consultas_por_mes' => $consultasPorMes,
             'pagamentos_por_metodo' => $pagamentosPorMetodo,
-            'consultas_recentes'   => $consultasRecentes,
-            'top_medicos'          => $topMedicos,
+            'consultas_recentes' => $consultasRecentes,
+            'top_medicos' => $topMedicos,
             'servicos_mais_usados' => $servicosMaisUsados,
-            'pagamentos_recentes'  => $pagamentosRecentes,
+            'pagamentos_recentes' => $pagamentosRecentes,
             'total_metodo_pagamento' => $metodos,
         ]);
     }
 
-    public function mostrar_pagamentos_admin()
+    public function mostrar_pagamentos_admin(Request $request)
     {
         if (! $this->verificar_admin()) {
             return redirect('/login');
         }
+        $pesquisar_pagamentos = $request->query('pesquisar_pagamentos') ?? '';
         $pagamentos = Pagamento::select('pagamentos.*', 'paciente.nome as nome_paciente', 'metodos_pagamentos.nome as metodo_pagamento', 'recepcionista.nome as nome_recepcionista')
             ->join('recepcionista', 'pagamentos.id_recepcionista', '=', 'recepcionista.id_recepcionista')
             ->join('paciente', 'pagamentos.id_paciente', '=', 'paciente.id_paciente')
             ->join('metodos_pagamentos', 'pagamentos.id_metodo_pagamento', '=', 'metodos_pagamentos.id_metodo_pagamento')
-            ->get();
+            ->where(function ($query) use ($pesquisar_pagamentos) {
+                $query->where('paciente.nome', 'like', "%$pesquisar_pagamentos%")
+                    ->orWhere('pagamentos.data', 'like', "%$pesquisar_pagamentos%")
+                    ->orWhere('metodos_pagamentos.nome', 'like', "%$pesquisar_pagamentos%")
+                    ->orWhere('recepcionista.nome', 'like', "%$pesquisar_pagamentos%")
+                    ->orWhere('pagamentos.total_pago', 'like', "%$pesquisar_pagamentos%")
+                    ->orWhere('pagamentos.estado', 'like', "%$pesquisar_pagamentos%");
+
+            })
+            ->paginate(10);
 
         return view('admin.pagamentos', compact('pagamentos'));
     }
@@ -340,27 +348,29 @@ class AdminController extends Controller
             return redirect('/login');
         }
         $pesquisar = $request->query('pesquisar_utilizador') ?? '';
+        $tab = $request->query('tab') ?? '';
         $utilizadores = Utilizador::where('id_util', '<>', session('id_utilizador'))
             ->where(function ($query) use ($pesquisar) {
                 $query->where('nome', 'like', "%$pesquisar%")->orWhere('email', 'like', "%$pesquisar%")->orWhere('num_telefone', 'like', "%$pesquisar%");
-            })->paginate(10);
+            })->paginate(10)->appends(request()->input());
         $pesquisar_especialidade = $request->query('pesquisar_especialidade') ?? '';
-        $especialidades = Especialidade::where('nome', 'like', "%$pesquisar_especialidade%")->paginate(10);
+        $especialidades = Especialidade::where('nome', 'like', "%$pesquisar_especialidade%")->paginate(10)->appends(request()->input());
         $pesquisar_tipo_consulta = $request->query('pesquisar_tipo_consulta') ?? '';
-        $tipo_consultas = TipoConsulta::where('nome', 'like', "%$pesquisar_tipo_consulta%")->paginate(10);
+        $tipo_consultas = TipoConsulta::where('nome', 'like', "%$pesquisar_tipo_consulta%")->paginate(10)->appends(request()->input());
         $pesquisar_servico_clinico = $request->query('pesquisar_servico_clinico') ?? '';
         $servicos_clinicos = ServicoClinico::select('servicos_clinicos.*', 'tipos_consultas.nome as tipo_consulta')
             ->join('tipos_consultas', 'tipos_consultas.id_tipo_consulta', '=', 'servicos_clinicos.id_tipo_consulta')
-            ->where('servicos_clinicos.nome', 'like', "%$pesquisar_servico_clinico%")->paginate(10);
+            ->where('servicos_clinicos.nome', 'like', "%$pesquisar_servico_clinico%")->paginate(10)->appends(request()->input());
 
         return view('admin.cadastros', compact('utilizadores', 'especialidades', 'tipo_consultas', 'servicos_clinicos'));
     }
 
-    public function mostrar_consultas_admin()
+    public function mostrar_consultas_admin(Request $request)
     {
         if (! $this->verificar_admin()) {
             return redirect('/login');
         }
+        $pesquisar_consultas = $request->query('pesquisar_consultas') ?? '';
         $consultas = Consulta::select(
             'consultas.id_consulta',
             'tipos_consultas.nome as tipo_consulta',
@@ -380,11 +390,23 @@ class AdminController extends Controller
             ->leftJoin('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
             ->leftJoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
             ->whereIn('estado', ['agendada', 'concluida', 'em_andamento', 'confirmada'])
+            ->where(function ($query) use ($pesquisar_consultas) {
+                $query->where('tipos_consultas.nome', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('servicos_clinicos.nome', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('paciente.nome', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('medico.nome', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('recepcionista.nome', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('servicos_clinicos.preco', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('consultas.data', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('consultas.hora', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('consultas.estado', 'like', "%$pesquisar_consultas%");
+
+            })
             ->orderBy('data', 'asc')
             ->orderBy('hora', 'asc')
-            ->get();
+            ->paginate(10);
 
-        return view('admin.consultas', compact('consultas',));
+        return view('admin.consultas', compact('consultas'));
     }
 
     public function mostrar_prontuarios_admin()
