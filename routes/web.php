@@ -129,6 +129,7 @@ Route::middleware(['web'])->group(function () {
     Route::get('/admin/cadastros/servicos_clinico/remover/{id_servico_clinico}', [ServicoClinicoController::class, 'remover_servico_clinico_admin'])->name('remover_servico_clinico_admin');
     Route::get('/admin/cadastros/servicos_clinico/registro/{id_servico_clinico?}', [ServicoClinicoController::class, 'mostrar_registro_servico_clinico_admin'])->name('mostrar_registro_servico_clinico_admin');
     Route::post('/admin/cadastros/servicos_clinico/registro/{id_servico_clinico?}', [ServicoClinicoController::class, 'salvar_registro_servico_clinico_admin'])->name('salvar_registro_servico_clinico_admin');
+    Route::get('/api/servicos-clinicos', [ServicoClinicoController::class, 'api_obter_servicos_clinicos'])->name('api_obter_servicos_clinicos');
 
     // Visualizações do admin
     Route::get('/admin/consultas', [AdminController::class, 'mostrar_consultas_admin'])->name('mostrar_consultas_admin');

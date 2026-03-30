@@ -59,7 +59,7 @@
                     <div class="row">
                         <div class="col form-group">
                             <label for="id_tipo_consulta">Tipo de consulta</label>
-                            <select class="w-100" id="id_tipo_consulta" name="id_tipo_consulta">
+                            <select class="w-100 tipo_consulta_auto_select" id="id_tipo_consulta" name="id_tipo_consulta">
                                 <option value="">Selecione o tipo de consulta</option>
                                 @foreach ($tipos_consultas as $tipo)
                                     <option value="{{ $tipo->id_tipo_consulta }}">{{ $tipo->nome }}</option>
@@ -68,11 +68,8 @@
                         </div>
                         <div class="col form-group">
                             <label for="id_servico_clinico">Serviços clínicos</label>
-                            <select class="w-100" id="id_servico_clinico" name="id_servico_clinico">
-                                <option value="">Selecione o serviço clínico</option>
-                                @foreach ($servicos_clinicos as $servico)
-                                    <option value="{{ $servico->id_servico_clinico }}">{{ $servico->nome }}</option>
-                                @endforeach
+                            <select class="w-100 servico_clinico_auto_select" id="id_servico_clinico"
+                                name="id_servico_clinico">
                             </select>
                         </div>
                     </div>
@@ -105,4 +102,7 @@
                 </form>
             </div>
     </section>
+@endsection
+@section('script')
+    <script src="/auto-select.js"></script>
 @endsection

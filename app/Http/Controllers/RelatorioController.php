@@ -186,7 +186,7 @@ class RelatorioController extends Controller
         return response()->json($pagamentos);
     }
 
-    public function api_relatorio_prontuario_paciente($id_paciente)
+    public function api_relatorio_prontuario_paciente(Request $request, $id_paciente)
     {
         $medico = verificar_medico();
         $admin = verificar_admin();
@@ -197,10 +197,18 @@ class RelatorioController extends Controller
         if (! $paciente) {
             return response()->json(['erro' => 'Paciente não encontrado'], status: 404);
         }
+        $data_inicio = $request->query('data_inicio');
+        $data_fim = $request->query('data_fim');
         $consultas = Consulta::select('consultas.*', 'tipos_consultas.nome as tipo_consulta', 'servicos_clinicos.nome as servico_clinico')
             ->join('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
             ->join('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
-            ->where('id_paciente', $id_paciente)->get()->toArray();
+            ->where('id_paciente', $id_paciente);
+      
+        if ($data_inicio && $data_fim) {
+            $consultas->whereBetween('consultas.data', [$data_inicio, $data_fim]);
+        }
+
+        $consultas = $consultas->get()->toArray();
         $consultas = array_map(function ($consulta) {
             $id_consulta = $consulta['id_consulta'];
             $diagnosticos = Diagnostico::where('id_consulta', $id_consulta)

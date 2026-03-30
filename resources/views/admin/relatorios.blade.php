@@ -112,7 +112,18 @@
                             @endforeach
                         </select>
                     </div>
-
+                    <div class="form-group">
+                        <label for="data_inicio_prontuario">
+                            Data de início
+                        </label>
+                        <input name="data_inicio_prontuario" id="data_inicio_prontuario" type="date" />
+                    </div>
+                    <div class="form-group">
+                        <label for="data_fim_prontuario">
+                            Data final
+                        </label>
+                        <input name="data_fim_prontuario" id="data_fim_prontuario" type="date" />
+                    </div>
                     <button type="submit" class="btn btn-primary btn-full" id="gerar_relatorio_prontuario_btn">
                         Gerar relatório
                     </button>
@@ -125,11 +136,11 @@
                     <h2 class="card-title">Pagamentos</h2>
                 </div>
                 <form>
-                      <div class="form-group">
-                        <label for="id_paciente">
+                    <div class="form-group">
+                        <label for="id_paciente_pagamento">
                             Paciente
                         </label>
-                        <select name="id_paciente" id="id_paciente">
+                        <select name="id_paciente_pagamento" id="id_paciente_pagamento">
                             <option value="">Todos</option>
                             @foreach ($pacientes as $paciente)
                                 <option value="{{ $paciente->id_paciente }}">{{ $paciente->nome }}</option>
@@ -137,31 +148,32 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="estado">
+                        <label for="estado_pagamento">
                             Estado
                         </label>
-                        <select name="estado" id="estado">
+                        <select name="estado_pagamento" id="estado_pagamento">
                             <option value="">Todos</option>
                             <option value="cancelada">cancelada</option>
                             <option value="sucesso">sucesso</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="id_recepcionista">
+                        <label for="id_recepcionista_pagamento">
                             Recepcionista
                         </label>
-                        <select name="id_recepcionista" id="id_recepcionista">
+                        <select name="id_recepcionista_pagamento" id="id_recepcionista_pagamento">
                             <option value="">Todos</option>
                             @foreach ($recepcionistas as $recepcionista)
-                                <option value="{{ $recepcionista->id_recepcionista }}">{{ $recepcionista->nome }}</option>
+                                <option value="{{ $recepcionista->id_recepcionista }}">{{ $recepcionista->nome }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="id_servico_clinico">
+                        <label for="id_servico_clinico_pagamento">
                             Serviço clinicos
                         </label>
-                        <select name="id_servico_clinico" id="id_servico_clinico">
+                        <select name="id_servico_clinico_pagamento" id="id_servico_clinico_pagamento">
                             <option value="">Todos</option>
                             @foreach ($servicos_clinicos as $servico_clinico)
                                 <option value="{{ $servico_clinico->id_servico_clinico }}">{{ $servico_clinico->nome }}
@@ -170,28 +182,29 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="id_metodo_pagamento">
+                        <label for="id_metodo_pagamento_pagamento">
                             Metodo de pagamento
                         </label>
-                        <select name="id_metodo_pagamento" id="id_metodo_pagamento">
+                        <select name="id_metodo_pagamento_pagamento" id="id_metodo_pagamento_pagamento">
                             <option value="">Todos</option>
                             @foreach ($metodos_pagamentos as $metodo_pagamento)
-                                <option value="{{ $metodo_pagamento->id_metodo_pagamento}}">{{ $metodo_pagamento->nome }}
+                                <option value="{{ $metodo_pagamento->id_metodo_pagamento }}">
+                                    {{ $metodo_pagamento->nome }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="data_inicio">
+                        <label for="data_inicio_pagamento">
                             Data de início
                         </label>
-                        <input name="data_inicio" id="data_inicio"type="date" />
+                        <input name="data_inicio_pagamento" id="data_inicio_pagamento"type="date" />
                     </div>
                     <div class="form-group">
-                        <label for="data_fim">
+                        <label for="data_fim_pagamento">
                             Data final
                         </label>
-                        <input name="data_fim" id="data_fim" type="date" />
+                        <input name="data_fim_pagamento" id="data_fim_pagamento" type="date" />
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-full" id="gerar_relatorio_pagamentos_btn">
@@ -260,17 +273,17 @@
                 );
             }
         })
-         
+
         const gerar_relatorio_pagamentos_btn = document.getElementById('gerar_relatorio_pagamentos_btn')
         gerar_relatorio_pagamentos_btn.addEventListener('click', async (e) => {
-            const id_paciente = document.getElementById('id_paciente').value || null
-            const estado = document.getElementById('estado').value || null
-            const id_recepcionista = document.getElementById('id_recepcionista').value || null
-            const id_metodo_pagamento = document.getElementById('id_metodo_pagamento').value || null
-            const id_servico_clinico = document.getElementById('id_servico_clinico').value || null
-            const data_inicio = document.getElementById('data_inicio').value || null
-            const data_fim = document.getElementById('data_fim').value || null
-            const url = "{{ route('api_relatorio_pagamentos') }}" 
+            const id_paciente = document.getElementById('id_paciente_pagamento').value || null
+            const estado = document.getElementById('estado_pagamento').value || null
+            const id_recepcionista = document.getElementById('id_recepcionista_pagamento').value || null
+            const id_metodo_pagamento = document.getElementById('id_metodo_pagamento_pagamento').value || null
+            const id_servico_clinico = document.getElementById('id_servico_clinico_pagamento').value || null
+            const data_inicio = document.getElementById('data_inicio_pagamento').value || null
+            const data_fim = document.getElementById('data_fim_pagamento').value || null
+            const url = "{{ route('api_relatorio_pagamentos') }}"
             try {
                 e.preventDefault()
                 const resultado = await fetch(url, {
@@ -310,12 +323,18 @@
                 );
             }
         })
-         
+
         const gerar_relatorio_prontuario_btn = document.getElementById('gerar_relatorio_prontuario_btn')
         gerar_relatorio_prontuario_btn.addEventListener('click', async (e) => {
             const id_paciente = document.getElementById('id_paciente_prontuario')
-            const rota = "{{ route('api_relatorio_prontuario_paciente', ['id_paciente' => ':id']) }}"
+            const data_inicio = document.getElementById('data_inicio_prontuario')
+            const data_fim = document.getElementById('data_fim_prontuario')
+            const rota =
+                "{{ route('api_relatorio_prontuario_paciente', ['id_paciente' => ':id', 'data_inicio' => 'data_inicio_param', 'data_fim' => 'data_fim_param']) }}"
             const url = rota.replace(':id', id_paciente.value)
+                .replaceAll('data_inicio_param', data_inicio.value ? encodeURIComponent(data_inicio.value) : '')
+                .replaceAll('data_fim_param', data_fim.value ? encodeURIComponent(data_fim.value) : '')
+                .replaceAll('amp;','')
             try {
                 e.preventDefault()
                 const resultado = await fetch(url, {

@@ -110,7 +110,18 @@
                             @endforeach
                         </select>
                     </div>
-
+                    <div class="form-group">
+                        <label for="data_inicio_prontuario">
+                            Data de início
+                        </label>
+                        <input name="data_inicio_prontuario" id="data_inicio_prontuario" type="date" />
+                    </div>
+                    <div class="form-group">
+                        <label for="data_fim_prontuario">
+                            Data final
+                        </label>
+                        <input name="data_fim_prontuario" id="data_fim_prontuario" type="date" />
+                    </div>
                     <button type="submit" class="btn btn-primary btn-full" id="gerar_relatorio_prontuario_btn">
                         Gerar relatório
                     </button>
@@ -179,8 +190,14 @@
         const gerar_relatorio_prontuario_btn = document.getElementById('gerar_relatorio_prontuario_btn')
         gerar_relatorio_prontuario_btn.addEventListener('click', async (e) => {
             const id_paciente = document.getElementById('id_paciente_prontuario')
-            const rota = "{{ route('api_relatorio_prontuario_paciente', ['id_paciente' => ':id']) }}"
+            const data_inicio = document.getElementById('data_inicio_prontuario')
+            const data_fim = document.getElementById('data_fim_prontuario')
+            const rota =
+                "{{ route('api_relatorio_prontuario_paciente', ['id_paciente' => ':id', 'data_inicio' => 'data_inicio_param', 'data_fim' => 'data_fim_param']) }}"
             const url = rota.replace(':id', id_paciente.value)
+                .replaceAll('data_inicio_param', data_inicio.value ? encodeURIComponent(data_inicio.value) : '')
+                .replaceAll('data_fim_param', data_fim.value ? encodeURIComponent(data_fim.value) : '')
+                .replaceAll('amp;', '')
             try {
                 e.preventDefault()
                 const resultado = await fetch(url, {

@@ -49,7 +49,7 @@
                 </div>
 
                 <div style="display: flex; flex-direction: column; margin-top: 20px;">
-                    <?php $menus = [['href' => '/admin/dashboard', 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'], ['href' => '/admin/pagamentos', 'titulo' => 'Pagamentos', 'icon' => 'fa-solid fa-credit-card'], ['href' => '/admin/cadastros', 'titulo' => 'Cadastros', 'icon' => 'fa-solid fa-users'], ['href' => '/admin/consultas', 'titulo' => 'Consultas', 'icon' => 'fa-solid fa-stethoscope'], ['href' => route('mostrar_prontuarios_medico_admin',), 'titulo' => 'Prontuários', 'icon' => 'fa-solid fa-file-medical'], ['href' => '/admin/relatorios', 'titulo' => 'Relatórios', 'icon' => 'fa-solid fa-file-alt']];
+                    <?php $menus = [['href' => '/admin/dashboard', 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'], ['href' => '/admin/pagamentos', 'titulo' => 'Pagamentos', 'icon' => 'fa-solid fa-credit-card'], ['href' => '/admin/cadastros', 'titulo' => 'Cadastros', 'icon' => 'fa-solid fa-users'], ['href' => '/admin/consultas', 'titulo' => 'Consultas', 'icon' => 'fa-solid fa-stethoscope'], ['href' => route('mostrar_prontuarios_medico_admin'), 'titulo' => 'Prontuários', 'icon' => 'fa-solid fa-file-medical'], ['href' => '/admin/relatorios', 'titulo' => 'Relatórios', 'icon' => 'fa-solid fa-file-alt']];
                     ?>
                     @foreach ($menus as $menu)
                         <a class="sidebar-menu-item" style="padding: 12px 16px; font-weight: 500;"
@@ -61,11 +61,12 @@
             </aside>
         </div>
         <header
-            style="position: fixed; top: 0px; left:240px;right: 0px; background-color: white; padding: 8px; height: 52px;z-index: 100;" >
+            style="position: fixed; top: 0px; left:240px;right: 0px; background-color: white; padding: 8px; height: 52px;z-index: 100;">
             <div style="display: flex; align-items: center; height: 100%; justify-content: space-between;">
                 <span style="font-weight: bold; font-size: px;">@yield('titulo')</span>
                 <a href="/visualizar-perfil"
-                    style="display: flex; justify-items: center; align-items: center; height: fit-content;"><i
+                    style="display: flex; justify-items: center; align-items: center; height: fit-content; gap: 8px;"> <span
+                        style="font-weight: 500; font-size: 14px;">{{ session('nome_utilizador') ?? 'Utilizador' }}</span><i
                         style="font-size: 28px; color: #0066cc" class="fa-solid fa-circle-user"></i></a>
             </div>
         </header>

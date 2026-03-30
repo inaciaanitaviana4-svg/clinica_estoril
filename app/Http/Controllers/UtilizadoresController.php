@@ -90,6 +90,7 @@ class UtilizadoresController extends Controller
             if ($senhValida) {
                 // Cria sessão do utilizador
                 session(['id_utilizador' => $utilizador->id_util]);
+                session(['nome_utilizador' => $utilizador->nome]);
 
                 // Redireciona conforme o nível de acesso
                 if ($utilizador->nivel_acesso == 0) {

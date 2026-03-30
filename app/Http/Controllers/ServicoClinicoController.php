@@ -64,4 +64,16 @@ class ServicoClinicoController extends Controller
         return response()->json(['mensagem' => 'servico_clinico removida com secesso'], 200);
 
     }
+    public function api_obter_servicos_clinicos(Request $request)
+    {
+        $tipo_consulta_id = $request->get('tipo_consulta_id');
+        $servicos_clinicos = ServicoClinico::where("activo", true);
+
+        if ($tipo_consulta_id) {
+            $servicos_clinicos = $servicos_clinicos->where("id_tipo_consulta", $tipo_consulta_id);
+        }
+
+        $servicos_clinicos = $servicos_clinicos->get();
+        return response()->json($servicos_clinicos);
+    }
 }

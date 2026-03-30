@@ -94,7 +94,8 @@ $menus = [
             <div style="display: flex; align-items: center; height: 100%; justify-content: space-between;">
                 <span style="font-weight: bold; font-size: px;">@yield('titulo')</span>
                 <a href="/visualizar-perfil"
-                    style="display: flex; justify-items: center; align-items: center; height: fit-content;"><i
+                    style="display: flex; justify-items: center; align-items: center; height: fit-content; gap: 8px;"> <span
+                        style="font-weight: 500; font-size: 14px;">{{ session('nome_utilizador') ?? 'Utilizador' }}</span><i
                         style="font-size: 28px; color: #0066cc" class="fa-solid fa-circle-user"></i></a>
             </div>
         </header>
