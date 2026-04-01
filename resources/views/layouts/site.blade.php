@@ -51,20 +51,18 @@
                             </a>
                         @endif
                         @if (session('tipo_utilizador') == 'recepcionista')
-                            <a href="{{ route('mostrar_consultas_recepcionista') }}" class="btn-login">
-                                <span>Agendamentos</span>
+                            <a href="{{ route('mostrar_dashboard_recepcionista') }}" class="btn-login">
+                                <span>Dashboard</span>
                             </a>
                         @endif
                         @if (session('tipo_utilizador') == 'medico')
-                            <a href= "{{ route('mostrar_consultas_medico') }}" class="btn-login">
-                                <span>Consultas</span>
-                                <a class="sidebar-menu-item" style="padding: 12px 16px; font-weight: 500; color:red;"
-                                    href="/sair"><strong>Sair</strong></a>
+                            <a href= "{{ route('mostrar_dashboard_medico') }}" class="btn-login">
+                                <span>Dashboard</span>
                             </a>
                         @endif
                         @if (session('tipo_utilizador') == 'paciente')
-                            <a href="/visualizar-perfil" class="btn-login">
-                                <span>Perfil</span>
+                            <a href="{{ route('mostrar_dashboard_paciente') }}" class="btn-login">
+                                <span>Dashboard</span>
                             </a>
                         @endif
 
@@ -93,8 +91,8 @@
             <a href="/especialidades" class="mobile-link">Especialidades</a>
             <a href="/equipa" class="mobile-link">Equipa</a>
             <a href="/contacto" class="mobile-link">Contacto</a>
-            <a href="/blog" class="nav-link">Blog</a>
-            <a href="/chatbot" class="nav-link">Chat Bot</a>
+            <a href="/blog" class="mobile-link">Blog</a>
+            <a href="/chatbot" class="mobile-link">Chat Bot</a>
         </div>
     </header>
 

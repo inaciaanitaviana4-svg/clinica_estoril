@@ -44,7 +44,7 @@
                     <div class="form-group">
                     <label for="numero-email">
                         <i class="fas fa-envelope"></i>
-                        Email ou número de telefone
+                        Email
                     </label>
                     <input type="text" id="email" name="email" required placeholder="Digite seu email">
                     </div>

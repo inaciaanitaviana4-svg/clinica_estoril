@@ -14,10 +14,14 @@
 <body>
     <header class="header header-simple">
         <div class="containe">
+           <div class="container">
             <div class="nav-wrapper">
-                <a href="/" class="logo">
-                    <img src="imagem/logo.jpg" alt="logotipo da clínica">
-                    <span>Clínica Estoril</span>
+                <!-- Logo -->
+                <a href="/">
+                    <div class="logo">
+                        <img src="imagem/logo.jpg" alt="logotipo da clinica">
+                        <span>Clínica Estoril</span>
+                    </div>
                 </a>
 
                 <a href="/login" class="btn-back">

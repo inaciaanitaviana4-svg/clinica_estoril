@@ -6,8 +6,8 @@
         <div id="prontuarios" class="tab-content active">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title">Consultas/Agendamentos</h2>
-                    <a class="btn btn-primary" href="{{ route('mostrar_atendimento_recepcionista') }}">Atendimento/Agendar</a>
+                    <h2 class="card-title">Consultas</h2>
+                    <a class="btn btn-primary" href="{{ route('mostrar_atendimento_recepcionista') }}">Agendar</a>
                 </div>
                 @if (session('erro'))
                     <div style="background-color:red;color:white;text-align:center">
