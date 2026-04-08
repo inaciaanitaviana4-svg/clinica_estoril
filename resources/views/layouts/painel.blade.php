@@ -60,6 +60,17 @@ $menus = [
         .sidebar-menu-item:hover {
             background-color: #0066cc30;
         }
+
+        .erro{
+            color:red;
+            font-size:17px;
+        }
+        .input-erro{
+            border:2px solid red;
+        }
+        .input-sucesso{
+            border:2px solid green;
+        }
     </style>
 </head>
 
@@ -144,3 +155,4 @@ $menus = [
 
 
 </html>
+

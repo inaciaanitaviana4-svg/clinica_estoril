@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-PT">
 
@@ -8,7 +9,38 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Criar conta Paciente</title>
 
+<style>
+    body {
+        font-family: Arial;
+    }
 
+    input {
+        display: block;
+        margin-bottom: 5px;
+        padding: 6px;
+        width: 250px;
+    }
+
+    .erro {
+        color: red;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .sucesso {
+        color: green;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .invalido {
+        border: 2px solid red;
+    }
+
+    .valido {
+        border: 2px solid green;
+    }
+    </style>
 </head>
 
 <body>
@@ -23,6 +55,7 @@
                         <span>Clínica Estoril</span>
                     </div>
                 </a>
+
 
                 <a href="/login" class="btn-back">
                     <i class="fas fa-arrow-left"></i>
@@ -46,41 +79,42 @@
                             {{ session('erro') }}
                         </div>
                     @endif
-                    <form method="post" action="/cadastrar-paciente">
+                    <form method="post" action="/cadastrar-paciente" id="formulario" >
                         {{ csrf_field() }}
                         <div class="form-group">
                             <label for="nome">Nome Completo</label>
                             <input type="text" id="nome" name="nome" placeholder="Ex.: Eugénio Influencer"
-                                required>
+                                required><span id="nomeErro" class="erro"></span>
                         </div>
                         <div class="form-group">
                             <label for="num_telefone">Número de telefone</label>
-                            <input type="number" id="num_telefone" name="num_telefone" placeholder="9XXXXXXXX"
-                                maxlength="9" min="9" required>
+                            <input type="text" id="num_telefone" name="num_telefone" placeholder="9XXXXXXXX"
+                                maxlength="9" min="9" required><span id="telefoneErro" class="erro"></span>
                         </div>
                         <div class="form-group">
                             <label for="email">E-mail</label>
-                            <input type="email" id="email" name="email" placeholder="eugenio@gmail.com"
-                                required>
+                            <input type="text" id="email" name="email" placeholder="eugenio@gmail.com"
+                                required><span id="emailErro" class="erro"></span>
                         </div>
                         <div class="form-group">
                             <label for="senha">senha</label>
-                            <input type="password" id="senha" name="senha" placeholder="**********" required>
+                            <input type="password" id="senha" name="senha" placeholder="**********" maxlength="8" required>
+                            <span id="senhaErro" class="erro"></span>
                         </div>
                         <div class="form-group">
                             <label for="confirmar_senha">Confirmar senha</label>
-                            <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="**********"
-                                required>
+                            <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="**********" maxlength="8"
+                                required><span id="confirmarSenhaErro" class="erro"></span>
                         </div>
 
                         <div class="form-group">
                             <label for="data_nascimento">Data de Nascimento</label>
-                            <input type="date" id="data_nascimento" name="data_nascimento" required>
+                            <input type="date" id="data_nascimento" name="data_nascimento" required><span id="dataErro" class="erro"></span>
                         </div>
                         <div class="form-group">
                             <label for="num_bi">Número do Bilhete de Identidade</label>
-                            <input type="text" id="num_bi" name="num_bi" placeholder="Digite o número do seu B.I"
-                                required>
+                            <input type="text" id="num_bi" name="num_bi" placeholder="007484030LA045" 
+                                required><span id="biErro" class="erro"></span>
                         </div>
                         <div class="form-group">
                             <label for="genero">Gênero</label>
@@ -101,15 +135,15 @@
                         </div>
                         <div class="form-group">
                             <label for="cidade">Cidade</label>
-                            <input type="text" id="cidade" name="cidade" placeholder="Ex.: Luanda" required>
+                            <input type="text" id="cidade" name="cidade" placeholder="Ex.: Luanda" maxlenght="20" required>
                         </div>
                         <div class="form-group">
                             <label for="bairro">Bairro</label>
-                            <input type="text" id="bairro" name="bairro" placeholder="Ex.: Golf 2" required>
+                            <input type="text" id="bairro" name="bairro" placeholder="Ex.: Golf 2" maxlength="20" required>
                         </div>
                         <div class="form-group">
-                            <label for="morada">morada</label>
-                            <input id="morada" name="morada">
+                            <label for="morada">Rua</label>
+                            <input id="morada" name="morada" placeholder="Digite o nome da sua rua" maxlength="10" required>
                         </div>
                         <div class="form-group">
                             <label for="seguro">Seguro ou Particular</label>
@@ -132,7 +166,7 @@
                     <i class="fas fa-question-circle"></i>
                     <h3>Precisa de Ajuda?</h3>
                     <p>Entre em contacto com o nosso suporte</p>
-                    <a href="contacto.html">Contactar Suporte</a>
+                    <a href="/contacto">Contactar Suporte</a>
                 </div>
     </section>
 
@@ -150,8 +184,10 @@
                         Cuidamos de você e da sua família.
                     </p>
                     <div class="social-links">
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                      <a href="https://www.facebook.com/c.estoril/" aria-label="Facebook"><i
+                                class="fab fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/clinica_estoril?igsh=cXRuMzBwYW5oM2ti"
+                            aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                        
                     </div>
                 </div>
@@ -205,6 +241,194 @@
             </div>
         </div>
     </footer>
+<script>
+ // REGEX
+const nomeRegex = /^[A-ZÀ-Ü][a-zà-ü]+( [A-ZÀ-Ü][a-zà-ü]+)+$/;
+const telefoneRegex = /^9[0-9]{8}$/;
+const biRegex = /^00[0-9]{7}LA[0-9]{3}$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// senha: 6-10 caracteres, letra maiúscula, número
+const senhaRegex = /^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{6,10}$/;
+
+
+// ===================== VALIDAÇÕES =====================
+
+// Nome
+function validarNome() {
+    let input = document.getElementById("nome");
+    let erro = document.getElementById("nomeErro");
+    let valor = input.value.trim();
+
+    if (!nomeRegex.test(valor)) {
+        input.classList.add("invalido");
+        erro.textContent = "Nome inválido ";
+        return false;
+    }
+
+    input.classList.remove("invalido");
+    input.classList.add("valido");
+    erro.textContent = "✓ Válido";
+    erro.className = "sucesso";
+    return true;
+}
+
+// Email
+function validarEmail() {
+    let input = document.getElementById("email");
+    let erro = document.getElementById("emailErro");
+
+    if (!emailRegex.test(input.value.trim())) {
+        input.classList.add("invalido");
+        erro.textContent = "Email inválido ";
+        return false;
+    }
+
+    input.classList.remove("invalido");
+    input.classList.add("valido");
+    erro.textContent = "✓ Válido";
+    erro.className = "sucesso";
+    return true;
+}
+
+// Telefone
+function validarTelefone() {
+    let input = document.getElementById("num_telefone");
+    let erro = document.getElementById("telefoneErro");
+
+    if (!telefoneRegex.test(input.value)) {
+        input.classList.add("invalido");
+        erro.textContent = "Telefone inválido ";
+        return false;
+    }
+
+    input.classList.remove("invalido");
+    input.classList.add("valido");
+    erro.textContent = "✓ Válido";
+    erro.className = "sucesso";
+    return true;
+}
+
+// BI
+function validarBI() {
+    let input = document.getElementById("num_bi");
+    let erro = document.getElementById("biErro");
+
+    if (!biRegex.test(input.value)) {
+        input.classList.add("invalido");
+        erro.textContent = "BI inválido ";
+        return false;
+    }
+
+    input.classList.remove("invalido");
+    input.classList.add("valido");
+    erro.textContent = "✓ Válido";
+    erro.className = "sucesso";
+    return true;
+}
+
+// Data
+function validarData() {
+    let input = document.getElementById("data_nascimento");
+    let erro = document.getElementById("dataErro");
+
+    let valor = input.value;
+    let hoje = new Date();
+
+    if (!valor) {
+        erro.textContent = "Campo obrigatório";
+        return false;
+    }
+
+    let data = new Date(valor);
+
+    if (data > hoje) {
+        erro.textContent = "Data futura não permitida ";
+        return false;
+    }
+
+    erro.textContent = "✓ Válido";
+    erro.className = "sucesso";
+    input.classList.add("valido");
+    return true;
+}
+
+// Senha
+function validarSenha() {
+    let input = document.getElementById("senha");
+    let erro = document.getElementById("senhaErro");
+
+    if (!senhaRegex.test(input.value)) {
+        input.classList.add("invalido");
+        erro.textContent = "Senha deve ter 6 a 10 caracteres, deve conter uma letra maiúscula e  número ";
+        return false;
+    }
+
+    input.classList.remove("invalido");
+    input.classList.add("valido");
+    erro.textContent = "✓ Válido";
+    erro.className = "sucesso";
+    return true;
+}
+
+// Confirmar senha
+function validarConfirmarSenha() {
+    let senha = document.getElementById("senha").value;
+    let confirmar = document.getElementById("confirmar_senha");
+    let erro = document.getElementById("confirmarSenhaErro");
+
+    if (confirmar.value !== senha || confirmar.value === "") {
+        confirmar.classList.add("invalido");
+        erro.textContent = "As senhas não coincidem ❌";
+        return false;
+    }
+
+    confirmar.classList.remove("invalido");
+    confirmar.classList.add("valido");
+    erro.textContent = "✓ Coincide";
+    erro.className = "sucesso";
+    return true;
+}
+
+
+// ===================== EVENTOS =====================
+
+document.getElementById("nome").addEventListener("input", validarNome);
+document.getElementById("email").addEventListener("input", validarEmail);
+
+document.getElementById("num_telefone").addEventListener("input", function(){
+    this.value = this.value.replace(/\D/g, '').slice(0,9);
+    validarTelefone();
+});
+
+document.getElementById("num_bi").addEventListener("input", validarBI);
+document.getElementById("data_nascimento").addEventListener("change", validarData);
+document.getElementById("senha").addEventListener("input", validarSenha);
+document.getElementById("confirmar_senha").addEventListener("input", validarConfirmarSenha);
+
+
+// ===================== SUBMIT =====================
+
+document.getElementById("formulario").addEventListener("submit", function(e){
+
+    let valido =
+        validarNome() &&
+        validarEmail() &&
+        validarTelefone() &&
+        validarBI() &&
+        validarData() &&
+        validarSenha() &&
+        validarConfirmarSenha();
+
+    if (!valido) {
+        e.preventDefault();
+        alert("Corrija os erros antes de enviar.");
+    } else {
+        alert("Formulário válido!");
+    }
+
+});
+</script>
 </body>
 
 </html>

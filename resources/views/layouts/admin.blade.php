@@ -30,6 +30,22 @@
         .sidebar-menu-item:hover {
             background-color: #0066cc30;
         }
+        
+    .erro {
+        color: red;
+        font-size: 18px;
+    
+    }
+
+    .input-sucesso{
+        border:2px solid green;
+    }
+
+    .input-erro {
+        border: 2px solid red;
+    }
+
+
     </style>
 </head>
 
@@ -85,6 +101,7 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
+     
     <script src="{{ asset('pdfmake/pdfmake.min.js') }}"></script>
     <script src="{{ asset('pdfmake/vfs_fonts.js') }}"></script>
     <script src="{{ asset('jquery-3.2.1.slim.min.js') }}"></script>
@@ -110,6 +127,7 @@
                 menu.classList.add("sidebar-menu-item-active")
             }
         }
+
     </script>
 </body>
 

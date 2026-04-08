@@ -34,10 +34,22 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label for="especialidade">
+                        Especialidades
+                    </label>
+                    <select name="especialidades[]" id="id_especialidade" required multiple="multiple">
+                        <option value="" disabled selected>Selecione a especialidade</option>
+                        @foreach ($especialidades as $especialidade)
+                            <option value="{{ $especialidade->id_especialidade }}" @selected(($servico_clinico->id_especialidade ?? null) == $especialidade->id_especialidade)>
+                                {{ $especialidade->nome }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="duracao">
                         Duração(minutos)
                     </label>
-                    <input req value="{{ $servico_clinico->duracao_min ?? '' }}" type="namber" id="duracao_min"
+                    <input req value="{{ $servico_clinico->duracao_min ?? '' }}" type="number" id="duracao_min"
                         name="duracao_min" required placeholder="0">
                 </div>
                 <div class="form-group">
@@ -66,4 +78,15 @@
 @endsection
 @section('script')
     <script src="/tabs.js"></script>
+    <script>
+     $(function() {
+            $('#id_especialidade').multipleSelect({
+                filter: true,
+                placeholder: "Selecione as especialidades",
+                selectAll: true,
+                allSelected: "Todas as especialidades selecionadas",
+                countSelected: "# de % selecionados",
+            });
+        });
+    </script>
 @endsection

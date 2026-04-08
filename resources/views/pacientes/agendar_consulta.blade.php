@@ -1,8 +1,9 @@
+
 @extends('layouts.painel')
-@section('titulo', 'agendar consulta')
+@section('titulo', 'Agendar Consulta')
 @section('conteudo')
 
-    <section ">
+    <section>
             <div class="login-container">
                 <!-- Seleção de Tipo de Usuário -->
                 <div class="login-card" id="userTypeCard">
@@ -14,12 +15,13 @@
         </div>
         @endif
 
-        <form method="post" action="/agendar-consulta-paciente">
+        <form method="post" action="/agendar-consulta-paciente" id="formAgendamento">
             {{ csrf_field() }}
             <div class="row">
                 <div class="col form-group">
                     <label for="data">Data da consulta</label>
-                    <input class="w-100" type="date" id="data" name="data" min="2025-01-01" max="2026-06-20">
+                    <input class="w-100" type="date" id="data" name="data" required>
+                    <small class="erro" id="erro-data"></small>
                 </div>
                 <div class=" col form-group">
                     <label for="hora">Horário Preferencial</label>
@@ -54,6 +56,7 @@
                 <label for="observacao">observação</label>
                 <textarea id="observacao" name="observacao" rows="5"
                     placeholder="Descreva brevemente o motivo da consulta ou dúvidas"></textarea>
+                     <small class="erro" id="erro-obs"></small>
             </div>
 
             <div class=" d-flex justify-content-center flex-column align-items-center">
@@ -68,6 +71,58 @@
             </div>
         </form>
         </div>
+        <script>
+           const dataInput = document.getElementById("data");
+const obsInput = document.getElementById("observacao");
+
+// DATA (valida ao mudar)
+dataInput.addEventListener("input", function () {
+    const hoje = new Date().toISOString().split("T")[0];
+    const erro = document.getElementById("erro-data");
+
+    if (this.value < hoje) {
+        erro.textContent = "Não pode escolher uma data passada ";
+        this.classList.add("input-erro");
+        this.classList.remove("input-sucesso");
+    } else {
+        erro.textContent = "";
+        this.classList.remove("input-erro");
+        this.classList.add("input-sucesso");
+    }
+});
+
+
+// OBSERVAÇÃO (valida enquanto digita)
+obsInput.addEventListener("input", function () {
+    const erro = document.getElementById("erro-obs");
+
+    if (this.value.length < 30) {
+        erro.textContent = "Mínimo de 30 caracteres(letras) ";
+        this.classList.add("input-erro");
+        this.classList.remove("input-sucesso");
+    } else {
+        erro.textContent = "";
+        this.classList.remove("input-erro");
+        this.classList.add("input-sucesso");
+    }
+});
+
+document.getElementById("formAgendamento")
+.addEventListener("submit", function (e) {
+
+    const hoje = new Date().toISOString().split("T")[0];
+    const data = dataInput.value;
+    const obs = obsInput.value;
+
+    if (data < hoje || obs.length < 30) {
+        e.preventDefault();
+        alert("Corrija os erros antes de enviar!");
+    }
+
+
+});
+
+</script>
         <div class="login-help">
             <div class="help-card">
                 <i class="fas fa-question-circle"></i>
