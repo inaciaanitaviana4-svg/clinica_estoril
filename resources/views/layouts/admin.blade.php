@@ -45,7 +45,45 @@
         border: 2px solid red;
     }
 
+.custom-alert{
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:rgba(0,0,0,0.5);
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        z-index:9999;
+         font-size:18px;
+        font-weight:bold;
+    }
 
+    .custom-alert-box{
+        background:white;
+        padding:20px;
+        border-radius:10px;
+        text-align:center;
+        min-width:250px;
+        box-shadow:0 5px 20px rgba(0,0,0,0.3);
+
+    }
+
+    .custom-alert button{
+        margin-top:10px;
+        padding:8px 15px;
+        border:none;
+        background:#0d6efd;
+        color:white;
+        border-radius:5px;
+        cursor:pointer;
+        font-weight:bold;
+    }
+
+    .hidden{
+        display:none;
+    }
     </style>
 </head>
 
@@ -92,7 +130,12 @@
     <main style="margin-left: 240px; margin-top: 52px; padding: 16px">
         @yield('conteudo')
     </main>
-
+ <div id="custom-alert" class="custom-alert hidden">
+        <div class="custom-alert-box">
+            <p id="custom-alert-text"></p>
+            <button onclick="fecharAlert()">Ok</button>
+        </div>
+        </div>
     <!-- Modal Remover -->
     @include('components.remover_modal')
 
@@ -128,8 +171,18 @@
             }
         }
 
+        function mostrarAlert(mensagem){ 
+    const box= document.getElementById("custom-alert");
+    const text= document.getElementById("custom-alert-text");
+
+    text.textContent= mensagem;
+    box.classList.remove("hidden");
+}
+
+function fecharAlert() {
+    document.getElementById("custom-alert").classList.add("hidden");
+} 
     </script>
 </body>
-
 
 </html>

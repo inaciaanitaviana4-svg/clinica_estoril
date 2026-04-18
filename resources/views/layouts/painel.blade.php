@@ -26,6 +26,7 @@ $menus = [
                 $menus=[
                     ['href' => route('mostrar_dashboard_paciente'), 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'],
                     ['href'=>route('mostrar_consultas_paciente'),'titulo'=>'Consultas','icon'=>'fa-solid fa-stethoscope'],
+                    ['href'=>route('mostrar_relatorios_paciente'),'titulo'=>'Relatórios','icon'=>'fa-solid fa-file-alt'],
                     ['href'=>route('listar_minhas_notificacoes'),'titulo'=>'Notificações','icon'=>'fa-solid fa-bell'],
                 ];
 }
@@ -47,7 +48,7 @@ $menus = [
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    @yield('estilo')
+       @yield('estilo')
     <style>
         .sidebar-menu-item {
             text-decoration: none;
@@ -72,6 +73,61 @@ $menus = [
         .input-sucesso{
             border:2px solid green;
         }
+
+    .sucesso {
+        color: green;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .invalido {
+        border: 2px solid red;
+    }
+
+    .valido {
+        border: 2px solid green;
+    }
+    .custom-alert{
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:rgba(0,0,0,0.5);
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        z-index:9999;
+        font-size:18px;
+        font-weight:bold;
+        
+    }
+
+    .custom-alert-box{
+        background:white;
+        padding:40px;
+        border-radius:20px;
+        text-align:center;
+        min-width:250px;
+        box-shadow:0 5px 20px rgba(0,0,0,0.3);
+
+    }
+
+    .custom-alert button{
+        margin-top:20px;
+        padding:8px 15px;
+        width:150px;
+        border:none;
+        background:#0d6efd;
+        color:white;
+        border-radius:10px;
+        cursor:pointer;
+        font-weight:bold;
+    }
+
+    .hidden{
+        display:none;
+    }
     </style>
 </head>
 
@@ -113,11 +169,15 @@ $menus = [
         </header>
 
     </div>
-
     <main style="margin-left: 240px; margin-top: 52px; padding: 16px">
         @yield('conteudo')
     </main>
-
+ <div id="custom-alert" class="custom-alert hidden">
+        <div class="custom-alert-box">
+            <p id="custom-alert-text"></p>
+            <button onclick="fecharAlert()">Ok</button>
+        </div>
+        </div>
     <!-- Modal Remover -->
     @include('components.remover_modal')
 
@@ -151,9 +211,19 @@ $menus = [
                 menu.classList.add("sidebar-menu-item-active")
             }
         }
+        function mostrarAlert(mensagem){ 
+    const box= document.getElementById("custom-alert");
+    const text= document.getElementById("custom-alert-text");
+
+    text.textContent= mensagem;
+    box.classList.remove("hidden");
+}
+
+function fecharAlert() {
+    document.getElementById("custom-alert").classList.add("hidden");
+} 
     </script>
 </body>
-
 
 </html>
 

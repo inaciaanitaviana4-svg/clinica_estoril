@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-PT">
 
@@ -40,22 +39,56 @@
     .valido {
         border: 2px solid green;
     }
+    .custom-alert{
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:rgba(0,0,0,0.5);
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        z-index:9999;
+         font-size:18px;
+        font-weight:bold;
+    }
+
+    .custom-alert-box{
+        background:white;
+        padding:20px;
+        border-radius:10px;
+        text-align:center;
+        min-width:250px;
+        box-shadow:0 5px 20px rgba(0,0,0,0.3);
+
+    }
+
+    .custom-alert button{
+        margin-top:10px;
+        padding:8px 15px;
+        border:none;
+        background:#0d6efd;
+        color:white;
+        border-radius:5px;
+        cursor:pointer;
+        font-weight:bold;
+    }
+
+    .hidden{
+        display:none;
+    }
     </style>
 </head>
 
 <body>
     <header class="header header-simple">
         <div class="containe">
-           <div class="container">
             <div class="nav-wrapper">
-                <!-- Logo -->
-                <a href="/">
-                    <div class="logo">
-                        <img src="imagem/logo.jpg" alt="logotipo da clinica">
-                        <span>Clínica Estoril</span>
-                    </div>
+                <a href="/" class="logo">
+                    <img src="imagem/logo.jpg" alt="logotipo da clínica">
+                    <span>Clínica Estoril</span>
                 </a>
-
 
                 <a href="/login" class="btn-back">
                     <i class="fas fa-arrow-left"></i>
@@ -68,7 +101,6 @@
         <div class="login-container">
             <!-- Seleção de Tipo de Usuário -->
             <div class="login-card" id="userTypeCard">
-
 
                 <div class="container">
                     <div class="photo"></div>
@@ -84,7 +116,7 @@
                         <div class="form-group">
                             <label for="nome">Nome Completo</label>
                             <input type="text" id="nome" name="nome" placeholder="Ex.: Eugénio Influencer"
-                                required><span id="nomeErro" class="erro"></span>
+                              title="Este campo não permite números, somente letras."  required><span id="nomeErro" class="erro"></span>
                         </div>
                         <div class="form-group">
                             <label for="num_telefone">Número de telefone</label>
@@ -98,12 +130,12 @@
                         </div>
                         <div class="form-group">
                             <label for="senha">senha</label>
-                            <input type="password" id="senha" name="senha" placeholder="**********" maxlength="8" required>
+                            <input type="password" id="senha" name="senha" placeholder="**********"  required>
                             <span id="senhaErro" class="erro"></span>
                         </div>
                         <div class="form-group">
                             <label for="confirmar_senha">Confirmar senha</label>
-                            <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="**********" maxlength="8"
+                            <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="**********" 
                                 required><span id="confirmarSenhaErro" class="erro"></span>
                         </div>
 
@@ -114,7 +146,7 @@
                         <div class="form-group">
                             <label for="num_bi">Número do Bilhete de Identidade</label>
                             <input type="text" id="num_bi" name="num_bi" placeholder="007484030LA045" 
-                                required><span id="biErro" class="erro"></span>
+                            ><span id="biErro" class="erro"></span>
                         </div>
                         <div class="form-group">
                             <label for="genero">Gênero</label>
@@ -241,16 +273,22 @@
             </div>
         </div>
     </footer>
+    <div id="custom-alert" class="custom-alert hidden">
+        <div class="custom-alert-box">
+            <p id="custom-alert-text"></p>
+            <button onclick="fecharAlert()">Ok</button>
+        </div>
+        </div>
+    
 <script>
  // REGEX
-const nomeRegex = /^[A-ZÀ-Ü][a-zà-ü]+( [A-ZÀ-Ü][a-zà-ü]+)+$/;
+const nomeRegex =/^[A-ZÁÉÍÓÚÂÊÔÃÕÇ][a-záéíóúâêôãõç]{2,}( [A-ZÁÉÍÓÚÂÊÔÃÕÇ][a-záéíóúâêôãõç]{2,})+$/;
 const telefoneRegex = /^9[0-9]{8}$/;
 const biRegex = /^00[0-9]{7}LA[0-9]{3}$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // senha: 6-10 caracteres, letra maiúscula, número
 const senhaRegex = /^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{6,10}$/;
-
 
 // ===================== VALIDAÇÕES =====================
 
@@ -262,7 +300,9 @@ function validarNome() {
 
     if (!nomeRegex.test(valor)) {
         input.classList.add("invalido");
-        erro.textContent = "Nome inválido ";
+        input.classList.remove("valido");
+        erro.textContent = "Nome deve ter pelo menos 3 letras por palavra e iniciar com maiúscula";
+        erro.className="erro";
         return false;
     }
 
@@ -280,7 +320,9 @@ function validarEmail() {
 
     if (!emailRegex.test(input.value.trim())) {
         input.classList.add("invalido");
+        input.classList.remove("valido");
         erro.textContent = "Email inválido ";
+        erro.className="erro";
         return false;
     }
 
@@ -298,7 +340,9 @@ function validarTelefone() {
 
     if (!telefoneRegex.test(input.value)) {
         input.classList.add("invalido");
-        erro.textContent = "Telefone inválido ";
+        input.classList.remove("valido");
+        erro.textContent = "Número de telefone deve começar com 9 e ter 9 dígitos ";
+        erro.className="erro";
         return false;
     }
 
@@ -313,10 +357,23 @@ function validarTelefone() {
 function validarBI() {
     let input = document.getElementById("num_bi");
     let erro = document.getElementById("biErro");
-
+    let valor= input.value.trim();
+    
+    //se estiver vazio
+    if(valor==""){
+      input.classList.remove("invalido");
+      input.classList.remove("válido");
+      erro.textContent="";
+      return true;
+    }
+   
+    //se estiver preenchido
     if (!biRegex.test(input.value)) {
         input.classList.add("invalido");
-        erro.textContent = "BI inválido ";
+
+        input.classList.remove("valido");
+        erro.textContent = "Campo opcional. Formato exigido: 00XXXXXXXLA000  ";
+        erro.className="erro";
         return false;
     }
 
@@ -333,22 +390,48 @@ function validarData() {
     let erro = document.getElementById("dataErro");
 
     let valor = input.value;
-    let hoje = new Date();
-
+    //campo vazio
     if (!valor) {
         erro.textContent = "Campo obrigatório";
+        erro.className="erro";
+        input.classList.add("invalido");
+
+        input.classList.remove("valido");
         return false;
     }
-
+     
     let data = new Date(valor);
+    let hoje = new Date();
+
+    //calcular data minima (105 anos atras)
+    let dataMinima = new Date();
+    dataMinima.setFullYear(hoje.getFullYear()-105);
+
+    //data futura....
 
     if (data > hoje) {
-        erro.textContent = "Data futura não permitida ";
+        erro.textContent = "Data futura é não permitido ";
+        erro.className="erro";
+        input.classList.add("invalido");
+
+        input.classList.remove("valido");
         return false;
     }
 
+    //data muito antiga
+    if(data<dataMinima){
+        erro.textContent="Idade máxima permitida é de 105 anos";
+        erro.className="erro";
+        input.classList.add("invalido");
+        input.classList.remove("valido");
+
+        return false;
+    }
+
+    //valido
     erro.textContent = "✓ Válido";
     erro.className = "sucesso";
+    input.classList.remove("invalido");
     input.classList.add("valido");
     return true;
 }
@@ -360,7 +443,9 @@ function validarSenha() {
 
     if (!senhaRegex.test(input.value)) {
         input.classList.add("invalido");
+        input.classList.remove("valido");
         erro.textContent = "Senha deve ter 6 a 10 caracteres, deve conter uma letra maiúscula e  número ";
+        erro.className="erro";
         return false;
     }
 
@@ -379,7 +464,9 @@ function validarConfirmarSenha() {
 
     if (confirmar.value !== senha || confirmar.value === "") {
         confirmar.classList.add("invalido");
-        erro.textContent = "As senhas não coincidem ❌";
+        confirmar.classList.remove("valido");
+        erro.textContent = "As senhas não coincidem ";
+        erro.className="erro";
         return false;
     }
 
@@ -389,7 +476,6 @@ function validarConfirmarSenha() {
     erro.className = "sucesso";
     return true;
 }
-
 
 // ===================== EVENTOS =====================
 
@@ -406,9 +492,20 @@ document.getElementById("data_nascimento").addEventListener("change", validarDat
 document.getElementById("senha").addEventListener("input", validarSenha);
 document.getElementById("confirmar_senha").addEventListener("input", validarConfirmarSenha);
 
-
 // ===================== SUBMIT =====================
 
+function mostrarAlert(mensagem) {
+    const box= document.getElementById("custom-alert");
+    const text= document.getElementById("custom-alert-text");
+
+    text.textContent= mensagem;
+    box.classList.remove("hidden");
+}
+
+function fecharAlert() {
+    document.getElementById("custom-alert").classList.add("hidden");
+    
+}
 document.getElementById("formulario").addEventListener("submit", function(e){
 
     let valido =
@@ -422,9 +519,9 @@ document.getElementById("formulario").addEventListener("submit", function(e){
 
     if (!valido) {
         e.preventDefault();
-        alert("Corrija os erros antes de enviar.");
+        mostrarAlert("Corrija os erros antes de enviar.");
     } else {
-        alert("Formulário válido!");
+        mostrarAlert("Formulário válido!");
     }
 
 });

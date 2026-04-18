@@ -1,4 +1,3 @@
-
 @extends('layouts.painel')
 @section('titulo', 'Agendar Consulta')
 @section('conteudo')
@@ -72,18 +71,40 @@
         </form>
         </div>
         <script>
-           const dataInput = document.getElementById("data");
+         const dataInput = document.getElementById("data");
 const obsInput = document.getElementById("observacao");
 
-// DATA (valida ao mudar)
+// ================= FUNÇÃO LIMITE DE DATA =================
+function obterLimiteMaximo() {
+    const hoje = new Date();
+    const limite = new Date();
+
+    limite.setMonth(hoje.getMonth() + 2); // +2 meses
+
+    return limite.toISOString().split("T")[0];
+}
+
+// ================= DATA =================
 dataInput.addEventListener("input", function () {
+
     const hoje = new Date().toISOString().split("T")[0];
+    const limiteMax = obterLimiteMaximo();
     const erro = document.getElementById("erro-data");
 
     if (this.value < hoje) {
-        erro.textContent = "Não pode escolher uma data passada ";
+        erro.textContent = "Não pode escolher uma data passada";
+        erro.className = "erro";
+
         this.classList.add("input-erro");
         this.classList.remove("input-sucesso");
+
+    } else if (this.value > limiteMax) {
+        erro.textContent = "Só pode agendar até 2 meses à frente";
+        erro.className = "erro";
+
+        this.classList.add("input-erro");
+        this.classList.remove("input-sucesso");
+
     } else {
         erro.textContent = "";
         this.classList.remove("input-erro");
@@ -91,15 +112,18 @@ dataInput.addEventListener("input", function () {
     }
 });
 
-
-// OBSERVAÇÃO (valida enquanto digita)
+// ================= OBSERVAÇÃO =================
 obsInput.addEventListener("input", function () {
+
     const erro = document.getElementById("erro-obs");
 
-    if (this.value.length < 30) {
-        erro.textContent = "Mínimo de 30 caracteres(letras) ";
+    if (this.value.trim().length < 30) {
+        erro.textContent = "Mínimo de 30 caracteres";
+        erro.className = "erro";
+
         this.classList.add("input-erro");
         this.classList.remove("input-sucesso");
+
     } else {
         erro.textContent = "";
         this.classList.remove("input-erro");
@@ -107,21 +131,43 @@ obsInput.addEventListener("input", function () {
     }
 });
 
+// ================= SUBMIT =================
+function mostrarAlert(mensagem) {
+    const box= document.getElementById("custom-alert");
+    const text= document.getElementById("custom-alert-text");
+
+    text.textContent= mensagem;
+    box.classList.remove("hidden");
+}
+
+function fecharAlert() {
+    document.getElementById("custom-alert").classList.add("hidden");
+}
 document.getElementById("formAgendamento")
 .addEventListener("submit", function (e) {
 
     const hoje = new Date().toISOString().split("T")[0];
-    const data = dataInput.value;
-    const obs = obsInput.value;
+    const limiteMax = obterLimiteMaximo();
 
-    if (data < hoje || obs.length < 30) {
-        e.preventDefault();
-        alert("Corrija os erros antes de enviar!");
+    const data = dataInput.value;
+    const obs = obsInput.value.trim();
+
+    let valido = true;
+
+    if (data < hoje || data > limiteMax) {
+        valido = false;
     }
 
+    if (obs.length < 30) {
+        valido = false;
+    }
+
+    if (!valido) {
+        e.preventDefault();
+        mostrarAlert("Corrija os erros antes de enviar!");
+    }
 
 });
-
 </script>
         <div class="login-help">
             <div class="help-card">

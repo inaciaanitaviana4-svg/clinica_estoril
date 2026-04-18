@@ -13,7 +13,7 @@
                         {{ session('erro') }}
                     </div>
                 @endif
-                <form method="post" action="{{ route('salvar_atendimento_recepcionista') }}">
+                <form method="post" id="formAgendamento" action="{{ route('salvar_atendimento_recepcionista') }}">
                     {{ csrf_field() }}
                     <div class="row">
                         <div class="col form-group">
@@ -22,7 +22,6 @@
                                 <option value="">Selecione a modalidade</option>
                                 <option value="imediata">Imediata</option>
                                 <option value="agendada">Agendada</option>
-
 
                             </select>
                         </div>
@@ -38,11 +37,10 @@
                     </div>
                     <div class="form-row">
 
-
                         <div class="col form-group">
                             <label for="data">Data da consulta</label>
-                            <input class="w-100" type="date" id="data" name="data" min="2025-01-01"
-                                max="2026-06-20">
+                            <input class="w-100" type="date" id="data" name="data" required>
+                                 <small class="erro" id="erro-data"></small>
 
                         </div>
                         <div class="col form-group">
@@ -87,6 +85,7 @@
                         <label for="observacao">observação</label>
                         <textarea id="observacao" name="observacao" rows="5"
                             placeholder="Descreva brevemente o motivo da consulta ou dúvidas"></textarea>
+                             <small class="erro" id="erro-obs"></small>
                     </div>
 
                     <div>
@@ -105,4 +104,104 @@
 @endsection
 @section('script')
     <script src="/auto-select.js"></script>
+    <script>
+   const dataInput = document.getElementById("data");
+const obsInput = document.getElementById("observacao");
+
+// ================= FUNÇÃO LIMITE DE DATA =================
+function obterLimiteMaximo() {
+    const hoje = new Date();
+    const limite = new Date();
+
+    limite.setMonth(hoje.getMonth() + 2); // +2 meses
+
+    return limite.toISOString().split("T")[0];
+}
+
+// ================= DATA =================
+dataInput.addEventListener("input", function () {
+
+    const hoje = new Date().toISOString().split("T")[0];
+    const limiteMax = obterLimiteMaximo();
+    const erro = document.getElementById("erro-data");
+
+    if (this.value < hoje) {
+        erro.textContent = "Não pode escolher uma data passada";
+        erro.className = "erro";
+
+        this.classList.add("input-erro");
+        this.classList.remove("input-sucesso");
+
+    } else if (this.value > limiteMax) {
+        erro.textContent = "Só pode agendar até 2 meses à frente";
+        erro.className = "erro";
+
+        this.classList.add("input-erro");
+        this.classList.remove("input-sucesso");
+
+    } else {
+        erro.textContent = "";
+        this.classList.remove("input-erro");
+        this.classList.add("input-sucesso");
+    }
+});
+
+// ================= OBSERVAÇÃO =================
+obsInput.addEventListener("input", function () {
+
+    const erro = document.getElementById("erro-obs");
+
+    if (this.value.trim().length < 30) {
+        erro.textContent = "Mínimo de 30 caracteres";
+        erro.className = "erro";
+
+        this.classList.add("input-erro");
+        this.classList.remove("input-sucesso");
+
+    } else {
+        erro.textContent = "";
+        this.classList.remove("input-erro");
+        this.classList.add("input-sucesso");
+    }
+});
+
+// ================= SUBMIT =================
+
+function mostrarAlert(mensagem) {
+    const box= document.getElementById("custom-alert");
+    const text= document.getElementById("custom-alert-text");
+
+    text.textContent= mensagem;
+    box.classList.remove("hidden");
+}
+
+function fecharAlert() {
+    document.getElementById("custom-alert").classList.add("hidden");
+}
+document.getElementById("formAgendamento")
+.addEventListener("submit", function (e) {
+
+    const hoje = new Date().toISOString().split("T")[0];
+    const limiteMax = obterLimiteMaximo();
+
+    const data = dataInput.value;
+    const obs = obsInput.value.trim();
+
+    let valido = true;
+
+    if (data < hoje || data > limiteMax) {
+        valido = false;
+    }
+
+    if (obs.length < 30) {
+        valido = false;
+    }
+
+    if (!valido) {
+        e.preventDefault();
+        mostrarAlert("Corrija os erros antes de enviar!");
+    }
+
+});
+</script>
 @endsection

@@ -1,4 +1,4 @@
-    @extends('layouts.admin')
+@extends('layouts.admin')
 @section('titulo', 'Registro de usuário')
 @section('conteudo')
     <section class="section active ">
@@ -11,9 +11,8 @@
                 </div>
             @endif
 
-            <form method="post" id="formPerfil" action="{{ route('salvar_registro_utilizador_admin', $utilizador->id_util ?? null) }}">
+            <form method="post" id="formulario" action="{{ route('salvar_registro_utilizador_admin', $utilizador->id_util ?? null) }}">
                 {{ csrf_field() }}
-
 
                 <!-- Informações Pessoais -->
                 <div class="editar-perfil-section">
@@ -143,7 +142,7 @@
                         <div class="editar-perfil-field">
                             <label class="editar-perfil-label editar-perfil-label--required">Senha</label>
                             <input name="senha" id="senha" type="password" class="editar-perfil-input"
-                                placeholder="Digite sua senha">
+                                placeholder="Digite sua senha" maxlength="10">
                                 <small id="erro-senha" class="erro"></small>
                         </div>
                     </div>
@@ -187,60 +186,107 @@
 @endsection
 @section('script')
     <script>
-
-
 document.addEventListener("DOMContentLoaded", function () {
+
+  const form = document.getElementById("formulario");
 
   const nome = document.getElementById("nome");
   const data = document.getElementById("data_nascimento");
   const bi = document.getElementById("num_bi");
   const email = document.getElementById("email");
   const telefone = document.getElementById("num_telefone");
-  const senha= document.getElementById("senha");
+  const senha = document.getElementById("senha");
 
-  // REGEX
-  const regexNome = /^([A-ZÁÉÍÓÚÂÊÔÃÕÇ][a-záéíóúâêôãõç]+)(\s[A-ZÁÉÍÓÚÂÊÔÃÕÇ][a-záéíóúâêôãõç]+)+$/;
+  // ================= REGEX =================
+  const regexNome = /^[A-ZÁÉÍÓÚÂÊÔÃÕÇ][a-záéíóúâêôãõç]{2,}( [A-ZÁÉÍÓÚÂÊÔÃÕÇ][a-záéíóúâêôãõç]{2,})+$/;
   const regexBI = /^00\d{7}LA\d{3}$/;
   const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const regexTelefone = /^9\d{8}$/;
-const regexSenha = /^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{6,10}$/;
+  const regexSenha = /^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{6,10}$/;
 
-  // FUNÇÃO GENÉRICA
+  // ================= FUNÇÃO GENÉRICA =================
   function validar(campo, regex, erroId, mensagem) {
     const erro = document.getElementById(erroId);
 
-    if (!regex.test(campo.value)) {
+    if (!regex.test(campo.value.trim())) {
       erro.textContent = mensagem;
+      erro.className = "erro";
+
       campo.classList.add("input-erro");
       campo.classList.remove("input-sucesso");
+
       return false;
     } else {
       erro.textContent = "";
       campo.classList.remove("input-erro");
       campo.classList.add("input-sucesso");
+
       return true;
     }
   }
 
-  // Senha
+  // ================= DATA =================
+  function validarDataNascimento(valor) {
+    if (!valor) return false;
 
-senha.addEventListener("input", function(){
-    validar(senha,regexSenha, "erro-senha","Senha deve ter 6 a 10 caracteres, deve conter uma letra maiúscula e  número " );
-});
+    const hoje = new Date();
+    const dataValor = new Date(valor);
 
-  // NOME
+    const dataMinima = new Date();
+    dataMinima.setFullYear(hoje.getFullYear() - 105);
+
+    if (dataValor > hoje) return false;
+    if (dataValor < dataMinima) return false;
+
+    return true;
+  }
+
+  // ================= EVENTOS =================
+
+  // Nome
   nome.addEventListener("input", function () {
     validar(nome, regexNome, "erro-nome",
-      "Digite nome completo com iniciais maiúsculas");
+      "Nome deve ter pelo menos 3 letras por palavra e iniciar com maiúscula");
   });
 
-  // DATA
-  data.addEventListener("input", function () {
-    const hoje = new Date().toISOString().split("T")[0];
+  // Email
+  email.addEventListener("input", function () {
+    validar(email, regexEmail, "erro-email", "Email inválido");
+  });
+
+  // Telefone
+  telefone.addEventListener("input", function () {
+    this.value = this.value.replace(/\D/g, '').slice(0, 9);
+    validar(telefone, regexTelefone, "erro-tel",
+      "Número deve começar com 9 e ter 9 dígitos");
+  });
+
+  // Senha
+  senha.addEventListener("input", function () {
+    validar(senha, regexSenha, "erro-senha",
+      "Senha deve ter 6 a 10 caracteres, deve conter uma letra maiúscula e  número");
+  });
+
+  // BI (OPCIONAL)
+  bi.addEventListener("input", function () {
+    if (bi.value.trim() === "") {
+      document.getElementById("erro-bi").textContent = "";
+      bi.classList.remove("input-erro", "input-sucesso");
+    } else {
+      validar(bi, regexBI, "erro-bi",
+        "Campo opcional. Formato exigido: 00XXXXXXXLA000");
+    }
+  });
+
+  // Data
+ if(data){
+     data.addEventListener("input", function () {
     const erro = document.getElementById("erro-data");
 
-    if (this.value > hoje) {
-      erro.textContent = "Data não pode ser futura";
+    if (!validarDataNascimento(this.value)) {
+      erro.textContent = "Data inválida! idades permitidas: 0 a 105 anos";
+      erro.className = "erro";
+
       this.classList.add("input-erro");
       this.classList.remove("input-sucesso");
     } else {
@@ -249,76 +295,69 @@ senha.addEventListener("input", function(){
       this.classList.add("input-sucesso");
     }
   });
+ }
 
-// BI
-  bi.addEventListener("input", function () {
-    validar(bi, regexBI, "erro-bi",
-      "Formato: 00XXXXXXXLA000");
-  });
+  // ================= SUBMIT =================
 
-  // EMAIL
-  email.addEventListener("input", function () {
-    validar(email, regexEmail, "erro-email",
-      "Email inválido");
-  });
+  function mostrarAlert(mensagem) {
+    const box= document.getElementById("custom-alert");
+    const text= document.getElementById("custom-alert-text");
 
-  // TELEFONE
-  telefone.addEventListener("input", function () {
-    validar(telefone, regexTelefone, "erro-tel",
-      "Telefone deve começar com 9 e ter 9 dígitos");
-  });
+    text.textContent= mensagem;
+    box.classList.remove("hidden");
+}
 
-  // BLOQUEAR ENVIO
+function fecharAlert() {
+    document.getElementById("custom-alert").classList.add("hidden");
+}
   form.addEventListener("submit", function (e) {
 
     let valido = true;
 
-    const tipo = document.getElementById("tipo").value;
+    if (!validar(nome, regexNome, "erro-nome", "Nome de usuário inválido")) {
+      valido = false;
+    }
 
-    const nomeVal = nome.value.trim();
-    const emailVal = email.value.trim();
-    const telVal = telefone.value.trim();
-    const senhaVal = senha.value;
+    if (!validar(email, regexEmail, "erro-email", "Email inválido")) {
+      valido = false;
+    }
 
-    // 🔹 VALIDAÇÃO COMUM (TODOS)
-    if (!/^[A-Za-zÀ-ÿ]+(?: [A-Za-zÀ-ÿ]+)+$/.test(nomeVal)) {
+    if (!validar(telefone, regexTelefone, "erro-tel", "Número de telefone inválido")) {
+      valido = false;
+    }
+
+    if (!validar(senha, regexSenha, "erro-senha", "Senha inválida")) {
+      valido = false;
+    }
+
+    // BI opcional
+    if (bi.value.trim() !== "") {
+      if (!validar(bi, regexBI, "erro-bi", "Bilhete Identidade inválido")) {
         valido = false;
+      }
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
-        valido = false;
+    // Data
+   if(data && data.offsetParent !==null){
+     if (!validarDataNascimento(data.value)) {
+      valido = false;
+
+      const erro = document.getElementById("erro-data");
+      erro.textContent = "Data inválida!";
+      erro.className = "erro";
+
+      data.classList.add("input-erro");
+      data.classList.remove("input-sucesso");
     }
+   }
 
-    if (!/^9\d{8}$/.test(telVal)) {
-        valido = false;
-    }
-
-    if (!/^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,10}$/.test(senhaVal)) {
-        valido = false;
-    }
-
-    // 🔥 VALIDAÇÕES ESPECÍFICAS (SÓ PARA PACIENTE)
-    if (tipo === "Paciente") {
-
-        const biVal = bi.value.trim();
-        const dataVal = dataNascimento.value;
-
-        if (!/^00\d{7}LA\d{3}$/.test(biVal)) {
-            valido = false;
-        }
-
-        if (!validarDataNascimento(dataVal)) {
-            valido = false;
-        }
-    }
-
-    // ❌ BLOQUEIA SE NÃO FOR VÁLIDO
+    // Bloquear envio
     if (!valido) {
-        e.preventDefault();
-        alert("Corrija os erros antes de enviar.");
+      e.preventDefault();
+      mostrarAlert("Corrija os erros antes de enviar.");
     }
 
-});
+  });
 
 });
 
@@ -385,4 +424,3 @@ senha.addEventListener("input", function(){
         }
     </script>
 @endsection
-
