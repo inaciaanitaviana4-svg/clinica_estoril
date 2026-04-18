@@ -178,6 +178,13 @@ class ConsultaController extends Controller
             'lida' => false,
             'data' => date('Y-m-d H:i:s'),
         ]);
+        Notificacao::create([
+            'titulo' => 'Nova consulta associada',
+            'mensagem' => 'A consulta '.$consulta->id_consulta.' foi associada ao paciente '.$paciente->nome.' com sucesso',
+            'id_util' => Utilizador::where('id_medico',$request->id_medico)->first()->id_util ?? '',
+            'lida' => false,
+            'data' => date('Y-m-d H:i:s'),
+        ]);
 
         return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
     }
@@ -351,6 +358,13 @@ class ConsultaController extends Controller
             'lida' => false,
             'data' => date('Y-m-d H:i:s'),
         ]);
+          Notificacao::create([
+            'titulo' => 'Associação de consulta',
+            'mensagem' => 'O medico '.$medico->nome.' foi associado a consulta '.$consulta->id_consulta.' com sucesso',
+            'id_util' => Utilizador::where('id_medico',$request->id_medico)->first()->id_util ?? '',
+            'lida' => false,
+            'data' => date('Y-m-d H:i:s'),
+        ]);
         if ($view == 'recepcionista') {
             return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
         } elseif ($view == 'admin') {
@@ -369,6 +383,7 @@ class ConsultaController extends Controller
         if (! $consulta) {
             return back()->with('erro', 'Consulta não encontrada');
         }
+        $id_medico = $consulta->id_medico;
         $medico = Medico::find($consulta->id_medico);
         $consulta->id_medico = null;
         $consulta->save();
@@ -376,6 +391,13 @@ class ConsultaController extends Controller
             'titulo' => 'Desassociação de médico',
             'mensagem' => 'O recepcionista '.$recepcionista->nome.' desassociou o medico '.$medico->nome.' a consulta '.$consulta->id_consulta,
             'id_util' => Utilizador::where('id_paciente', $consulta->id_paciente)->first()->id_util ?? '',
+            'lida' => false,
+            'data' => date('Y-m-d H:i:s'),
+        ]);
+          Notificacao::create([
+            'titulo' => 'Desassociação de médico',
+            'mensagem' => 'O medico '.$medico->nome.' foi desassociado da consulta '.$consulta->id_consulta.' com sucesso',
+            'id_util' => Utilizador::where('id_medico',$id_medico)->first()->id_util ?? '',
             'lida' => false,
             'data' => date('Y-m-d H:i:s'),
         ]);

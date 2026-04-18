@@ -1,5 +1,5 @@
 @extends("layouts.painel")
-@section("titulo", "notificações paciente")
+@section("titulo", "Notificações")
 @section("conteudo")
     <section class="section active">
         <div class="card">

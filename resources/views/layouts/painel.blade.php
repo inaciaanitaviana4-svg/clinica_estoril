@@ -10,6 +10,7 @@ $menus = [
             ['href'=>route('mostrar_consultas_medico'),'titulo'=>'Consultas','icon'=>'fa-solid fa-calendar-check'],
             ['href'=>route('mostrar_horarios_medico'),'titulo'=>'Horarios','icon'=>'fa-solid fa-clock'],
             ['href'=>route('mostrar_relatorios_medico'),'titulo'=>'Relatórios','icon'=>'fa-solid fa-file-alt'],
+             ['href'=>route('listar_minhas_notificacoes'),'titulo'=>'Notificações','icon'=>'fa-solid fa-bell'],
         ];
     } 
       if (session('tipo_utilizador') == 'recepcionista'){
