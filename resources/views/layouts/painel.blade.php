@@ -96,7 +96,7 @@ $menus = [
                             href="{{ $menu['href'] }}"><i class="{{ $menu['icon'] }}"></i> {{ $menu['titulo'] }}</a>
                     @endforeach
                     <a class="sidebar-menu-item" style="padding: 12px 16px; font-weight: 500; color:red;"
-                        href="/sair"><i class="fa-solid fa-right-from-bracket"></i> <strong>Sair</strong></a>
+                        href="/sair"><i class="fa-solid fa-right-from-bracket"></i> <strong>Terminar Sessão</strong></a>
                 </div>
             </aside>
         </div>

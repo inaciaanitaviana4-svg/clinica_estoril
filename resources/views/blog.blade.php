@@ -1687,33 +1687,13 @@
             }
         };
     
-        // Função de pesquisa
-        function handleSearch() {
-            
-            const searchInput = document.getElementById('searchInput');
-            const searchTerm = searchInput.value.trim();
-            
-            if (searchTerm) {
-                alert('Pesquisando por: ' + searchTerm + '\n\nEsta é uma demonstração. Em produção, esta função buscaria artigos relacionados no banco de dados.');
-                // Aqui você implementaria a lógica de pesquisa real com Laravel
-                // window.location.href = '/pesquisa?q=' + encodeURIComponent(searchTerm);
-            } else {
-                alert('Por favor, digite algo para pesquisar.');
-            }
-        }
-        
+         
         // Permitir pesquisa ao pressionar Enter
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 handleSearch();
             }
         });
-        
-        // Navegação para categorias
-        function navigateToCategory(category) {
-            alert('Navegando para: ' + category.replace('-', ' ').toUpperCase() + '\n\nEsta é uma demonstração. Em produção, você seria redirecionado para a página da categoria.');
-            // Em Laravel: window.location.href = '/categoria/' + category;
-        }
         
         // Mostrar artigo interno
         function showArticle(event, articleId) {
