@@ -504,9 +504,10 @@
       title: 'Horários de Funcionamento',
       content: `
         <strong>Segunda a Sexta:</strong> 08h00 – 20h00<br>
-        <strong>Sábados:</strong> 08h00 – 14h00<br>
-        <strong>Domingos e Feriados:</strong> Encerrado<br><br>
-        Para urgências fora do horário consulte a secção <em>Urgências</em>.
+        <strong>Sábados e Domingos:</strong> 08h00 – 14h00<br>
+        trabalhamos 24h para urgências, mas para consultas regulares recomendamos agendar dentro do horário acima.
+       
+
       `
     },
     {
@@ -515,11 +516,7 @@
       title: 'Localização',
       content: `
         <strong>Morada:</strong><br>
-        Av. do Estoril, nº 123, 2765-000 Estoril, Portugal<br><br>
-        <strong>Como chegar:</strong><br>
-        • Comboio: Linha de Cascais – Estação do Estoril (5 min a pé)<br>
-        • Autocarro: Carris Metropolitana, linha 417<br>
-        • Carro: Estacionamento gratuito disponível
+         municipio do Kilamba Kiaxi-Luanda<br>Golf2 Vila Estoril<br><br>
       `
     },
     {
@@ -541,14 +538,13 @@
       title: 'Especialidades Médicas',
       content: `
         Oferecemos as seguintes especialidades:<br><br>
-        • Medicina Geral e Familiar<br>
+        • Medicina Geral<br>
         • Cardiologia<br>
         • Dermatologia<br>
-        • Endocrinologia<br>
         • Ginecologia e Obstetrícia<br>
         • Ortopedia<br>
         • Pediatria<br>
-        • Psicologia e Psiquiatria<br>
+        • Psicologia<br>
         • Neurologia<br>
         • Oftalmologia
       `
@@ -559,9 +555,9 @@
       title: 'Como Agendar Consulta',
       content: `
         Pode agendar a sua consulta de três formas:<br><br>
-        <strong>1. Online</strong> – Aceda ao nosso site, faça login e escolha especialidade, médico e horário disponível.<br><br>
-        <strong>2. Telefone</strong> – Ligue para <strong>+351 214 000 000</strong> durante o horário de funcionamento.<br><br>
-        <strong>3. Presencialmente</strong> – Dirija-se à receção e a nossa equipa irá ajudá-lo a marcar.
+        <strong>1. Online</strong> – Aceda ao nosso site, faça cadastro ou login e sera direcionado para o painel de agendamento, onde pode marcar a sua consulta.<br><br>
+        <strong>2. Telefone</strong> – Ligue para <strong>+244 939 789 797</strong> durante o horário de funcionamento.<br><br>
+        <strong>3. Presencialmente</strong> – Dirija-se à nossa clínica e a nossa equipa irá ajudá-lo a marcar.
       `
     },
     {
@@ -572,7 +568,7 @@
         <strong>Cancelamento:</strong><br>
         Para cancelar, contacte-nos com pelo menos <strong>24 horas de antecedência</strong> para evitar taxa de cancelamento tardio.<br><br>
         <strong>Reagendamento:</strong><br>
-        Pode reagendar a sua consulta sem custos através do nosso site, telefone ou WhatsApp.<br><br>
+        Pode reagendar a sua consulta sem custos através do nosso site, telefone ou presencialmente.<br><br><br>
         <strong>Política de faltas:</strong> Após 2 faltas sem aviso, poderá ser solicitado pagamento antecipado para futuras marcações.
       `
     },
@@ -583,11 +579,9 @@
       content: `
         Aceitamos os seguintes meios de pagamento:<br><br>
         • Dinheiro<br>
-        • Multibanco / Débito direto<br>
-        • Cartões Visa, Mastercard e American Express<br>
-        • MB Way<br>
-        • Seguros de saúde: Médis, Multicare, AdvanceCare, Fidelidade e outros (verificar na receção)<br><br>
-        O pagamento é efetuado no final de cada consulta ou ato clínico.
+        • Multicaixa<br>
+        •  Express<br>
+        O pagamento é efetuado no final de cada consulta ou acto clínico.
       `
     },
     {
@@ -595,9 +589,8 @@
       label: '🚨 Urgências',
       title: 'Urgências',
       content: `
-        <strong>Linha de urgência:</strong> <strong>+351 214 000 999</strong> (24h/7 dias)<br><br>
-        Em situações de risco de vida, ligue imediatamente para o <strong>112</strong>.<br><br>
-        A clínica dispõe de serviço de urgência para situações não graves durante o horário de funcionamento. Para urgências fora do horário, recomendamos o Hospital de Cascais (15 min).
+        <strong>Linha de urgência:</strong> <strong>+244 939 789 797</strong> (24h/7 dias)<br><br>
+        A clínica dispõe de serviço de urgência para situações não graves durante o horário de funcionamento.
       `
     },
     {
@@ -623,13 +616,14 @@
         <strong>Como fazer Cadastro:</strong><br>
         1. Aceda a <em>www.clinicaestoril.pt</em><br>
         2. Clique em "Criar conta"<br>
-        3. Preencha os dados pessoais e o nº de utente do SNS<br>
-        4. Confirme o email recebido na caixa de correio<br><br>
+        3. Preencha os dados pessoais<br>
+        4. Escolha um email e palavra-passe<br>
+        5. Aceite os termos e clique em "Registrar"<br><br>
         <strong>Como fazer Login:</strong><br>
         1. Clique em "Entrar" no canto superior direito do site<br>
         2. Insira o seu email e palavra-passe<br>
         3. Se esqueceu a password, use a opção "Recuperar password"<br><br>
-        Em caso de dificuldade contacte: suporte@clinicaestoril.pt
+        Em caso de dificuldade contacte: <strong>+244 939 789 797</strong>
       `
     }
   ];
@@ -665,6 +659,7 @@
     // Se o chat ainda não tem mensagens, mostra a saudação inicial
     if (chatBody.children.length === 0) {
       showGreeting();
+     chatBody.firstElementChild?.scrollIntoView({ behavior: "smooth" });
     }
     // Foca o campo de texto (acessibilidade)
     setTimeout(() => userInput.focus(), 250);
@@ -689,9 +684,9 @@
   }
 
   /* Rola para a última mensagem */
-  function scrollToBottom() {
-    chatBody.scrollTop = chatBody.scrollHeight;
-  }
+ function scrollToBottom() {
+  chatBody.lastElementChild?.scrollIntoView({ behavior: "smooth" });
+}
 
   /* ----------------------------------------------------------
      5. SAUDAÇÃO INICIAL COM LISTA DE ASSUNTOS

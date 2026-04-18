@@ -140,6 +140,7 @@ Route::middleware(['web'])->group(function () {
     Route::get('/admin/relatorios', [RelatorioController::class, 'mostrar_relatorios_admin'])->name('mostrar_relatorios_admin');
     // relatorios
     Route::post('/api/relatorios/consultas', [RelatorioController::class, 'api_relatorio_consultas'])->name('api_relatorio_consultas');
+    Route::post('/api/relatorios/consultas/{id_consulta}', [RelatorioController::class, 'api_relatorio_consultas'])->name('api_relatorio_consultas');
     Route::post('/api/relatorios/pagamentos', [RelatorioController::class, 'api_relatorio_pagamentos'])->name('api_relatorio_pagamentos');
     Route::get('/api/relatorios/prontuario/{id_paciente}', [RelatorioController::class, 'api_relatorio_prontuario_paciente'])->name('api_relatorio_prontuario_paciente');
     // dashboard

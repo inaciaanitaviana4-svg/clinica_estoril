@@ -52,26 +52,15 @@ class RelatorioController extends Controller
         if (! $utilizador) {
             return back()->with('erro', 'não tem permissão para acessar essa pagina ');
         }
-        $pacientes = Paciente::join('consultas', 'paciente.id_paciente', '=', 'consultas.id_paciente')
-            ->where('consultas.id_medico', '=', $utilizador->id_medico)
-            ->select('paciente.*')
-            ->distinct()->get();
-        $recepcionistas = recepcionista::join('consultas', 'recepcionista.id_recepcionista', '=', 'consultas.id_recepcionista')
-            ->where('consultas.id_medico', '=', $utilizador->id_medico)
-            ->select('recepcionista.*')
-            ->distinct()->get();
-
-        $tipos_consultas = TipoConsulta::join('consultas', 'tipos_consultas.id_tipo_consulta', '=', 'consultas.id_tipo_consulta')
-            ->where('consultas.id_medico', '=', $utilizador->id_medico)
-            ->select('tipos_consultas.*')
-            ->distinct()->get();
-        $servicos_clinicos = ServicoClinico::join('consultas', 'servicos_clinicos.id_servico_clinico', '=', 'consultas.id_servico_clinico')
-            ->where('consultas.id_medico', '=', $utilizador->id_medico)
-            ->select('servicos_clinicos.*')
-            ->distinct()->get();
+        $consultas = Consulta::join('servicos_clinicos', 'servicos_clinicos.id_servico_clinico', '=', 'consultas.id_servico_clinico')
+             ->join('tipos_consultas', 'tipos_consultas.id_tipo_consulta', '=', 'consultas.id_tipo_consulta')
+             ->select('consultas.*', 'tipos_consultas.nome as tipo_consulta', 'servicos_clinicos.nome as servico_clinico')
+             ->where('consultas.id_paciente', '=', $utilizador->id_paciente)
+             ->where('consultas.estado', '=', 'concluida')
+            ->get();
         $clinica = Clinica::first();
 
-        return view('pacientes.relatorios', compact('pacientes', 'recepcionistas', 'tipos_consultas', 'servicos_clinicos', 'clinica'));
+        return view('pacientes.relatorios', compact('consultas', 'clinica'));
     }
 
     public function mostrar_relatorios_admin()

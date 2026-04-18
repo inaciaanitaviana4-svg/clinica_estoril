@@ -271,7 +271,7 @@ ul {
 
 .nav-menu {
     display: flex;
-    gap: 16px;
+    gap: 1.5rem;
 }
 
 .nav-link {
