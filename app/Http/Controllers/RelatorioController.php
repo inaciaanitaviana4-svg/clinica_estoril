@@ -46,6 +46,7 @@ class RelatorioController extends Controller
 
         return view('medicos.relatorios', compact('pacientes', 'recepcionistas', 'tipos_consultas', 'servicos_clinicos', 'clinica'));
     }
+
     public function mostrar_relatorios_paciente()
     {
         $utilizador = verificar_paciente();
@@ -53,10 +54,10 @@ class RelatorioController extends Controller
             return back()->with('erro', 'não tem permissão para acessar essa pagina ');
         }
         $consultas = Consulta::join('servicos_clinicos', 'servicos_clinicos.id_servico_clinico', '=', 'consultas.id_servico_clinico')
-             ->join('tipos_consultas', 'tipos_consultas.id_tipo_consulta', '=', 'consultas.id_tipo_consulta')
-             ->select('consultas.*', 'tipos_consultas.nome as tipo_consulta', 'servicos_clinicos.nome as servico_clinico')
-             ->where('consultas.id_paciente', '=', $utilizador->id_paciente)
-             ->where('consultas.estado', '=', 'concluida')
+            ->join('tipos_consultas', 'tipos_consultas.id_tipo_consulta', '=', 'consultas.id_tipo_consulta')
+            ->select('consultas.*', 'tipos_consultas.nome as tipo_consulta', 'servicos_clinicos.nome as servico_clinico')
+            ->where('consultas.id_paciente', '=', $utilizador->id_paciente)
+            ->where('consultas.estado', '=', 'concluida')
             ->get();
         $clinica = Clinica::first();
 
@@ -133,6 +134,33 @@ class RelatorioController extends Controller
         if ($request->data_inicio && $request->data_fim) {
             $query->whereBetween('consultas.data', [$request->data_inicio, $request->data_fim]);
         }
+
+        $consultas = $query->orderBy('consultas.data', 'desc')->get();
+
+        return response()->json($consultas);
+    }
+
+    public function api_relatorio_consultas_paciente($id_consulta)
+    {
+        $paciente = verificar_paciente();
+        if (! $paciente) {
+            return response()->json(['erro' => 'Não tem permissão para acessar este relatório'], status: 403);
+        }
+
+        $query = Consulta::select('consultas.*',
+            'paciente.nome as paciente',
+            'medico.nome as medico',
+            'tipos_consultas.nome as tipo_consulta',
+            'servicos_clinicos.nome as servico_clinico',
+            'recepcionista.nome as recepcionista')
+            ->join('medico', 'consultas.id_medico', '=', 'medico.id_medico')
+            ->join('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
+            ->join('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+            ->join('recepcionista', 'consultas.id_recepcionista', '=', 'recepcionista.id_recepcionista')
+            ->join('paciente',
+                'consultas.id_paciente',
+                '=',
+                'paciente.id_paciente')->where('consultas.id_consulta', $id_consulta);
 
         $consultas = $query->orderBy('consultas.data', 'desc')->get();
 
@@ -219,7 +247,7 @@ class RelatorioController extends Controller
             ->join('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
             ->join('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
             ->where('id_paciente', $id_paciente);
-      
+
         if ($data_inicio && $data_fim) {
             $consultas->whereBetween('consultas.data', [$data_inicio, $data_fim]);
         }

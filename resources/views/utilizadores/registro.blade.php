@@ -157,8 +157,9 @@
 
                     <div class="editar-perfil-grid">
                         <div class="editar-perfil-field" data-input="especialidade">
-                            <label class="editar-perfil-label editar-perfil-label--required">Especialidade</label>
+                            <label class="editar-perfil-label ">Especialidade</label>
                             <select name="especialidade" class="editar-perfil-select">
+                                <option value="Nenhuma">Nenhuma</option>
                                 @foreach ($especialidades as $especialidade)
                                     <option value="{{ $especialidade->nome }}">{{ $especialidade->nome }}</option>
                                 @endforeach

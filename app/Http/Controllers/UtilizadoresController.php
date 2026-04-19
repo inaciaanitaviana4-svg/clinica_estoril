@@ -630,7 +630,7 @@ class UtilizadoresController extends Controller
             $medico->genero = $request['genero'];
             $medico->email = $request['email'];
             $medico->especialidade = $request['especialidade'];
-            $medico->ano_experiencia = $request['ano_experiencia'];
+            $medico->ano_experiencia = $request['ano_experiencia'] ?? 0;
             $medico->senha = $senha;
             $medico->id_clinica = 1;
             $medico->save();

@@ -43,13 +43,14 @@
     <script src="/relatorio-consultas.js"></script>
     <script src="/relatorio-prontuario.js"></script>
     <script>
-        const url = "{{ route('api_relatorio_consultas') }}"
+        const rota = "{{ route('api_relatorio_consultas_paciente', ['id_consulta' => ':id_consulta']) }}"
+        console.log('rota', rota)
         const logo_url = "{{ asset('imagem/logo.png') }}"
         const csrfToken = "{{ csrf_token() }}";
         const gerar_relatorio_consultas_btn = document.getElementById('gerar_relatorio_consultas_btn')
         gerar_relatorio_consultas_btn.addEventListener('click', async (e) => {
             const id_consulta = document.getElementById('id_consulta').value || null
-
+            const url = rota.replace(':id_consulta', id_consulta)
             try {
                 e.preventDefault()
                 const resultado = await fetch(url, {
@@ -58,15 +59,6 @@
                         "Content-Type": "application/json",
                         "X-CSRF-TOKEN": csrfToken,
                     },
-                    body: JSON.stringify({
-                        id_paciente,
-                        estado,
-                        id_recepcionista,
-                        id_tipo_consulta,
-                        id_servico_clinico,
-                        data_inicio,
-                        data_fim
-                    }),
                 })
                 const dados = await resultado.json();
                 if (!resultado.ok) {
@@ -74,7 +66,7 @@
                         dados?.erro || "Erro ao gerar relatório de consultas",
                     );
                 }
-                const descricao = `${data_inicio} - ${data_fim} - ${estado}`
+                const descricao = 'Relatório de Consultas - ' + dados.nome_paciente
 
                 const logotipo = await obterImagemBase64(logo_url)
                 gerarRelatorioConsultasTabela(dados, {

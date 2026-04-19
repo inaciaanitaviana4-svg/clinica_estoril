@@ -659,7 +659,7 @@
     // Se o chat ainda não tem mensagens, mostra a saudação inicial
     if (chatBody.children.length === 0) {
       showGreeting();
-     chatBody.firstElementChild?.scrollIntoView({ behavior: "smooth" });
+     chatBody.scrollTo({ top: 0, behavior: 'smooth' });
     }
     // Foca o campo de texto (acessibilidade)
     setTimeout(() => userInput.focus(), 250);
