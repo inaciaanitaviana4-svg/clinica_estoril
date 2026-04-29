@@ -1,5 +1,8 @@
 @extends('layouts.admin')
 @section('titulo', 'Registro de serviço clínico')
+@section('estilo')
+    <link rel="stylesheet" href="{{ asset('select2.min.css') }}">
+@endsection
 @section('conteudo')
     <section class="section active ">
         <div class="login-card" id="userTypeCard">
@@ -33,14 +36,13 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="especialidade">
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem;" >
+                    <label for="especialidade" style="font-weight: 600">
                         Especialidades
                     </label>
-                    <select name="especialidades[]" id="id_especialidade" required multiple="multiple">
-                        <option value="" disabled selected>Selecione a especialidade</option>
+                    <select name="especialidades[]" id="id_especialidade" required multiple="multiple" style="width: 100%; padding: 14px; border: 2px solid var(--border-color); border-radius: 4px;">
                         @foreach ($especialidades as $especialidade)
-                            <option value="{{ $especialidade->id_especialidade }}" @selected(($servico_clinico->id_especialidade ?? null) == $especialidade->id_especialidade)>
+                            <option value="{{ $especialidade->id_especialidade }}">
                                 {{ $especialidade->nome }}</option>
                         @endforeach
                     </select>
@@ -78,14 +80,16 @@
 @endsection
 @section('script')
     <script src="/tabs.js"></script>
+    <script src="{{ asset('select2.min.js') }}"></script>
     <script>
+        const especialidades = @json($especialidades);
      $(function() {
-            $('#id_especialidade').multipleSelect({
-                filter: true,
+            $('#id_especialidade').select2({
                 placeholder: "Selecione as especialidades",
-                selectAll: true,
-                allSelected: "Todas as especialidades selecionadas",
-                countSelected: "# de % selecionados",
+                data: especialidades.map(e => ({
+                    id: e.id_espec,
+                    text: e.nome
+                }))
             });
         });
     </script>

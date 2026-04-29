@@ -197,7 +197,7 @@ class UtilizadoresController extends Controller
             session(['id_utilizador' => $utilizador->id]);
             session(['tipo_utilizador' => 'paciente']);
 
-            return redirect('/');
+            return redirect()->route('mostrar_dashboard_paciente');
         }
 
         return back()->with('erro', 'Desculpe, não foi possível completar o cadastro. Tente novamente mais tarde ou contate o suporte.');

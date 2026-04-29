@@ -693,6 +693,10 @@ function badge_todos_estados($estado) {
             $cor = "#10b981";
             $estado_nome = "Sucesso";
             break;
+        case "concluida":
+            $cor = "#10b981";
+            $estado_nome = "Concluída";
+            break;
     }
 
     return `<span style='padding: 4px 8px; background-color: ${$cor}; color: white; border-radius: 4px;'>${$estado_nome}</span>`;
