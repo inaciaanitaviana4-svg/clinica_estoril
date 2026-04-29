@@ -35,63 +35,41 @@
     <section class="services-main">
         <div class="container">
             <div class="services-grid-detailed">
-                <!-- Consultas Médicas -->
+                <!-- Tipos de consultas -->
                 <div class="service-detailed-card">
                     <div class="service-detailed-icon">
                         <i class="fas fa-user-md"></i>
                     </div>
-                    <h3>Consultas Médicas</h3>
+                    <h3>Tipos de Consultas</h3>
                     <p class="service-description">
                         Atendimento médico em diversas especialidades com profissionais 
                         experientes e equipamentos de última geração.
                     </p>
                     <ul class="service-features">
-                        <li><i class="fas fa-check"></i> Consultas agendadas</li>
-                        <li><i class="fas fa-check"></i> Atendimento de urgência</li>
-                        <li><i class="fas fa-check"></i> Telemedicina disponível</li>
-                        <li><i class="fas fa-check"></i> Seguimento personalizado</li>
+                        <li><i class="fas fa-check"></i>Rotinas/Regular</li>
+                        <li><i class="fas fa-check"></i> Especializadas</li>
+                        <li><i class="fas fa-check"></i>urgência</li>
+                        <li><i class="fas fa-check"></i> Exames</li>
                     </ul>
                     <a href="/login" class="service-btn">
                         Agendar Consulta <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
-
-                <!-- Exames Diagnósticos -->
-                <div class="service-detailed-card">
-                    <div class="service-detailed-icon">
-                        <i class="fas fa-x-ray"></i>
-                    </div>
-                    <h3>Exames Diagnósticos</h3>
-                    <p class="service-description">
-                        Diagnóstico por imagem com equipamentos modernos para resultados 
-                        rápidos e precisos.
-                    </p>
-                    <ul class="service-features">
-                        <li><i class="fas fa-check"></i> Radiologia digital</li>
-                        <li><i class="fas fa-check"></i> Ultrassonografia</li>
-                        <li><i class="fas fa-check"></i> Tomografia computorizada</li>
-                        <li><i class="fas fa-check"></i> Ressonância magnética</li>
-                    </ul>
-                    <a href="/contacto" class="service-btn">
-                        Mais Informações <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <!-- Análises Clínicas -->
+                <!-- tipos de exames -->
                 <div class="service-detailed-card">
                     <div class="service-detailed-icon">
                         <i class="fas fa-microscope"></i>
                     </div>
-                    <h3>Análises Clínicas</h3>
+                    <h3>tipos de exames</h3>
                     <p class="service-description">
                         Laboratório completo com tecnologia avançada para análises 
                         precisas e resultados rápidos.
                     </p>
                     <ul class="service-features">
-                        <li><i class="fas fa-check"></i> Análises de sangue</li>
-                        <li><i class="fas fa-check"></i> Análises de urina</li>
-                        <li><i class="fas fa-check"></i> Testes hormonais</li>
-                        <li><i class="fas fa-check"></i> Testes microbiológicos</li>
+                        <li><i class="fas fa-check"></i>Exame de sangue</li>
+                        <li><i class="fas fa-check"></i> Exame de urina</li>
+                        <li><i class="fas fa-check"></i> Hemograma</li>
+                        <li><i class="fas fa-check"></i> Reação Vidal</li>
                     </ul>
                     <a href="/contacto" class="service-btn">
                         Mais Informações <i class="fas fa-arrow-right"></i>
@@ -181,28 +159,7 @@
                         Agendar Check-up <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
-
-                <!-- Medicina do Trabalho -->
-                <div class="service-detailed-card">
-                    <div class="service-detailed-icon">
-                        <i class="fas fa-briefcase-medical"></i>
-                    </div>
-                    <h3>Medicina do Trabalho</h3>
-                    <p class="service-description">
-                        Serviços de saúde ocupacional para empresas e trabalhadores, 
-                        garantindo ambientes seguros.
-                    </p>
-                    <ul class="service-features">
-                        <li><i class="fas fa-check"></i> Exames admissionais</li>
-                        <li><i class="fas fa-check"></i> Exames periódicos</li>
-                        <li><i class="fas fa-check"></i> Atestados de saúde ocupacional</li>
-                        <li><i class="fas fa-check"></i> Programas de prevenção</li>
-                    </ul>
-                    <a href="/contacto" class="service-btn">
-                        Solicitar Orçamento <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
+                
                 <!-- Vacinação -->
                 <div class="service-detailed-card">
                     <div class="service-detailed-icon">
