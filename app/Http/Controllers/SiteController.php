@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Configuracao;
-use App\Models\Especialidade;
 use App\Models\Paciente;
+use App\Models\Especialidade;
+use App\Models\Medico;
+
 use Carbon\Carbon;
 use Illuminate\View\View;
 
@@ -39,21 +41,29 @@ class SiteController extends Controller
         return view('sobre', compact('anosExperiencia','totalPacientes','totalEspecialidades'));
 
     }
-
+    
+    public function politica_seguranca():view
+    {
+        return view('politica_seguranca');
+    }
     public function servicos(): View
     {
         return view('servicos');
     }
 
-    public function especialidades(): View
-    {
-        return view('especialidades');
-    }
+   public function especialidades(): View
+{
+    $especialidades = Especialidade::where('activo', 1)->get();
 
-    public function equipa(): View
-    {
-        return view('equipa');
-    }
+    return view('especialidades', compact('especialidades'));
+}
+
+   public function equipa(): View
+{
+    $medicos = Medico::all();
+
+    return view('equipa', compact('medicos'));
+}
 
     public function contacto(): View
     {

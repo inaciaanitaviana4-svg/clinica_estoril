@@ -1,9 +1,8 @@
-<?php
+p<?php
 
 use Illuminate\Support\Str;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Database Connection Name

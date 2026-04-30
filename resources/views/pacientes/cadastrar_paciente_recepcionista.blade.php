@@ -1,4 +1,3 @@
-
 @extends("layouts.painel")
 @section("titulo", "Cadastro de Paciente")
 @section("conteudo")
@@ -12,7 +11,7 @@
                 </div>
             @endif
 
-            <form method="post" id="formulario" action="{{ route('salvar_cadastro_paciente_recepcionista') }}">
+            <form method="post" id="formulario" enctype="multipart/form-data" action="{{ route('salvar_cadastro_paciente_recepcionista') }}">
                 {{ csrf_field() }}
 
                 <!-- Informações Pessoais -->
@@ -96,19 +95,40 @@
                     </h2>
                     <div class="editar-perfil-grid">
                         <div class="editar-perfil-field editar-perfil-field--full" data-input="morada">
-                            <label class="editar-perfil-label editar-perfil-label--required">Morada</label>
+                            <label class="editar-perfil-label editar-perfil-label--required">Rua/Moarada</label>
                             <textarea name="morada" class="editar-perfil-textarea"
                                 placeholder="Rua, número, edifício, andar, apartamento..." maxlength="10"></textarea>
                         </div>
                         <div class="editar-perfil-field" data-input="cidade">
-                            <label class="editar-perfil-label editar-perfil-label--required">Cidade</label>
-                            <input name="cidade" type="text" class="editar-perfil-input"
-                                value="" placeholder="Digite a cidade" maxlength="20">
+                            <label class="editar-perfil-label editar-perfil-label--required">Província</label>
+                           <select id="cidade" name="cidade" class="editar-perfil-select">
+                                <option value="Bengo">Bengo</option>
+                                <option value="Benguela">Benguela</option>
+                                <option value="Bié">Bié</option>
+                                <option value="Cabinda">Cabinda</option>
+                                <option value="Cuando">Cuando</option>
+                                <option value="Cubando">Cubando</option>
+                                <option value="Cuanza Norte">Cuanza Norte</option>
+                                <option value="Cuanza Sul">Cuanza Sul</option>
+                                <option value="Cunene">Cunene</option>
+                                <option value="Huambo">Huambo</option>
+                                <option value="Icolo Bengo">Icolo Bengo</option>
+                                <option value="Luanda">Luanda</option>
+                                <option value="Lunda Norte">Lunda Norte</option>
+                                <option value="Lunda sul">Lunda Sul</option>
+                                <option value="Malanje">Malanje</option>
+                                <option value="Moxico">Moxico</option>
+                                <option value="Moxico Leste">Moxico Leste</option>
+                                <option value="Namibe">Namibe</option>
+                                <option value="Uíge">Uíge</option>
+                                <option value="Zaire">Zaire</option>
+                            </select>
                         </div>
                         <div class="editar-perfil-field" data-input="bairro">
                             <label class="editar-perfil-label editar-perfil-label--required">Bairro</label>
-                            <input name="bairro" type="text" class="editar-perfil-input"
+                            <input name="bairro" id="bairro" type="text" class="editar-perfil-input"
                                 value="" placeholder="Digite o bairro" maxlength="20">
+                                <span id="bairroErro" class="erro"></span>
                         </div>
                         <div class="editar-perfil-field editar-perfil-field--full" data-input="seguro">
                             <label class="editar-perfil-label">Seguro</label>
@@ -149,14 +169,17 @@
 @endsection
 @section("script")
     <script>
- // REGEX
-const nomeRegex =/^[A-ZÁÉÍÓÚÂÊÔÃÕÇ][a-záéíóúâêôãõç]{2,}( [A-ZÁÉÍÓÚÂÊÔÃÕÇ][a-záéíóúâêôãõç]{2,})+$/;
-const telefoneRegex = /^9[0-9]{8}$/;
+ const telefoneRegex = /^9[0-9]{8}$/;
 const biRegex = /^00[0-9]{7}LA[0-9]{3}$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// senha: 6-10 caracteres, letra maiúscula, número
-const senhaRegex = /^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{6,10}$/;
+const senhasComuns = ["123456", "password", "12345678", "qwerty", "abc123", "111111"];
+
+// ===================== UTIL =====================
+
+function normalizarEspacos(valor) {
+    return valor.replace(/\s+/g, ' ').trim();
+}
 
 // ===================== VALIDAÇÕES =====================
 
@@ -164,20 +187,56 @@ const senhaRegex = /^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{6,10}$/;
 function validarNome() {
     let input = document.getElementById("nome");
     let erro = document.getElementById("nomeErro");
-    let valor = input.value.trim();
+    let valor = input.value;
 
-    if (!nomeRegex.test(valor)) {
+    if (valor.trim() === "") {
+        erro.textContent = "Campo obrigatório";
+        erro.className = "erro";
         input.classList.add("invalido");
         input.classList.remove("valido");
-        erro.textContent = "Nome deve ter pelo menos 3 letras por palavra e iniciar com maiúscula";
-        erro.className="erro";
         return false;
     }
 
+    if (/\d/.test(valor)) {
+        erro.textContent = "O nome não pode conter números";
+        erro.className = "erro";
+        input.classList.add("invalido");
+        input.classList.remove("valido");
+        return false;
+    }
+
+    let partes = normalizarEspacos(valor).split(" ");
+
+    if (partes.length < 2) {
+        erro.textContent = "Informe nome e sobrenome";
+        erro.className = "erro";
+        input.classList.add("invalido");
+        input.classList.remove("valido");
+        return false;
+    }
+
+    for (let parte of partes) {
+        if (parte.length < 3) {
+            erro.textContent = "Cada nome deve ter no mínimo 3 letras";
+            erro.className = "erro";
+            input.classList.add("invalido");
+            input.classList.remove("valido");
+            return false;
+        }
+
+        if (parte[0] !== parte[0].toUpperCase()) {
+            erro.textContent = "Cada nome deve começar com letra maiúscula";
+            erro.className = "erro";
+            input.classList.add("invalido");
+            input.classList.remove("valido");
+            return false;
+        }
+    }
+
+    erro.textContent = "✓ Nome válido";
+    erro.className = "sucesso";
     input.classList.remove("invalido");
     input.classList.add("valido");
-    erro.textContent = "✓ Válido";
-    erro.className = "sucesso";
     return true;
 }
 
@@ -187,17 +246,17 @@ function validarEmail() {
     let erro = document.getElementById("emailErro");
 
     if (!emailRegex.test(input.value.trim())) {
+        erro.textContent = "Email inválido";
+        erro.className = "erro";
         input.classList.add("invalido");
         input.classList.remove("valido");
-        erro.textContent = "Email inválido ";
-        erro.className="erro";
         return false;
     }
 
+    erro.textContent = "✓ Email válido";
+    erro.className = "sucesso";
     input.classList.remove("invalido");
     input.classList.add("valido");
-    erro.textContent = "✓ Válido";
-    erro.className = "sucesso";
     return true;
 }
 
@@ -207,17 +266,17 @@ function validarTelefone() {
     let erro = document.getElementById("telefoneErro");
 
     if (!telefoneRegex.test(input.value)) {
+        erro.textContent = "Número deve começar com 9 e ter 9 dígitos";
+        erro.className = "erro";
         input.classList.add("invalido");
         input.classList.remove("valido");
-        erro.textContent = "Número de telefone deve começar com 9 e ter 9 dígitos ";
-        erro.className="erro";
         return false;
     }
 
+    erro.textContent = "✓ Telefone válido";
+    erro.className = "sucesso";
     input.classList.remove("invalido");
     input.classList.add("valido");
-    erro.textContent = "✓ Válido";
-    erro.className = "sucesso";
     return true;
 }
 
@@ -225,30 +284,27 @@ function validarTelefone() {
 function validarBI() {
     let input = document.getElementById("num_bi");
     let erro = document.getElementById("biErro");
-    let valor= input.value.trim();
-    
-    //se estiver vazio
-    if(valor==""){
-      input.classList.remove("invalido");
-      input.classList.remove("válido");
-      erro.textContent="";
-      return true;
-    }
-   
-    //se estiver preenchido
-    if (!biRegex.test(input.value)) {
-        input.classList.add("invalido");
+    let valor = input.value.trim();
 
+    if (valor === "") {
+        input.classList.remove("invalido");
         input.classList.remove("valido");
-        erro.textContent = "Campo opcional. Formato exigido: 00XXXXXXXLA000  ";
-        erro.className="erro";
+        erro.textContent = "";
+        return true;
+    }
+
+    if (!biRegex.test(valor)) {
+        erro.textContent = "Formato: 00XXXXXXXLA000";
+        erro.className = "erro";
+        input.classList.add("invalido");
+        input.classList.remove("valido");
         return false;
     }
 
+    erro.textContent = "✓ BI válido";
+    erro.className = "sucesso";
     input.classList.remove("invalido");
     input.classList.add("valido");
-    erro.textContent = "✓ Válido";
-    erro.className = "sucesso";
     return true;
 }
 
@@ -258,46 +314,85 @@ function validarData() {
     let erro = document.getElementById("dataErro");
 
     let valor = input.value;
-    //campo vazio
+
     if (!valor) {
         erro.textContent = "Campo obrigatório";
-        erro.className="erro";
+        erro.className = "erro";
         input.classList.add("invalido");
-
         input.classList.remove("valido");
         return false;
     }
-     
-    let data = new Date(valor);
+
+    let data = new Date(valor + "T00:00:00");
     let hoje = new Date();
 
-    //calcular data minima (105 anos atras)
     let dataMinima = new Date();
-    dataMinima.setFullYear(hoje.getFullYear()-105);
-
-    //data futura....
+    dataMinima.setFullYear(hoje.getFullYear() - 105);
 
     if (data > hoje) {
-        erro.textContent = "Data futura é não permitido ";
-        erro.className="erro";
+        erro.textContent = "Data futura não permitida";
+        erro.className = "erro";
         input.classList.add("invalido");
-
         input.classList.remove("valido");
         return false;
     }
 
-    //data muito antiga
-    if(data<dataMinima){
-        erro.textContent="Idade máxima permitida é de 105 anos";
-        erro.className="erro";
+    if (data < dataMinima) {
+        erro.textContent = "Idade máxima é 105 anos";
+        erro.className = "erro";
         input.classList.add("invalido");
         input.classList.remove("valido");
-
         return false;
     }
 
-    //valido
-    erro.textContent = "✓ Válido";
+    erro.textContent = "✓ Data válida";
+    erro.className = "sucesso";
+    input.classList.remove("invalido");
+    input.classList.add("valido");
+    return true;
+}
+
+// Bairro
+function validarBairro() {
+    let input = document.getElementById("bairro");
+    let erro = document.getElementById("bairroErro");
+    let valor = input.value;
+
+    if (valor.trim() === "") {
+        erro.textContent = "Campo obrigatório";
+        erro.className = "erro";
+        input.classList.add("invalido");
+        input.classList.remove("valido");
+        return false;
+    }
+
+    let normalizado = normalizarEspacos(valor);
+
+    if (normalizado.length < 4) {
+        erro.textContent = "O bairro deve ter no mínimo 4 caracteres";
+        erro.className = "erro";
+        input.classList.add("invalido");
+        input.classList.remove("valido");
+        return false;
+    }
+
+    if (/^\d+$/.test(normalizado)) {
+        erro.textContent = "O bairro não pode conter apenas números";
+        erro.className = "erro";
+        input.classList.add("invalido");
+        input.classList.remove("valido");
+        return false;
+    }
+
+    if (/^[a-z]/.test(normalizado)) {
+        erro.textContent = "Deve começar com letra maiúscula";
+        erro.className = "erro";
+        input.classList.add("invalido");
+        input.classList.remove("valido");
+        return false;
+    }
+
+    erro.textContent = "✓ Bairro válido";
     erro.className = "sucesso";
     input.classList.remove("invalido");
     input.classList.add("valido");
@@ -308,19 +403,65 @@ function validarData() {
 function validarSenha() {
     let input = document.getElementById("senha");
     let erro = document.getElementById("senhaErro");
+    let senha = input.value;
+    let nome = normalizarEspacos(document.getElementById("nome").value.toLowerCase());
 
-    if (!senhaRegex.test(input.value)) {
+    if (senha === "") {
+        erro.textContent = "Campo obrigatório";
+        erro.className = "erro";
         input.classList.add("invalido");
         input.classList.remove("valido");
-        erro.textContent = "Senha deve ter 6 a 10 caracteres, deve conter uma letra maiúscula e  número ";
-        erro.className="erro";
         return false;
     }
 
+    if (senha.length < 6 || senha.length > 10) {
+        erro.textContent = "Deve ter 6 a 10 caracteres";
+        erro.className = "erro";
+        input.classList.add("invalido");
+        input.classList.remove("valido");
+        return false;
+    }
+
+    if (!/[A-Z]/.test(senha)) {
+        erro.textContent = "Deve ter uma letra maiúscula";
+        erro.className = "erro";
+        input.classList.add("invalido");
+        input.classList.remove("valido");
+        return false;
+    }
+
+    if (!/[0-9]/.test(senha)) {
+        erro.textContent = "Deve ter um número";
+        erro.className = "erro";
+        input.classList.add("invalido");
+        input.classList.remove("valido");
+        return false;
+    }
+
+    let partesNome = nome.split(" ");
+
+    for (let parte of partesNome) {
+        if (parte.length > 2 && senha.toLowerCase().includes(parte)) {
+            erro.textContent = "A senha não deve conter partes do seu nome";
+            erro.className = "erro";
+            input.classList.add("invalido");
+            input.classList.remove("valido");
+            return false;
+        }
+    }
+
+    if (senhasComuns.includes(senha.toLowerCase())) {
+        erro.textContent = "Senha muito fraca";
+        erro.className = "erro";
+        input.classList.add("invalido");
+        input.classList.remove("valido");
+        return false;
+    }
+
+    erro.textContent = "✓ Senha segura";
+    erro.className = "sucesso";
     input.classList.remove("invalido");
     input.classList.add("valido");
-    erro.textContent = "✓ Válido";
-    erro.className = "sucesso";
     return true;
 }
 
@@ -331,27 +472,41 @@ function validarConfirmarSenha() {
     let erro = document.getElementById("confirmarSenhaErro");
 
     if (confirmar.value !== senha || confirmar.value === "") {
+        erro.textContent = "As senhas não coincidem";
+        erro.className = "erro";
         confirmar.classList.add("invalido");
         confirmar.classList.remove("valido");
-        erro.textContent = "As senhas não coincidem ❌";
-        erro.className="erro";
         return false;
     }
 
-    confirmar.classList.remove("invalido");
-    confirmar.classList.add("valido");
     erro.textContent = "✓ Coincide";
     erro.className = "sucesso";
+    confirmar.classList.remove("invalido");
+    confirmar.classList.add("valido");
     return true;
 }
 
 // ===================== EVENTOS =====================
 
+// input (não bloqueia espaço)
 document.getElementById("nome").addEventListener("input", validarNome);
+document.getElementById("bairro").addEventListener("input", validarBairro);
+
+// normalizar só ao sair
+document.getElementById("nome").addEventListener("blur", function(){
+    this.value = normalizarEspacos(this.value);
+    validarNome();
+});
+
+document.getElementById("bairro").addEventListener("blur", function(){
+    this.value = normalizarEspacos(this.value);
+    validarBairro();
+});
+
 document.getElementById("email").addEventListener("input", validarEmail);
 
-document.getElementById("num_telefone").addEventListener("input", function(){
-    this.value = this.value.replace(/\D/g, '').slice(0,9);
+document.getElementById("num_telefone").addEventListener("input", function () {
+    this.value = this.value.replace(/\D/g, '').slice(0, 9);
     validarTelefone();
 });
 
@@ -363,17 +518,18 @@ document.getElementById("confirmar_senha").addEventListener("input", validarConf
 // ===================== SUBMIT =====================
 
 function mostrarAlert(mensagem) {
-    const box= document.getElementById("custom-alert");
-    const text= document.getElementById("custom-alert-text");
+    const box = document.getElementById("custom-alert");
+    const text = document.getElementById("custom-alert-text");
 
-    text.textContent= mensagem;
+    text.textContent = mensagem;
     box.classList.remove("hidden");
 }
 
 function fecharAlert() {
     document.getElementById("custom-alert").classList.add("hidden");
 }
-document.getElementById("formulario").addEventListener("submit", function(e){
+
+document.getElementById("formulario").addEventListener("submit", function (e) {
 
     let valido =
         validarNome() &&
@@ -381,6 +537,7 @@ document.getElementById("formulario").addEventListener("submit", function(e){
         validarTelefone() &&
         validarBI() &&
         validarData() &&
+        validarBairro() &&
         validarSenha() &&
         validarConfirmarSenha();
 
@@ -388,9 +545,9 @@ document.getElementById("formulario").addEventListener("submit", function(e){
         e.preventDefault();
         mostrarAlert("Corrija os erros antes de enviar.");
     } else {
+        e.preventDefault();
         mostrarAlert("Formulário válido!");
     }
-
 });
 
         const select_tipo = document.querySelector('[name="tipo"]')

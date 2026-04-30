@@ -283,15 +283,19 @@
 
         <!-- Menu Mobile -->
         <div class="mobile-menu">
-            <a href="/" class="mobile-link ">Início</a>
+            <a href="/" class="mobile-link "><i class="fas fa-home"></i></a>
             <a href="/sobre" class="mobile-link">Sobre</a>
             <a href="/servicos" class="mobile-link">Serviços</a>
             <a href="/especialidades" class="mobile-link">Especialidades</a>
             <a href="/equipa" class="mobile-link">Equipa</a>
             <a href="/contacto" class="mobile-link">Contacto</a>
             <a href="/blog" class="mobile-link">Blog</a>
+            <a href="/visualizar-perfil" class="mobile-link">
+                        <i class="fas fa-user"></i>
+                        
+                    </a>
            <!-- <a href="/chatbot" class="mobile-link">Chat Bot</a>-->
-
+           
         </div>
     </header>
            
@@ -347,7 +351,7 @@
                                 class="fab fa-facebook"></i></a>
                         <a href="https://www.instagram.com/clinica_estoril?igsh=cXRuMzBwYW5oM2ti"
                             aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                            <a href="whatsapp:939789797"><i class="fab fa-whatsapp"></i></a>
+                            
                     </div>
                 </div>
 
@@ -482,10 +486,13 @@ Pode agendar de 2 formas:<br><br>
 <li><i class="bi bi-heart-fill"></i> Cardiologia</li>
 <li><i class="bi bi-bandaid-fill"></i> Ortopedia</li>
 <li><i class="bi bi-eye-fill"></i> Oftalmologia</li>
-<li><i class="bi bi-droplet-fill"></i> Análises Clínicas</li>
-<li><i class="bi bi-activity"></i> Imagiologia (Ecografia, Raio-X)</li>
+<li><i class="fas fa-spa"></i> Dermalogia</li>
+<li><i class="fas fa-dna"></i> Endocrinologia</li>
 <li><i class="bi bi-lungs-fill"></i> Pneumologia</li>
-<li><i class="bi bi-brain"></i> Neurologia</li>
+<li><i class="bi bi-heart-fill"></i> Gastroenterologia</li>
+<li><i class="fas fa-ear-listen"></i> Otorrinolaringologia</li>
+<li><i class="fas fa-head-side-virus"></i> Psiquiatria</li>
+<li><i class="fas fa-brain"></i> Neurologia</li>
 </ul>`,
     follow:{q:'Qual especialidade deseja agendar?',opts:[
       {l:'Agendar Consulta',i:'bi-calendar-plus-fill',a:'agendamento'},
@@ -725,6 +732,25 @@ Especialistas em saúde infantil em todas as fases:<br><br>
       {l:'Criança (1–12 anos)',i:'bi-person-fill',a:'pediatria_crianca'},
     ]}
   },
+
+
+      cardiologia:{
+    keys:['coração','Card','cardio','pressão','agendar','colestorel','cardíaca','Cardiologia'],
+    reply:`<i class="bi bi-heart-fill"></i> Cardiologia</strong><br><br>
+Cuidamos da sua saúde cardíaca, garantindo melhor funcionamento do seu coração e vasos sanguíneos<br><br>
+O que o cardiologista trata:<br><br>
+<ul>
+<li><strong> Doença do coração</strong></li>
+<li><strong>Pressão Alta</strong></li>
+<li><strong> Check-up do coração</strong></li>
+<li><strong> Cirurgia</strong></li>
+</ul>`,
+    follow:{q:'Gostaria de agendar uma consulta?',opts:[
+       {l:'Agendar Consulta',i:'bi-calendar-plus-fill',a:'agendamento'},
+      {l:'Horários',i:'bi-clock-fill',a:'horarios'},
+    ]}
+  },
+
   tuberculose:{
     keys:['tuberculose','tb','bacilo','koch','tosse com sangue','hemoptise'],
     reply:`<strong><i class="bi bi-lungs-fill"></i> Tuberculose (TB)</strong><br><br>
