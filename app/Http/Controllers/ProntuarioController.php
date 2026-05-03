@@ -60,6 +60,46 @@ class ProntuarioController extends Controller
         return view('admin.prontuarios', compact('pacientes'));
     }
 
+    public function mostrar_prontuario_paciente(Request $request)
+    {
+        $paciente = verificar_paciente();
+        if (! $paciente) {
+            return back()->with('erro', 'Não tem permissão para acessar esta página');
+        }
+         $pesquisar_consultas = $request->query('pesquisar_consultas') ?? '';
+        $consultas = Consulta::select(
+            'consultas.id_consulta',
+            'tipos_consultas.nome as tipo_consulta',
+            'consultas.modalidade',
+            'consultas.data',
+            'consultas.hora',
+            'consultas.estado',
+            'medico.nome as nome_medico',
+            'servicos_clinicos.nome as nome_servico_clinico',
+            'servicos_clinicos.preco as preco_servico_clinico'
+        )
+            ->leftJoin('medico', 'consultas.id_medico', '=', 'medico.id_medico')
+            ->leftJoin('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+            ->leftJoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
+            ->where('id_paciente', $paciente->id_paciente)
+            ->where('consultas.estado', 'concluida')
+            ->where(function ($query) use ($pesquisar_consultas) {
+                $query->where('consultas.modalidade', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('tipos_consultas.nome', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('servicos_clinicos.nome', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('medico.nome', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('servicos_clinicos.preco', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('consultas.data', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('consultas.hora', 'like', "%$pesquisar_consultas%")
+                    ->orWhere('consultas.estado', 'like', "%$pesquisar_consultas%");
+
+            })
+            ->orderBy('data')
+            ->orderBy('hora')
+            ->paginate(10);
+        return view('pacientes.prontuario', compact('consultas'));
+    }
+
     public function mostrar_detalhes_prontuario_medico($id_paciente)
     {
         $medico = verificar_medico();
@@ -79,6 +119,19 @@ class ProntuarioController extends Controller
         $totalConsultas = $consultas->count();
 
         return view('medicos.detalhes_prontuario', compact('paciente', 'consultas', 'totalConsultas'));
+    }
+    public function mostrar_detalhes_consulta_paciente($id_consulta)
+    {
+        $paciente = verificar_paciente();
+        if (! $paciente) {
+            return back()->with('erro', 'Não tem permissão para acessar esta página');
+        }
+        $consulta = Consulta::select('consultas.*', 'medico.nome AS nome_medico')
+            ->join('medico', 'consultas.id_medico', '=', 'medico.id_medico')
+             ->where('id_consulta', $id_consulta)
+            ->first();
+
+        return view('pacientes.detalhes_prontuario', compact('paciente', 'consulta'));
     }
 
     public function mostrar_detalhes_prontuario_admin($id_paciente)
@@ -110,7 +163,8 @@ class ProntuarioController extends Controller
     {
         $medico = verificar_medico();
         $admin = verificar_admin();
-        if (! $medico && ! $admin) {
+        $paciente = verificar_paciente();
+        if (! $medico && ! $admin && ! $paciente) {
             return response()->json(['erro' => 'Não tem permissão para acessar esta API'], 403);
         }
 

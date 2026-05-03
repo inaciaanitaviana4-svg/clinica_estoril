@@ -51,6 +51,9 @@ Route::middleware(['web'])->group(function () {
     Route::post('/cancelar-consulta-paciente/{id_consulta}', [PacienteController::class, 'cancelar_consulta_paciente']);
     Route::post('/confirmar-consulta-paciente/{id_consulta}', [PacienteController::class, 'confirmar_consulta_paciente']);
     Route::get('/painel-paciente/relatorios', [RelatorioController::class, 'mostrar_relatorios_paciente'])->name('mostrar_relatorios_paciente');
+    Route::get('/painel-paciente/prontuario', [ProntuarioController::class, 'mostrar_prontuario_paciente'])->name('mostrar_prontuario_paciente');
+    Route::get('/painel-paciente/prontuario/{id_consulta}', [ProntuarioController::class, 'mostrar_detalhes_consulta_paciente'])->name('mostrar_detalhes_consulta_paciente');
+
 
     // ===== ROTAS DE NOTIFICAÇÕES =====
     Route::get('/listar-minhas-notificacoes', [NotificacoesController::class, 'listar_minhas_notificacoes'])->name('listar_minhas_notificacoes');

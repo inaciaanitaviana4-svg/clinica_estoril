@@ -40,7 +40,7 @@
                     <label for="especialidade" style="font-weight: 600">
                         Especialidades
                     </label>
-                    <select name="especialidades[]" id="id_especialidade" required multiple="multiple" style="width: 100%; padding: 14px; border: 2px solid var(--border-color); border-radius: 4px;">
+                    <select name="especialidades[]" id="id_especialidade" multiple="multiple" style="width: 100%; padding: 14px; border: 2px solid var(--border-color); border-radius: 4px;">
                         @foreach ($especialidades as $especialidade)
                             <option value="{{ $especialidade->id_especialidade }}">
                                 {{ $especialidade->nome }}</option>

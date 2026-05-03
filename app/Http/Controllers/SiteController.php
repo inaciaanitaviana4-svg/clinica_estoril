@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Configuracao;
-use App\Models\Paciente;
 use App\Models\Especialidade;
 use App\Models\Medico;
-
+use App\Models\Paciente;
+use App\Models\ServicoClinico;
+use App\Models\TipoConsulta;
 use Carbon\Carbon;
 use Illuminate\View\View;
 
@@ -38,32 +39,46 @@ class SiteController extends Controller
 
         $anosExperiencia = $anoAtual - ($config ? $config->ano_fundacao : 0);
 
-        return view('sobre', compact('anosExperiencia','totalPacientes','totalEspecialidades'));
+        return view('sobre', compact('anosExperiencia', 'totalPacientes', 'totalEspecialidades'));
 
     }
-    
-    public function politica_seguranca():view
+
+    public function politica_seguranca(): view
     {
         return view('politica_seguranca');
     }
+
     public function servicos(): View
     {
-        return view('servicos');
+        $tipos_consulta = TipoConsulta::get();
+        $servicos = $tipos_consulta->map(function ($tipo) {
+            $servicos_clinicos = ServicoClinico::select('id_servico_clinico', 'nome')->where('id_tipo_consulta', $tipo->id_tipo_consulta)->get()->toArray();
+
+            return [
+                'id' => $tipo->id_tipo_consulta,
+                'nome' => $tipo->nome,
+                'icone' => $tipo->icone,
+                'descricao' => $tipo->descricao,
+                'servicos' => $servicos_clinicos,
+            ];
+        });
+
+        return view('servicos', compact('servicos'));
     }
 
-   public function especialidades(): View
-{
-    $especialidades = Especialidade::where('activo', 1)->get();
+    public function especialidades(): View
+    {
+        $especialidades = Especialidade::where('activo', 1)->get();
 
-    return view('especialidades', compact('especialidades'));
-}
+        return view('especialidades', compact('especialidades'));
+    }
 
-   public function equipa(): View
-{
-    $medicos = Medico::all();
+    public function equipa(): View
+    {
+        $medicos = Medico::all();
 
-    return view('equipa', compact('medicos'));
-}
+        return view('equipa', compact('medicos'));
+    }
 
     public function contacto(): View
     {
@@ -118,5 +133,5 @@ class SiteController extends Controller
         }
 
         return view('painel_recepcionista');
-     }
+    }
 }

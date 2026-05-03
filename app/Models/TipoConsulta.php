@@ -20,7 +20,9 @@ class TipoConsulta extends Model
     
     // Define colunas editáveis
     protected $fillable = [
-        "nome",                 // Nome do tipo de consulta
+        "nome", 
+        "descricao",
+        "icone"
     ];
 }
 

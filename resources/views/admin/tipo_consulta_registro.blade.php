@@ -1,13 +1,13 @@
-@extends("layouts.admin")
-@section("titulo", "Registro de tipo de consulta")
-@section("conteudo")
+@extends('layouts.admin')
+@section('titulo', 'Registro de tipo de consulta')
+@section('conteudo')
     <section class="section active ">
         <div class="login-card" id="userTypeCard">
             <h2 style="text-align: center;"><strong>Registro de tipo de consulta</strong> </h2>
             <br><br>
-            @if(session("erro"))
+            @if (session('erro'))
                 <div style="background-color:red;color:white;text-align:center">
-                    {{ session("erro") }}
+                    {{ session('erro') }}
                 </div>
             @endif
 
@@ -18,8 +18,20 @@
                     <label for="nome">
                         Nome
                     </label>
-                    <input req value="{{ $tipo_consulta->nome ?? "" }}" type="text" id="nome" name="nome" required
+                    <input req value="{{ $tipo_consulta->nome ?? '' }}" type="text" id="nome" name="nome" required
                         placeholder="digite o nome do tipo de consulta">
+                </div>
+                <div class="form-group">
+                    <label for="icone">
+                        Ícone
+                    </label>
+                    <input req value="{{ $tipo_consulta->icone ?? '' }}" type="text" id="icone" name="icone" 
+                        placeholder="digite o ícone do tipo de consulta">
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <textarea id="descricao" name="descricao" rows="5" placeholder="Detalhes do tipo de consulta">{{ $tipo_consulta->descricao ?? '' }}</textarea>
                 </div>
                 <button type="submit" class="btn btn-primary btn-full">
                     Guardar
@@ -34,6 +46,6 @@
     </section>
 
 @endsection
-@section("script")
+@section('script')
     <script src="/tabs.js"></script>
 @endsection

@@ -25,10 +25,14 @@ class TipoConsultaController extends Controller
         try {
             if ($id_tipo_consulta) {
                 $tipo_consulta->nome = $request->nome;
+                $tipo_consulta->descricao = $request->descricao;
+                $tipo_consulta->icone = $request->icone;
                 $tipo_consulta->save();
             } else {
                 TipoConsulta::create([
                     "nome" => $request->nome,
+                    "descricao" => $request->descricao,
+                    "icone" => $request->icone
                 ]);
 
             }

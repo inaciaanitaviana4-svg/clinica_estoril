@@ -25,6 +25,7 @@ $menus = [
               if (session('tipo_utilizador') == 'paciente'){
                 $menus=[
                     ['href' => route('mostrar_dashboard_paciente'), 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'],
+                    ['href'=>route('mostrar_prontuario_paciente'),'titulo'=>'Prontuario','icon'=>'fa-solid fa-file-medical'],
                     ['href'=>route('mostrar_consultas_paciente'),'titulo'=>'Consultas','icon'=>'fa-solid fa-stethoscope'],
                     ['href'=>route('mostrar_relatorios_paciente'),'titulo'=>'Relatórios','icon'=>'fa-solid fa-file-alt'],
                     ['href'=>route('listar_minhas_notificacoes'),'titulo'=>'Notificações','icon'=>'fa-solid fa-bell'],
