@@ -7,15 +7,60 @@
             <div class="editar-perfil-header">
                 <div class="editar-perfil-header-content">
                     <div class="editar-perfil-header-text">
-                        <h1>Editar Perfil</h1>
-                        <p>Atualize suas informações pessoais e profissionais</p>
-                    </div>
-                </div>
+                <h1>Editar Perfil</h1>
+                <p>Atualize suas informações pessoais e profissionais</p>
             </div>
+             </div>
+                  
 
             <!-- Formulário -->
-            <form action="/editar-perfil" id="formulario" method="POST" class="editar-perfil-form">
-                {{ csrf_field() }}
+            <form action="/editar-perfil" id="formulario" method="POST"
+      class="editar-perfil-form" enctype="multipart/form-data">
+    {{ csrf_field() }}
+
+       {{-- Foto de perfil circular — centro do formulário --}}
+    <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:20px;">
+        <label for="foto" id="foto-label" style="
+            position:relative; width:120px; height:120px; border-radius:50%;
+            cursor:pointer; overflow:hidden; border:3px dashed #a0aec0;
+            background:#f0f4f8; display:flex; align-items:center;
+            justify-content:center; transition:border-color 0.2s;"
+            onmouseover="this.style.borderColor='#0066cc';document.getElementById('foto-overlay').style.opacity='1'"
+            onmouseout="this.style.borderColor='#a0aec0';document.getElementById('foto-overlay').style.opacity='0'">
+
+            @if($utilizador->foto)
+                <img id="foto-preview"
+                     src="{{ asset('storage/' . $utilizador->foto) }}"
+                     alt="Foto de perfil"
+                     style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                <i id="foto-icon" class="fa-solid fa-circle-user"
+                   style="display:none; font-size:64px; color:#a0aec0;"></i>
+            @else
+
+             <img id="foto-preview" src="" alt="Foto de perfil"
+                     style="display:none; width:100%; height:100%;
+                            object-fit:cover; border-radius:50%;">
+                <i id="foto-icon" class="fa-solid fa-circle-user"
+                   style="font-size:64px; color:#a0aec0;"></i>
+            @endif
+
+            <div id="foto-overlay" style="
+                position:absolute; inset:0; background:rgba(0,0,0,0.38);
+                border-radius:50%; display:flex; align-items:center;
+                justify-content:center; opacity:0; transition:opacity 0.2s;
+                pointer-events:none;">
+                <i class="fa-solid fa-camera" style="color:white; font-size:26px;"></i>
+            </div>
+        </label>
+        <input type="file" id="foto" name="foto" accept="image/*" style="display:none">
+        <span style="margin-top:8px; font-size:13px; color:#718096;">
+            {{ $utilizador->foto ? 'Clique para alterar foto' : 'Clique para adicionar foto' }}
+        </span>
+    </div>
+
+     
+</div>
+           
                 <!-- Informações Pessoais -->
                 <div class="editar-perfil-section">
                     <h2 class="editar-perfil-section-title">
@@ -203,6 +248,20 @@
             </form>
         </div>
     </section>
+    {{-- Script de preview --}}
+<script>
+document.getElementById('foto').addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+        document.getElementById('foto-preview').src           = e.target.result;
+        document.getElementById('foto-preview').style.display = 'block';
+        document.getElementById('foto-icon').style.display    = 'none';
+    };
+    reader.readAsDataURL(file);
+});
+</script>
     <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -217,6 +276,7 @@ const email = document.getElementById("email");
 const telefone = document.getElementById("num_telefone");
 const senha = document.getElementById("senha");
 const confirmarSenha = document.getElementById("confirmar_senha");
+
 
 // ================= REGEX =================
 const regexNome = /^[A-Za-zÁÉÍÓÚÂÊÔÃÕÇáéíóúâêôãõç\s]+$/;
@@ -349,6 +409,7 @@ function validarDataNascimento(valor) {
     return true;
 }
 
+
 // ================= EVENTOS =================
 // Nome
   nome.addEventListener("input", function () {
@@ -383,6 +444,7 @@ function validarDataNascimento(valor) {
       senha.classList.add("input-sucesso");
     }
   });
+
 
 // Confirmar senha
 if (confirmarSenha) {
@@ -428,6 +490,7 @@ if (data) {
         }
     });
 }
+
 
 // ================= SUBMIT =================
 

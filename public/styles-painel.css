@@ -13,6 +13,7 @@
     height: 100vh;
     overflow-y: auto;
     box-shadow: var(--shadow-lg);
+    
 }
 
 
@@ -367,5 +368,283 @@ tbody tr:hover {
 
 .section.active {
     display: block;
+}
+
+.logotipo{
+    display: flex; justify-content: center; align-items: center; gap: 4px; height: 52px;
+}
+ /*menu vertical dos painel*/
+.menu-vertical{
+    position: fixed; width: 240px; top:0px; height: 100%; background-color: white;
+}
+.logotipo-clinica{
+    height: 40px;
+     width: 40px;
+      object-fit: cover;
+}
+.texto{
+     font-weight: bold; 
+     font-size: 14pt;
+}
+.paginas-vertical{
+    display:flex;
+     flex-direction:column;
+      height:calc(100vh - 90px);
+}
+
+/* botão sair sempre no fundo */ .sidebar-menu-item.sair{ 
+    margin-top:auto; 
+    padding:12px 16px; 
+    font-weight:500; 
+    color:red !important;
+ }
+
+/* =====================================================
+   COMPONENTE DE PESQUISA DE PACIENTE
+   Clínica Estoril — Sistema de Gestão
+   ===================================================== */
+
+/* ── Wrapper principal ── */
+.pp-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+/* ── Linha de input + botão ── */
+.pp-input-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+    align-items: stretch;
+}
+
+.pp-input-row input[type="text"] {
+    flex: 1;
+    height: 40px;
+    padding: 0 12px;
+    font-size: 14px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #111827;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+.pp-input-row input[type="text"]:focus {
+    border-color: #1a56db;
+    box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.12);
+}
+
+.pp-input-row input[type="text"]::placeholder {
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+.pp-input-row .btn {
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+/* ── Dropdown de resultados ── */
+.pp-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.07),
+        0 10px 24px -2px rgba(0, 0, 0, 0.10);
+    z-index: 1050;
+    max-height: 260px;
+    overflow-y: auto;
+    animation: pp-fade-in 0.15s ease;
+}
+
+.pp-dropdown.aberto {
+    display: block;
+}
+
+@keyframes pp-fade-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Scrollbar do dropdown */
+.pp-dropdown::-webkit-scrollbar {
+    width: 4px;
+}
+.pp-dropdown::-webkit-scrollbar-track {
+    background: transparent;
+}
+.pp-dropdown::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 4px;
+}
+.pp-dropdown::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* ── Item da lista ── */
+.pp-item {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 14px;
+    cursor: pointer;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 13.5px;
+    color: #111827;
+    transition: background 0.12s, color 0.12s;
+    line-height: 1.4;
+}
+
+.pp-item:last-child {
+    border-bottom: none;
+}
+
+.pp-item:first-child {
+    border-radius: 7px 7px 0 0;
+}
+
+.pp-item:last-child {
+    border-radius: 0 0 7px 7px;
+}
+
+.pp-item:hover {
+    background: #eff6ff;
+    color: #1e3a8a;
+}
+
+/* Item seleccionado — fundo azul sólido */
+.pp-item.selecionado {
+    background: #1a56db;
+    color: #ffffff;
+    border-bottom-color: #1d4ed8;
+}
+
+.pp-item.selecionado:hover {
+    background: #1e40af;
+    color: #ffffff;
+}
+
+.pp-item.selecionado .pp-item-sub {
+    color: #bfdbfe !important;
+}
+
+/* Nome principal dentro do item */
+.pp-item strong {
+    font-weight: 600;
+    font-size: 13.5px;
+    display: block;
+}
+
+/* Linha secundária — telefone / email */
+.pp-item-sub {
+    font-size: 11.5px;
+    color: #9ca3af;
+    margin-top: 2px;
+    transition: color 0.12s;
+}
+
+.pp-item:hover .pp-item-sub {
+    color: #3b82f6;
+}
+
+/* ── Estados vazios e loading ── */
+.pp-vazio,
+.pp-loading {
+    padding: 14px 12px;
+    text-align: center;
+    font-size: 13px;
+    color: #9ca3af;
+    line-height: 1.5;
+}
+
+.pp-loading {
+    color: #6b7280;
+}
+
+.pp-loading i,
+.pp-vazio i {
+    margin-right: 6px;
+    opacity: 0.7;
+}
+
+/* ── Caixa de confirmação do paciente selecionado ── */
+.pp-selecionado {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border: 1.5px solid #93c5fd;
+    border-left: 4px solid #1a56db;
+    border-radius: 6px;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.pp-selecionado.visivel {
+    display: flex;
+    animation: pp-slide-in 0.18s ease;
+}
+
+@keyframes pp-slide-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Ícone de check */
+.pp-selecionado > i.fa-circle-check {
+    color: #1a56db;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+/* Bloco de texto (nome + telefone) */
+.pp-selecionado > div {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Nome do paciente selecionado */
+.pp-sel-nome {
+    font-weight: 600;
+    font-size: 13.5px;
+    color: #1e3a8a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Telefone / sub-info */
+.pp-sel-sub {
+    font-size: 11.5px;
+    color: #3b82f6;
+    margin-top: 2px;
+    font-weight: 400;
+}
+
+.pp-sel-sub i {
+    font-size: 10px;
+    margin-right: 3px;
+    opacity: 0.8;
+}
+
+/* Badge "Selecionado" */
+.pp-sel-badge {
+    flex-shrink: 0;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
 }
 

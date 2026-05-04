@@ -1,3 +1,4 @@
+
  @extends("layouts.site")
 @section("titulo","Nossa Equipa")
 @section("conteudo")
@@ -34,34 +35,37 @@
     <!-- EQUIPA MÉDICA -->
     <section class="team-section">
         <div class="container">
-            <div class="team-grid">
-                <!-- INSTRUÇÃO: Substitua as imagens dos médicos -->
-                    <div class="team-grid">
-    @forelse($medicos as $medico)
-        <div class="team-card">
-            <div class="team-photo">
-                <img src="{{ asset('imagem/pedro.jpg') }}" alt="{{ $medico->nome }}">
-            </div>
+             <div class="team-grid">
+          @forelse($medicos as $medico)
+    <div class="team-card">
+        <div class="team-photo">
+            @php
+                $utilizadorDoMedico = \App\Models\Utilizador::where('id_medico', $medico->id_medico)->first();
+            @endphp
 
-            <div class="team-info">
-                <h3>{{ $medico->nome }}</h3>
-
-                <p class="team-specialty">
-                    Especialidade:<br>
-                    {{ $medico->especialidade }}
-                </p>
-
-                <p class="team-description service-btn">
-                    {{ $medico->ano_experiencia }} anos de experiência
-                </p>
-
-               
-            </div>
+            @if($utilizadorDoMedico && $utilizadorDoMedico->foto)
+                <img src="{{ asset('storage/' . $utilizadorDoMedico->foto) }}"
+                     alt="{{ $medico->nome }}">
+            @else
+                <div class="team-photo-placeholder">
+                    <span>
+                        {{ strtoupper(substr($medico->nome, 0, 1)) }}
+                    </span>
+                </div>
+            @endif
         </div>
-    @empty
-        <p>Nenhum profissional cadastrado.</p>
-    @endforelse
-</div>
+
+        <div class="team-info">
+            <h3>{{ $medico->nome }}</h3>
+            <p class="team-specialty">Especialidade:<br>{{ $medico->especialidade }}</p>
+            <p class="team-description service-btn">
+                {{ $medico->ano_experiencia }} anos de experiência
+            </p>
+        </div>
+    </div>
+@empty
+    <p>Nenhum profissional cadastrado.</p>
+@endforelse
 </div>
 </div>
                    
@@ -158,3 +162,6 @@
     </section>
 
   @endsection
+
+
+  

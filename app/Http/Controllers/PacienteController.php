@@ -85,51 +85,7 @@ class PacienteController extends Controller
         return view('pacientes.agendar_consulta', compact('especialidades', 'horarios', 'servicos_clinicos', 'tipos_consultas'));
     }
 
-    public function agendar_consulta_paciente_salvar(Request $request)
-    {
-        if (! session('id_utilizador')) {
-            return redirect('/login');
-        }
-        $utilizador = Utilizador::find(session('id_utilizador'));
-        $paciente = Paciente::find($utilizador->id_paciente);
-        if (! $paciente) {
-            return back()->with('erro', 'paciente não encontrado, faça o login novamente... ');
-        }
-        $tipo_consulta = TipoConsulta::find($request['id_tipo_consulta']);
-        if (! $tipo_consulta) {
-            return back()->with('erro', 'tipo de consulta não encontrada... ');
-        }
-        $servico_clinico = ServicoClinico::find($request['id_servico_clinico']);
-        if (! $servico_clinico) {
-            return back()->with('erro', 'Servico clinico não encontrado... ');
-        }
-        if (! $request['data']) {
-            return back()->with('erro', 'Data obrigatoria');
-        }
-        if (! $request['hora']) {
-            return back()->with('erro', 'hora obrigatoria');
-        }
-        try {
-            $consulta = Consulta::create([
-                'id_paciente' => $paciente->id_paciente,
-                'id_tipo_consulta' => $request['id_tipo_consulta'],
-                'id_servico_clinico' => $request['id_servico_clinico'],
-                'data' => $request['data'],
-                'hora' => $request['hora'],
-                'estado' => 'pendente',
-                'modalidade' => 'agendada',
-                'observacao' => $request['observacao'],
-            ]);
-            if (! $consulta) {
-                return back()->with('erro', 'não foi posssivel agendar a consulta');
-            }
-        } catch (\Throwable $th) {
-            return back()->with('erro', 'não foi posssivel agendar a consulta');
-        }
-
-        return redirect('/consultas-paciente');
-
-    }
+  
 
     public function cancelar_consulta_paciente(Request $request, $id_consulta)
     {
@@ -243,78 +199,110 @@ class PacienteController extends Controller
         return view('pacientes.cadastrar_paciente_recepcionista');
     }
 
-    public function salvar_cadastro_paciente_recepcionista(Request $request)
-    {
-        $totalPacientes = Paciente::count();
-        $utilizador = verificar_recepcionista();
-        if (! $utilizador) {
-            return back()->with('erro', 'Não tem permissão para acessar esta página');
-        }
-        if (! $request['nome']) {
-            return back()->with('erro', 'Nome é obrigatorio');
-        }
-        if (! $request['email']) {
-            return back()->with('erro', 'Email é obrigatorio');
-        }
-        if (! $request['num_telefone']) {
-            return back()->with('erro', 'Número de telefone é obrigatorio');
-        }
-        if (! $request['num_bi']) {
-            return back()->with('erro', 'Número de BI é obrigatorio');
-        }
-        try {
-            // Valida email únicos em ambos os modelos
-            $emailexiste = Paciente::where('email', $request->email)->first();
-            $emailexisteutilizador = Utilizador::where('email', $request->email)->first();
-            if ($emailexiste || $emailexisteutilizador) {
-                return back()->with('erro', 'Este email já está cadastrado no sistema. Use um email diferente ou faça login se já possui uma conta.');
-            }
-
-            // Valida telefone único em ambos os modelos
-            $num_telefoneexiste = Paciente::where('num_telefone', $request->num_telefone)->first();
-            $num_telefoneexisteutilizador = Utilizador::where('num_telefone', $request->num_telefone)->first();
-            if ($num_telefoneexiste || $num_telefoneexisteutilizador) {
-                return back()->with('erro', 'Este número de telefone já está registrado no sistema. Use um número diferente.');
-            }
-            if ($request['senha'] != $request['confirmar_senha']) {
-                return back()->with('erro', 'As senhas não coincidem. Por favor, confirme sua senha corretamente.');
-            }
-            // Cria novo registro de paciente
-            $paciente = Paciente::create([
-                'nome' => $request['nome'],
-                'email' => $request['email'],
-                'num_telefone' => $request['num_telefone'],
-                'genero' => $request['genero'],
-                'morada' => $request['morada'],
-                'senha' => Hash::make($request['senha']),
-                'data_nascimento' => $request['data_nascimento'],
-                'num_bi' => $request['num_bi'],
-                'estado_civil' => $request['estado_civil'],
-                'cidade' => $request['cidade'],
-                'bairro' => $request['bairro'],
-                'seguro' => $request['seguro'],
-                'id_clinica' => 1,
-            ]);
-
-            // Cria utilizador associado ao paciente
-            $utilizador = Utilizador::create([
-                'num_telefone' => $request['num_telefone'],
-                'senha' => Hash::make($request['senha']),
-                'nome' => $request['nome'],
-                'genero' => $request['genero'],
-                'email' => $request['email'],
-                'nivel_acesso' => 3, // 3 = paciente
-                'id_paciente' => $paciente->id_paciente,
-            ]);
-
-            if (! $paciente) {
-                return back()->with('erro', 'não foi posssivel cadastrar o paciente');
-            }
-        } catch (\Throwable $th) {
-            return back()->with('erro', 'não foi posssivel cadastrar o paciente');
-        }
-
-        return redirect()->route('mostrar_pacientes_recepcionista')->with('sucesso', 'Paciente cadastrado com sucesso');
-
+ public function salvar_cadastro_paciente_recepcionista(Request $request)
+{
+    $utilizador = verificar_recepcionista();
+    if (!$utilizador) {
+        return back()->with('erro', 'Não tem permissão para acessar esta página');
     }
+    if (!$request['nome']) {
+        return back()->with('erro', 'Nome é obrigatorio');
+    }
+    if (!$request['email']) {
+        return back()->with('erro', 'Email é obrigatorio');
+    }
+    if (!$request['num_telefone']) {
+        return back()->with('erro', 'Número de telefone é obrigatorio');
+    }
+    if (!$request['num_bi']) {
+        return back()->with('erro', 'Número de BI é obrigatorio');
+    }
+    try {
+        $emailexiste           = Paciente::where('email', $request->email)->first();
+        $emailexisteutilizador = Utilizador::where('email', $request->email)->first();
+        if ($emailexiste || $emailexisteutilizador) {
+            return back()->with('erro', 'Este email já está cadastrado.');
+        }
+
+        $num_telefoneexiste           = Paciente::where('num_telefone', $request->num_telefone)->first();
+        $num_telefoneexisteutilizador = Utilizador::where('num_telefone', $request->num_telefone)->first();
+        if ($num_telefoneexiste || $num_telefoneexisteutilizador) {
+            return back()->with('erro', 'Este número de telefone já está registrado.');
+        }
+
+        if ($request['senha'] != $request['confirmar_senha']) {
+            return back()->with('erro', 'As senhas não coincidem.');
+        }
+
+        $paciente = Paciente::create([
+            'nome'            => $request['nome'],
+            'email'           => $request['email'],
+            'num_telefone'    => $request['num_telefone'],
+            'genero'          => $request['genero'],
+            'morada'          => $request['morada'],
+            'senha'           => Hash::make($request['senha']),
+            'data_nascimento' => $request['data_nascimento'],
+            'num_bi'          => $request['num_bi'],
+            'estado_civil'    => $request['estado_civil'],
+            'cidade'          => $request['cidade'],
+            'bairro'          => $request['bairro'],
+            'seguro'          => $request['seguro'],
+            'id_clinica'      => 1,
+        ]);
+
+        // ── FOTO ──────────────────────────────────────────
+        $foto = null;
+        if ($request->hasFile('foto')) {
+            $ficheiro = $request->file('foto');
+            if ($ficheiro->isValid() && $ficheiro->getSize() > 0) {
+                $pastaDestino = storage_path('app/public/fotos');
+                if (!file_exists($pastaDestino)) {
+                    mkdir($pastaDestino, 0775, true);
+                }
+                $extensao  = $ficheiro->getClientOriginalExtension();
+                $nomeUnico = uniqid('foto_') . '.' . $extensao;
+                $ficheiro->move($pastaDestino, $nomeUnico);
+                $foto = 'fotos/' . $nomeUnico;
+            }
+        }
+        // ──────────────────────────────────────────────────
+
+        $utilizadorNovo = Utilizador::create([
+            'num_telefone' => $request['num_telefone'],
+            'senha'        => Hash::make($request['senha']),
+            'nome'         => $request['nome'],
+            'genero'       => $request['genero'],
+            'email'        => $request['email'],
+            'foto'         => $foto,
+            'nivel_acesso' => 3,
+            'id_paciente'  => $paciente->id_paciente,
+        ]);
+
+        if (!$paciente) {
+            return back()->with('erro', 'Não foi possível cadastrar o paciente');
+        }
+
+    } catch (\Throwable $th) {
+        return back()->with('erro', 'Não foi possível cadastrar o paciente: ' . $th->getMessage());
+    }
+
+    return redirect()->route('mostrar_pacientes_recepcionista')->with('sucesso', 'Paciente cadastrado com sucesso');
+}
+public function api_pesquisar_pacientes(Request $request)
+{
+    $termo = $request->query('termo', '');
+    
+    if (strlen($termo) < 2) {
+        return response()->json([]);
+    }
+
+    $pacientes = Paciente::where('nome', 'like', "%$termo%")
+        ->orWhere('num_telefone', 'like', "%$termo%")
+        ->orWhere('email', 'like', "%$termo%")
+        ->select('id_paciente', 'nome', 'num_telefone', 'email')
+        ->limit(10)
+        ->get();
+
+    return response()->json($pacientes);
+}
 }

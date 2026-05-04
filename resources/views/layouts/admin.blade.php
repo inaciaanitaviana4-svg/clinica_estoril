@@ -18,99 +18,34 @@
     <link rel="manifest" href="/site.webmanifest" />
     @yield('estilo')
     <style>
-        .sidebar-menu-item {
-            text-decoration: none;
-        }
-
-        .sidebar-menu-item-active {
-            background-color: #0066cc;
-            color: white;
-        }
-
-        .sidebar-menu-item:hover {
-            background-color: #0066cc30;
-        }
-        
-    .erro {
-        color: red;
-        font-size: 18px;
     
-    }
-
-    .input-sucesso{
-        border:2px solid green;
-    }
-
-    .input-erro {
-        border: 2px solid red;
-    }
-
-.custom-alert{
-        position:fixed;
-        top:0;
-        left:0;
-        width:100%;
-        height:100%;
-        background:rgba(0,0,0,0.5);
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        z-index:9999;
-         font-size:18px;
-        font-weight:bold;
-    }
-
-    .custom-alert-box{
-        background:white;
-        padding:20px;
-        border-radius:10px;
-        text-align:center;
-        min-width:250px;
-        box-shadow:0 5px 20px rgba(0,0,0,0.3);
-
-    }
-
-    .custom-alert button{
-        margin-top:10px;
-        padding:8px 15px;
-        border:none;
-        background:#0d6efd;
-        color:white;
-        border-radius:5px;
-        cursor:pointer;
-        font-weight:bold;
-    }
-
-    .hidden{
-        display:none;
-    }
     </style>
 </head>
 
 <body class="bg-light">
     <div style="display: flex;">
-        <div style="position: fixed; width: 240px; top:0px; height: 100%; background-color: white;">
+        <div class="menu-vertical">
             <aside>
-                <div style="padding: 8px;">
+                <div>
                     <a href="/">
-                        <div
-                            style="display: flex; justify-content: center; align-items: center; gap: 4px; height: 52px;">
-                            <img style="height: 40px; width: 40px; object-fit: cover;" src="/imagem/logo.png"
+                        <div class="logotipo">
+                            <img class="logotipo-clinica" src="/imagem/logo.png"
                                 alt="logotipo da clinica">
-                            <span style="font-weight: bold; font-size: 14pt;">Clínica Estoril</span>
+                            <span class="texto">Clínica Estoril</span>
                         </div>
                     </a>
                 </div>
 
-                <div style="display: flex; flex-direction: column; margin-top: 20px;">
+                <div class="paginas-vertical">
                     <?php $menus = [['href' => '/admin/dashboard', 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'], ['href' => '/admin/pagamentos', 'titulo' => 'Pagamentos', 'icon' => 'fa-solid fa-credit-card'], ['href' => '/admin/cadastros', 'titulo' => 'Cadastros', 'icon' => 'fa-solid fa-users'], ['href' => '/admin/consultas', 'titulo' => 'Consultas', 'icon' => 'fa-solid fa-stethoscope'], ['href' => route('mostrar_prontuarios_medico_admin'), 'titulo' => 'Prontuários', 'icon' => 'fa-solid fa-file-medical'], ['href' => '/admin/relatorios', 'titulo' => 'Relatórios', 'icon' => 'fa-solid fa-file-alt']];
                     ?>
                     @foreach ($menus as $menu)
                         <a class="sidebar-menu-item" style="padding: 12px 16px; font-weight: 500;"
                             href="{{ $menu['href'] }}"><i class="{{ $menu['icon'] }}"></i> {{ $menu['titulo'] }}</a>
                     @endforeach
-                    <a class="sidebar-menu-item" style="padding: 12px 16px; font-weight: 500; color:red;"
-                        href="/sair"><i class="fa-solid fa-right-from-bracket"></i> <strong>Terminar Sessão</strong></a>
+                       <!-- BOTÃO TERMINAR SESSÃO --> <a class="sidebar-menu-item sair" href="/sair"> 
+        <i class="fa-solid fa-right-from-bracket"></i> <strong>Terminar Sessão</strong> </a>
+                </div>
                 </div>
             </aside>
         </div>
@@ -118,10 +53,24 @@
             style="position: fixed; top: 0px; left:240px;right: 0px; background-color: white; padding: 8px; height: 52px;z-index: 100;">
             <div style="display: flex; align-items: center; height: 100%; justify-content: space-between;">
                 <span style="font-weight: bold; font-size: px;">@yield('titulo')</span>
-                <a href="/visualizar-perfil"
-                    style="display: flex; justify-items: center; align-items: center; height: fit-content; gap: 8px;"> <span
-                        style="font-weight: 500; font-size: 14px;">{{ session('nome_utilizador') ?? 'Utilizador' }}</span><i
-                        style="font-size: 28px; color: #0066cc" class="fa-solid fa-circle-user"></i></a>
+                 <a href="/visualizar-perfil"
+   style="display:flex; align-items:center; height:fit-content;
+          gap:8px; text-decoration:none; color:inherit;">
+    <span style="font-weight:500; font-size:14px;">
+        {{ session('nome_utilizador') ?? 'Utilizador' }}
+    </span>
+
+    @if(session('foto_utilizador'))
+        <img src="{{ asset('storage/' . session('foto_utilizador')) }}"
+             alt="Foto de perfil"
+             style="width:34px; height:34px; border-radius:50%;
+                    object-fit:cover; border:2px solid #e2e8f0;
+                    flex-shrink:0;">
+    @else
+        <i style="font-size:28px; color:#0066cc"
+           class="fa-solid fa-circle-user"></i>
+    @endif
+</a>
             </div>
         </header>
 
@@ -159,30 +108,37 @@
     @yield('script')
 
     <script>
-        const url = window.location.pathname
-        const menus = document.getElementsByClassName("sidebar-menu-item")
+        const urlAtual = window.location.pathname;
+    const menus = document.getElementsByClassName("sidebar-menu-item");
 
-        for (let i = 0; i < menus.length; i++) {
-            const menu = menus.item(i)
-            menu.classList.remove("sidebar-menu-item-active")
-            const href = menu.getAttribute("href")
-            if (url.startsWith(href)) {
-                menu.classList.add("sidebar-menu-item-active")
-            }
+    for (let i = 0; i < menus.length; i++) {
+        const menu = menus[i];
+
+        // remove classe ativa
+        menu.classList.remove("sidebar-menu-item-active");
+
+        // pega apenas o pathname do href
+        const href = new URL(menu.href).pathname;
+
+        // compara as rotas
+        if (urlAtual === href || urlAtual.startsWith(href + "/")) {
+            menu.classList.add("sidebar-menu-item-active");
         }
+    }
 
-        function mostrarAlert(mensagem){ 
-    const box= document.getElementById("custom-alert");
-    const text= document.getElementById("custom-alert-text");
+    function mostrarAlert(mensagem){ 
+        const box = document.getElementById("custom-alert");
+        const text = document.getElementById("custom-alert-text");
 
-    text.textContent= mensagem;
-    box.classList.remove("hidden");
-}
+        text.textContent = mensagem;
+        box.classList.remove("hidden");
+    }
 
-function fecharAlert() {
-    document.getElementById("custom-alert").classList.add("hidden");
-} 
+    function fecharAlert() {
+        document.getElementById("custom-alert").classList.add("hidden");
+    } 
     </script>
 </body>
+
 
 </html>

@@ -35,7 +35,7 @@
                         <i class="fas fa-envelope"></i>
                     </div>
                     <h3>Email</h3>
-                    <p><a href="mailto:geral@clinicaestoril.pt">geral@clinicaestoril.AO</a></p>
+                    <p><a href="mailto:geral@clinicaestoril.ao">geral@clinicaestoril.ao</a></p>
                     <p class="contact-info-desc">Resposta em 24h</p>
                 </div>
 
@@ -75,21 +75,21 @@
                 <i class="fas fa-laptop-medical"></i>
             </div>
             <p>Consultas online disponíveis. Faça login na sua área do paciente para agendar.</p>
-             @if (session('id_utilizador'))
+            @if (session('id_utilizador'))
                     <div style="display:inline-block; align-items: center; gap:8px;">
                         @if (session('tipo_utilizador') == 'admi')
                             <a href="/admin/dashboard" class="btn-login">
-                               <i class="fa-solid fa-gauge"></i><span>Dashboard</span>
+                              <i class="fa-solid fa-gauge"></i><span>Dashboard</span>
                             </a>
                         @endif
                         @if (session('tipo_utilizador') == 'recepcionista')
                             <a href="{{ route('mostrar_consultas_recepcionista') }}" class="btn-login">
-                                <i class="fa-solid fa-stethoscope"></i><span>Agendamentos</span>
+                               <i class="fa-solid fa-stethoscope"></i> <span>Agendamentos</span>
                             </a>
                         @endif
                         @if (session('tipo_utilizador') == 'medico')
                             <a href= "{{ route('mostrar_consultas_medico') }}" class="btn-login">
-                                <i class="fa-solid fa-stethoscope"></i><span>Consultas</span>
+                               <i class="fa-solid fa-stethoscope"></i> <span>Consultas</span>
                             </a>
                         @endif
                         @if (session('tipo_utilizador') == 'paciente')
@@ -97,7 +97,8 @@
                                 <i class="fa-solid fa-stethoscope"></i><span>Consultas</span>
                             </a>
                         @endif
-           </div>
+
+                    </div>
                 @else
                     <a style="display:inline-block;" href="/login" class="btn-login">
                         <i class="fas fa-user"></i>
@@ -105,7 +106,9 @@
                     </a>
                 @endif
 
-        <div   class="sidebar-card">
+        </div>
+
+        <div class="sidebar-card">
             <div class="sidebar-icon">
                 <i class="fas fa-file-medical"></i>
             </div>

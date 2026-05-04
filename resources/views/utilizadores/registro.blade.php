@@ -11,8 +11,51 @@
                 </div>
             @endif
 
-            <form method="post" id="formulario" action="{{ route('salvar_registro_utilizador_admin', $utilizador->id_util ?? null) }}">
-                {{ csrf_field() }}
+       
+
+            <form method="post" id="formulario" enctype="multipart/form-data"
+      action="{{ route('salvar_registro_utilizador_admin', $utilizador->id_util ?? null) }}">
+    {{ csrf_field() }}
+
+         {{-- Foto de perfil --}}
+<div style="display:flex; flex-direction:column; align-items:center; margin-bottom:32px;">
+    <label for="foto" id="foto-label" style="
+        position:relative; width:120px; height:120px; border-radius:50%;
+        cursor:pointer; overflow:hidden; border:3px dashed #a0aec0;
+        background:#f0f4f8; display:flex; align-items:center;
+        justify-content:center; transition:border-color 0.2s;"
+        onmouseover="this.style.borderColor='#0066cc';document.getElementById('foto-overlay').style.opacity='1'"
+        onmouseout="this.style.borderColor='#a0aec0';document.getElementById('foto-overlay').style.opacity='0'">
+
+        @if(isset($utilizador) && $utilizador->foto)
+            <img id="foto-preview"
+                 src="{{ asset('storage/' . $utilizador->foto) }}"
+                 alt="Foto" style="width:100%; height:100%;
+                 object-fit:cover; border-radius:50%;">
+            <i id="foto-icon" class="fa-solid fa-circle-user"
+               style="display:none; font-size:64px; color:#a0aec0;"></i>
+        @else
+
+         <img id="foto-preview" src="" alt="Foto"
+                 style="display:none; width:100%; height:100%;
+                        object-fit:cover; border-radius:50%;">
+            <i id="foto-icon" class="fa-solid fa-circle-user"
+               style="font-size:64px; color:#a0aec0;"></i>
+        @endif
+
+        <div id="foto-overlay" style="
+            position:absolute; inset:0; background:rgba(0,0,0,0.38);
+            border-radius:50%; display:flex; align-items:center;
+            justify-content:center; opacity:0; transition:opacity 0.2s;
+            pointer-events:none;">
+            <i class="fa-solid fa-camera" style="color:white; font-size:26px;"></i>
+        </div>
+    </label>
+    <input type="file" id="foto" name="foto" accept="image/*" style="display:none">
+    <span style="margin-top:8px; font-size:13px; color:#718096;">
+        {{ isset($utilizador) && $utilizador->foto ? 'Alterar foto' : 'Adicionar foto (opcional)' }}
+    </span>
+</div>
 
                 <!-- Informações Pessoais -->
                 <div class="editar-perfil-section">
@@ -29,7 +72,7 @@
                                 <option value="medico" @selected($tipo_utilizador == 'medico')>Médico</option>
                                 <option value="recepcionista" @selected($tipo_utilizador == 'recepcionista')>
                                     Recepcionista</option>
-                         z       <option value="administrador" @selected($tipo_utilizador == 'administrador')>
+                              <option value="administrador" @selected($tipo_utilizador == 'administrador')>
                                     Administrador</option>
                             </select>
                         </div>
@@ -207,6 +250,19 @@
     </section>
 @endsection
 @section('script')
+<script>
+document.getElementById('foto').addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+        document.getElementById('foto-preview').src           = e.target.result;
+        document.getElementById('foto-preview').style.display = 'block';
+        document.getElementById('foto-icon').style.display    = 'none';
+    };
+    reader.readAsDataURL(file);
+});
+</script>
     <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -233,6 +289,7 @@ document.addEventListener("DOMContentLoaded", function () {
     "111111", "123123", "admin", "000000", "senha",
     "1234", "12345"
   ];
+
 
   // ================= FUNÇÃO GENÉRICA =================
   function validar(campo, regex, erroId, mensagem) {
@@ -337,6 +394,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return true;
   }
 
+
   // ================= DATA =================
   function validarDataNascimento(valor) {
     if (!valor) return false;
@@ -389,6 +447,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+
   // Bairro
   bairro.addEventListener("input", function () {
     const erro = document.getElementById("erro-bairro");
@@ -401,6 +460,7 @@ document.addEventListener("DOMContentLoaded", function () {
       erro.textContent = "";
     }
   });
+
 
   // BI (OPCIONAL)
   bi.addEventListener("input", function () {
@@ -504,6 +564,7 @@ function fecharAlert() {
   });
 
 });
+
 
         const select_tipo = document.querySelector('[name="tipo"]')
         select_tipo.addEventListener("change", function() {

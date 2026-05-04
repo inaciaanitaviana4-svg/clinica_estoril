@@ -1,45 +1,27 @@
 <?php
 $menus = [
-   // ['href' => '/admin/dashboard', 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'], 
-  
-    ];
-      if (session('tipo_utilizador') == 'medico'){
-        $menus=[
-            ['href' => route('mostrar_dashboard_medico'), 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'],
-            ['href'=>route('mostrar_prontuarios_medico'),'titulo'=>'Prontuarios','icon'=>'fa-solid fa-file-medical'],
-            ['href'=>route('mostrar_consultas_medico'),'titulo'=>'Consultas','icon'=>'fa-solid fa-calendar-check'],
-            ['href'=>route('mostrar_horarios_medico'),'titulo'=>'Horarios','icon'=>'fa-solid fa-clock'],
-            ['href'=>route('mostrar_relatorios_medico'),'titulo'=>'Relatórios','icon'=>'fa-solid fa-file-alt'],
-             ['href'=>route('listar_minhas_notificacoes'),'titulo'=>'Notificações','icon'=>'fa-solid fa-bell'],
-        ];
-    } 
-      if (session('tipo_utilizador') == 'recepcionista'){
-        $menus=[
-            ['href' => route('mostrar_dashboard_recepcionista'), 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'],
-            ['href'=>route('mostrar_consultas_recepcionista'),'titulo'=>'Agendamentos','icon'=>'fa-solid fa-stethoscope'],
-            ['href'=>route('mostrar_pagamentos_recepcionista'),'titulo'=>'Pagamentos','icon'=>'fa-solid fa-credit-card'],
-            ['href'=>route('mostrar_pacientes_recepcionista'),'titulo'=>'Pacientes','icon'=>'fa-solid fa-users'],
-            ['href'=>route('mostrar_horarios_recepcionista'),'titulo'=>'Horarios','icon'=>'fa-solid fa-clock'],
-        ];
-            }
-              if (session('tipo_utilizador') == 'paciente'){
-                $menus=[
-                    ['href' => route('mostrar_dashboard_paciente'), 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'],
-                    ['href'=>route('mostrar_prontuario_paciente'),'titulo'=>'Prontuario','icon'=>'fa-solid fa-file-medical'],
-                    ['href'=>route('mostrar_consultas_paciente'),'titulo'=>'Consultas','icon'=>'fa-solid fa-stethoscope'],
-                    ['href'=>route('mostrar_relatorios_paciente'),'titulo'=>'Relatórios','icon'=>'fa-solid fa-file-alt'],
-                    ['href'=>route('listar_minhas_notificacoes'),'titulo'=>'Notificações','icon'=>'fa-solid fa-bell'],
-                ];
+    // ['href' => '/admin/dashboard', 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'],
+];
+if (session('tipo_utilizador') == 'medico') {
+    $menus = [['href' => route('mostrar_dashboard_medico'), 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'], ['href' => route('mostrar_prontuarios_medico'), 'titulo' => 'Prontuarios', 'icon' => 'fa-solid fa-file-medical'], ['href' => route('mostrar_consultas_medico'), 'titulo' => 'Consultas', 'icon' => 'fa-solid fa-calendar-check'], ['href' => route('mostrar_horarios_medico'), 'titulo' => 'Horarios', 'icon' => 'fa-solid fa-clock'], ['href' => route('mostrar_relatorios_medico'), 'titulo' => 'Relatórios', 'icon' => 'fa-solid fa-file-alt'], ['href' => route('listar_minhas_notificacoes'), 'titulo' => 'Notificações', 'icon' => 'fa-solid fa-bell']];
+}
+if (session('tipo_utilizador') == 'recepcionista') {
+    $menus = [['href' => route('mostrar_dashboard_recepcionista'), 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'], ['href' => route('mostrar_consultas_recepcionista'), 'titulo' => 'Agendamentos', 'icon' => 'fa-solid fa-stethoscope'], ['href' => route('mostrar_pagamentos_recepcionista'), 'titulo' => 'Pagamentos', 'icon' => 'fa-solid fa-credit-card'], ['href' => route('mostrar_pacientes_recepcionista'), 'titulo' => 'Pacientes', 'icon' => 'fa-solid fa-users'], ['href' => route('mostrar_horarios_recepcionista'), 'titulo' => 'Horarios', 'icon' => 'fa-solid fa-clock']];
+}
+if (session('tipo_utilizador') == 'paciente') {
+    $menus = [['href' => route('mostrar_dashboard_paciente'), 'titulo' => 'Dashboard', 'icon' => 'fa-solid fa-gauge'], ['href' => route('mostrar_consultas_paciente'), 'titulo' => 'Consultas', 'icon' => 'fa-solid fa-stethoscope'], ['href' => route('listar_minhas_notificacoes'), 'titulo' => 'Notificações', 'icon' => 'fa-solid fa-bell'], ['href' => route('mostrar_relatorios_paciente'), 'titulo' => 'Relatórios', 'icon' => 'fa-solid fa-file-alt'], ['href' => route('mostrar_prontuario_paciente'), 'titulo' => 'Prontuario', 'icon' => 'fa-solid fa-file-medical']];
 }
 ?>
 <!DOCTYPE html>
 <html lang="pt-PT">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Clínica Estoril - A sua saude nas melhores mãos ">
     <title>Clínica Estoril - @yield('titulo')</title>
     <link rel="stylesheet" href="{{ asset('styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('notificacao.css') }}">
     <link rel="stylesheet" href="{{ asset('all.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('toastify.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('styles-painel.css') }}">
@@ -49,112 +31,43 @@ $menus = [
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-       @yield('estilo')
-    <style>
-        .sidebar-menu-item {
-            text-decoration: none;
-        }
-
-        .sidebar-menu-item-active {
-            background-color: #0066cc;
-            color: white;
-        }
-
-        .sidebar-menu-item:hover {
-            background-color: #0066cc30;
-        }
-
-        .erro{
-            color:red;
-            font-size:17px;
-        }
-        .input-erro{
-            border:2px solid red;
-        }
-        .input-sucesso{
-            border:2px solid green;
-        }
-
-    .sucesso {
-        color: green;
-        font-size: 18px;
-        margin-bottom: 10px;
-    }
-
-    .invalido {
-        border: 2px solid red;
-    }
-
-    .valido {
-        border: 2px solid green;
-    }
-    .custom-alert{
-        position:fixed;
-        top:0;
-        left:0;
-        width:100%;
-        height:100%;
-        background:rgba(0,0,0,0.5);
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        z-index:9999;
-        font-size:18px;
-        font-weight:bold;
-        
-    }
-
-    .custom-alert-box{
-        background:white;
-        padding:40px;
-        border-radius:20px;
-        text-align:center;
-        min-width:250px;
-        box-shadow:0 5px 20px rgba(0,0,0,0.3);
-
-    }
-
-    .custom-alert button{
-        margin-top:20px;
-        padding:8px 15px;
-        width:150px;
-        border:none;
-        background:#0d6efd;
-        color:white;
-        border-radius:10px;
-        cursor:pointer;
-        font-weight:bold;
-    }
-
-    .hidden{
-        display:none;
-    }
-    </style>
+    @yield('estilo')
 </head>
 
 <body class="bg-light">
-    <div style="display: flex;">
-        <div style="position: fixed; width: 240px; top:0px; height: 100%; background-color: white;">
+    <div>
+        <div class="menu-vertical">
             <aside>
-                <div style="padding: 8px;">
+                <div>
                     <a href="/">
-                        <div
-                            style="display: flex; justify-content: center; align-items: center; gap: 4px; height: 52px;">
-                            <img style="height: 40px; width: 40px; object-fit: cover;" src="/imagem/logo.png"
-                                alt="logotipo da clinica">
-                            <span style="font-weight: bold; font-size: 14pt;">Clínica Estoril</span>
+                        <div class="logotipo">
+                            <img class="logotipo-clinica" src="/imagem/logo.png" alt="logotipo da clinica">
+                            <span class="texto">Clínica Estoril</span>
                         </div>
                     </a>
                 </div>
 
-                <div style="display: flex; flex-direction: column; margin-top: 20px;">
+                <div class="paginas-vertical">
 
                     @foreach ($menus as $menu)
                         <a class="sidebar-menu-item" style="padding: 12px 16px; font-weight: 500;"
-                            href="{{ $menu['href'] }}"><i class="{{ $menu['icon'] }}"></i> {{ $menu['titulo'] }}</a>
+                            href="{{ $menu['href'] }}">
+
+                            @if (str_contains($menu['href'], 'notificac'))
+                                {{-- Ícone com badge por cima --}}
+                                <span class="notif-icon-wrapper">
+                                    <i class="{{ $menu['icon'] }}"></i>
+                                    <span class="notif-badge" id="notif-badge" style="display:none;">0</span>
+                                </span>
+                            @else
+                                <i class="{{ $menu['icon'] }}"></i>
+                            @endif
+
+                            {{ $menu['titulo'] }}
+                        </a>
                     @endforeach
-                    <a class="sidebar-menu-item" style="padding: 12px 16px; font-weight: 500; color:red;"
-                        href="/sair"><i class="fa-solid fa-right-from-bracket"></i> <strong>Terminar Sessão</strong></a>
+                    <!-- BOTÃO TERMINAR SESSÃO --> <a class="sidebar-menu-item sair" href="/sair">
+                        <i class="fa-solid fa-right-from-bracket"></i> <strong>Terminar Sessão</strong> </a>
                 </div>
             </aside>
         </div>
@@ -163,9 +76,21 @@ $menus = [
             <div style="display: flex; align-items: center; height: 100%; justify-content: space-between;">
                 <span style="font-weight: bold; font-size: px;">@yield('titulo')</span>
                 <a href="/visualizar-perfil"
-                    style="display: flex; justify-items: center; align-items: center; height: fit-content; gap: 8px;"> <span
-                        style="font-weight: 500; font-size: 14px;">{{ session('nome_utilizador') ?? 'Utilizador' }}</span><i
-                        style="font-size: 28px; color: #0066cc" class="fa-solid fa-circle-user"></i></a>
+                    style="display:flex; align-items:center; height:fit-content;
+          gap:8px; text-decoration:none; color:inherit;">
+                    <span style="font-weight:500; font-size:14px;">
+                        {{ session('nome_utilizador') ?? 'Utilizador' }}
+                    </span>
+
+                    @if (session('foto_utilizador'))
+                        <img src="{{ asset('storage/' . session('foto_utilizador')) }}" alt="Foto de perfil"
+                            style="width:34px; height:34px; border-radius:50%;
+                    object-fit:cover; border:2px solid #e2e8f0;
+                    flex-shrink:0;">
+                    @else
+                        <i style="font-size:28px; color:#0066cc" class="fa-solid fa-circle-user"></i>
+                    @endif
+                </a>
             </div>
         </header>
 
@@ -173,12 +98,12 @@ $menus = [
     <main style="margin-left: 240px; margin-top: 52px; padding: 16px">
         @yield('conteudo')
     </main>
- <div id="custom-alert" class="custom-alert hidden">
+    <div id="custom-alert" class="custom-alert hidden">
         <div class="custom-alert-box">
             <p id="custom-alert-text"></p>
             <button onclick="fecharAlert()">Ok</button>
         </div>
-        </div>
+    </div>
     <!-- Modal Remover -->
     @include('components.remover_modal')
 
@@ -199,32 +124,77 @@ $menus = [
     <script src="{{ asset('remover-modal.js') }}"></script>
 
     @yield('script')
+    @section('script')
+        <script>
+            // Assim que a página de notificações carrega, atualiza o badge imediatamente
+            document.addEventListener('DOMContentLoaded', function() {
+                // Força atualização do badge ao entrar na página de notificações
+                if (typeof atualizarBadgeNotificacoes === 'function') {
+                    atualizarBadgeNotificacoes();
+                }
+            });
+        </script>
+    @endsection
 
     <script>
-        const url = window.location.pathname
-        const menus = document.getElementsByClassName("sidebar-menu-item")
+        const urlAtual = window.location.pathname;
+        const menus = document.getElementsByClassName("sidebar-menu-item");
 
         for (let i = 0; i < menus.length; i++) {
-            const menu = menus.item(i)
-            menu.classList.remove("sidebar-menu-item-active")
-            const href = menu.getAttribute("href")
-            if (url.startsWith(href)) {
-                menu.classList.add("sidebar-menu-item-active")
+            const menu = menus[i];
+
+            // remove classe ativa
+            menu.classList.remove("sidebar-menu-item-active");
+
+            // pega apenas o pathname do href
+            const href = new URL(menu.href).pathname;
+
+            // compara as rotas
+            if (urlAtual === href || urlAtual.startsWith(href + "/")) {
+                menu.classList.add("sidebar-menu-item-active");
             }
         }
-        function mostrarAlert(mensagem){ 
-    const box= document.getElementById("custom-alert");
-    const text= document.getElementById("custom-alert-text");
 
-    text.textContent= mensagem;
-    box.classList.remove("hidden");
-}
+        function mostrarAlert(mensagem) {
+            const box = document.getElementById("custom-alert");
+            const text = document.getElementById("custom-alert-text");
 
-function fecharAlert() {
-    document.getElementById("custom-alert").classList.add("hidden");
-} 
+            text.textContent = mensagem;
+            box.classList.remove("hidden");
+        }
+
+        function fecharAlert() {
+            document.getElementById("custom-alert").classList.add("hidden");
+        }
+
+        // Polling de notificações — verifica a cada 30 segundos
+        function atualizarBadgeNotificacoes() {
+            fetch('/api/notificacoes-nao-lidas')
+                .then(r => r.json())
+                .then(data => {
+                    const badge = document.getElementById('notif-badge');
+                    if (!badge) return;
+
+                    const total = data.total;
+
+                    if (total > 0) {
+                        // Define o texto: +10 se passar de 10, senão o número exato
+                        badge.textContent = total > 10 ? '+10' : total;
+                        badge.style.display = 'flex';
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                })
+                .catch(() => {}); // falha silenciosa
+        }
+
+        // Executa imediatamente ao carregar a página
+        atualizarBadgeNotificacoes();
+
+        // Repete a cada 30 segundos
+        setInterval(atualizarBadgeNotificacoes, 30000);
     </script>
 </body>
 
-</html>
 
+</html>

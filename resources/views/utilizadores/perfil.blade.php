@@ -1,377 +1,158 @@
-
 @extends(Session::get('tipo_utilizador') == 'admi' ? 'layouts.admin' : 'layouts.painel')
 @section('titulo', 'Perfil')
 @section('conteudo')
     <section>
-        <div class="editar-perfil-container">
-            <!-- Header -->
-            <div class="editar-perfil-header">
-                <div class="editar-perfil-header-content">
-                    <div class="editar-perfil-header-text">
-                        <h1>Editar Perfil</h1>
-                        <p>Atualize suas informações pessoais e profissionais</p>
-                    </div>
+        <div class="perfil-container">
+            <!-- Header com foto e botão editar -->
+            <div class="perfil-header">
+                <div class="perfil-header-info">
+                   {{-- Foto de perfil --}}
+    <div style="margin-right:20px; flex-shrink:0;">
+        @if($utilizador->foto)
+            <img src="{{ asset('storage/' . $utilizador->foto) }}"
+                 alt="Foto de {{ $utilizador->nome }}"
+                 style="width:96px; height:96px; border-radius:50%;
+                        object-fit:cover; border:3px solid #e2e8f0;
+                        box-shadow:0 2px 8px rgba(0,0,0,0.10);">
+        @else
+            <div style="width:96px; height:96px; border-radius:50%;
+                        background:#e8f0fe; display:flex;
+                        align-items:center; justify-content:center;
+                        border:3px solid #e2e8f0;">
+                <i class="fa-solid fa-circle-user"
+                   style="font-size:52px; color:#0066cc;"></i>
+            </div>
+        @endif
+    </div>
+
+    <div class="perfil-header-text">
+        <h1 class="perfil-nome">{{ $utilizador->nome }}</h1>
+        @if ($dados['medico'])
+            <p class="perfil-cargo">
+                {{ $dados['medico']->especialidade }} |
+                {{ $dados['medico']->ano_experiencia }} anos de experiência
+            </p>
+        @endif
+    </div>
+</div>
                 </div>
+                <a href="/editar-perfil" class="perfil-btn-edit">Editar Perfil</a>
             </div>
 
-            <!-- Formulário -->
-            <form action="/editar-perfil" id="formulario" method="POST" class="editar-perfil-form">
-                {{ csrf_field() }}
+            <!-- Conteúdo do perfil -->
+            <div class="perfil-content">
                 <!-- Informações Pessoais -->
-                <div class="editar-perfil-section">
-                    <h2 class="editar-perfil-section-title">
-                        <span class="editar-perfil-section-icon"></span>
+                <div class="perfil-section">
+                    <h2 class="perfil-section-title">
+                        <span class="perfil-section-icon"></span>
                         Informações Pessoais
                     </h2>
-                    <div class="editar-perfil-grid">
-                        <div class="editar-perfil-field">
-                            <label class="editar-perfil-label editar-perfil-label--required">Nome Completo</label>
-                            <input name="nome" id="nome" type="text" class="editar-perfil-input" value="{{ $utilizador->nome }}"
-                                placeholder="Digite seu nome completo">
-                                <small id="erro-nome" class="erro"></small>
+                    <div class="perfil-grid">
+                        <div class="perfil-field">
+                            <label class="perfil-field-label">Nome Completo</label>
+                            <div class="perfil-field-value">{{ $utilizador->nome }}</div>
                         </div>
-                        <div class="editar-perfil-field">
-                            <label class="editar-perfil-label editar-perfil-label--required">Gênero</label>
-                            <select name="genero" class="editar-perfil-select">
-                                <option value="">Selecione...</option>
-                                <option value="M" {{ $utilizador->genero == 'M' ? 'selected' : '' }}>Masculino</option>
-                                <option value="F" {{ $utilizador->genero == 'F' ? 'selected' : '' }}>Feminino</option>
-                            </select>
-                        </div>
+                        @if ($utilizador->genero)
+                            <div class="perfil-field">
+                                <label class="perfil-field-label">Gênero</label>
+                                <div class="perfil-field-value">{{ $utilizador->genero }}</div>
+                            </div>
+                        @endif
                         @if ($dados['paciente'])
-                            <div class="editar-perfil-field">
-                                <label class="editar-perfil-label editar-perfil-label--required">Data de Nascimento</label>
-                                <input name="data_nascimento" id="data_nascimento" type="date" class="editar-perfil-input"
-                                    value="{{ $dados['paciente']->data_nascimento }}">
-                                    <small id="erro-data" class="erro"></small>
+                            <div class="perfil-field">
+                                <label class="perfil-field-label">Data de Nascimento</label>
+                                <div class="perfil-field-value">{{ $dados['paciente']->data_nascimento }}</div>
                             </div>
-                            <div class="editar-perfil-field">
-                                <label class="editar-perfil-label">Estado Civil</label>
-                                <select name="estado_civil" id="estado_civil" class="editar-perfil-select">
-                                    <option value="">Selecione...</option>
-                                    <option value="solteiro"
-                                        {{ $dados['paciente']->estado_civil == 'solteiro' ? 'selected' : '' }}>
-                                        Solteiro(a)</option>
-                                    <option value="casado"
-                                        {{ $dados['paciente']->estado_civil == 'casado' ? 'selected' : '' }}>
-                                        Casado(a)
-                                    </option>
-                                    <option value="divorciado"
-                                        {{ $dados['paciente']->estado_civil == 'divorciado' ? 'selected' : '' }}>
-                                        Divorciado(a)</option>
-                                    <option value="viuvo"
-                                        {{ $dados['paciente']->estado_civil == 'viuvo' ? 'selected' : '' }}>
-                                        Viúvo(a)
-                                    </option>
-                                </select>
+                            <div class="perfil-field">
+                                <label class="perfil-field-label">Estado Civil</label>
+                                <div class="perfil-field-value">{{ $dados['paciente']->estado_civil }}</div>
                             </div>
-                            <div class="editar-perfil-field">
-                                <label class="editar-perfil-label editar-perfil-label--required">Número do BI</label>
-                                <input name="num_bi" id="num_bi" type="text" class="editar-perfil-input"
-                                    value="{{ $dados['paciente']->num_bi }}" placeholder="000000000LA000">
-                                    <small id="erro-bi" class="erro"></small>
+                            <div class="perfil-field">
+                                <label class="perfil-field-label">Número do BI</label>
+                                <div class="perfil-field-value perfil-field-value--highlight">
+                                    {{ $dados['paciente']->num_bi }}
+                                </div>
                             </div>
                         @endif
                     </div>
                 </div>
 
                 <!-- Informações de Contato -->
-                <div class="editar-perfil-section">
-                    <h2 class="editar-perfil-section-title">
-                        <span class="editar-perfil-section-icon"></span>
+                <div class="perfil-section">
+                    <h2 class="perfil-section-title">
+                        <span class="perfil-section-icon"></span>
                         Contato
                     </h2>
-                    <div class="editar-perfil-grid">
-                        <div class="editar-perfil-field">
-                            <label class="editar-perfil-label editar-perfil-label--required">Email</label>
-                            <input name="email" id="email" type="email" class="editar-perfil-input"
-                                value="{{ $utilizador->email }}" placeholder="seu.email@exemplo.com">
-                                <small id="erro-email" class="erro"></small>
-                            <span class="editar-perfil-helper-text">Este email será usado para login e notificações</span>
+                    <div class="perfil-grid">
+                        <div class="perfil-field">
+                            <label class="perfil-field-label">Email</label>
+                            <div class="perfil-field-value">{{ $utilizador->email }}</div>
                         </div>
-                        <div class="editar-perfil-field">
-                            <label class="editar-perfil-label editar-perfil-label--required">Número de Telefone</label>
-                            <input name="num_telefone" id="num_telefone" type="tel" class="editar-perfil-input"
-                                value="{{ $utilizador->num_telefone }}" placeholder="+244 900 000 000">
-                                <small id="erro-tel" class="erro"></small>
+                        <div class="perfil-field">
+                            <label class="perfil-field-label">Número de Telefone</label>
+                            <div class="perfil-field-value">{{ $utilizador->num_telefone }}</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Endereço -->
-                <div class="editar-perfil-section">
-                    <h2 class="editar-perfil-section-title">
-                        <span class="editar-perfil-section-icon"></span>
+                <div class="perfil-section">
+                    <h2 class="perfil-section-title">
+                        <span class="perfil-section-icon"></span>
                         Endereço
                     </h2>
-                    <div class="editar-perfil-grid">
-                        <div class="editar-perfil-field editar-perfil-field--full">
-                            <label class="editar-perfil-label editar-perfil-label--required">Morada</label>
-                            <textarea name="morada" class="editar-perfil-textarea" placeholder="Rua, número, edifício, andar, apartamento...">{{ $dados['paciente']->morada ?? ($dados['admin']->morada ?? ($dados['recepcionista']->morada ?? $dados['medico']->morada)) }}</textarea>
+                    <div class="perfil-grid">
+                        <div class="perfil-field">
+                            <label class="perfil-field-label">Rua/Morada</label>
+                            <div class="perfil-field-value">
+                                {{ $dados['paciente']->morada ?? ($dados['admin']->morada ?? ($dados['recepcionista']->morada ?? $dados['medico']->morada)) }}
+                            </div>
                         </div>
                         @if ($dados['paciente'])
-                            <div class="editar-perfil-field">
-                                <label class="editar-perfil-label editar-perfil-label--required">Cidade</label>
-                                <input name="cidade" id="cidade" type="text" class="editar-perfil-input"
-                                    value="{{ $dados['paciente']->cidade }}" placeholder="Digite a cidade">
+                            <div class="perfil-field">
+                                <label class="perfil-field-label">Província</label>
+                                <div class="perfil-field-value">{{ $dados['paciente']->cidade }}</div>
                             </div>
-                            <div class="editar-perfil-field">
-                                <label class="editar-perfil-label editar-perfil-label--required">Bairro</label>
-                                <input name="bairro" id="bairro" type="text" class="editar-perfil-input"
-                                    value="{{ $dados['paciente']->bairro }}" placeholder="Digite o bairro">
+                            <div class="perfil-field">
+                                <label class="perfil-field-label">Bairro</label>
+                                <div class="perfil-field-value">{{ $dados['paciente']->bairro }}</div>
                             </div>
-                            <div class="editar-perfil-field editar-perfil-field--full">
-                                <label class="editar-perfil-label">Seguro</label>
-                                <input name="seguro" id="seguro" type="text" class="editar-perfil-input"
-                                    value="{{ $dados['paciente']->seguro }}"
-                                    placeholder="Informações do seguro profissional">
+                            <div class="perfil-field">
+                                <label class="perfil-field-label">Seguro</label>
+                                <div class="perfil-field-value">{{ $dados['paciente']->seguro }}</div>
                             </div>
                         @endif
                     </div>
                 </div>
-                <div class="editar-perfil-section">
-                    <h2 class="editar-perfil-section-title">
-                        <span class="editar-perfil-section-icon"></span>
-                        Informações de Acesso
-                    </h2>
-
-                    <div class="editar-perfil-grid">
-                        <div class="editar-perfil-field">
-                            <label class="editar-perfil-label editar-perfil-label--required">Senha</label>
-                            <input name="senha" id="senha" type="password" class="editar-perfil-input"
-                                placeholder="Digite sua senha" maxlength="10">
-                                <small id="erro-senha" class="erro"></small>
-                        </div>
-                        <div class="editar-perfil-field">
-                            <label class="editar-perfil-label editar-perfil-label--required">Confirmar Senha</label>
-                            <input name="confirmar_senha" id="confirmar_senha" type="password" class="editar-perfil-input"
-                                placeholder="Confirme sua senha" maxlength="10">
-                                <small id="erro-confirmar-senha" class="erro"></small>
-                        </div>
-                    </div>
-                </div>
-                <!-- Informações Profissionais -->
-                @if (!$dados['paciente'])
-                    <div class="editar-perfil-section">
-                        <h2 class="editar-perfil-section-title">
-                            <span class="editar-perfil-section-icon"></span>
+                @if ($dados['medico'])
+                    <!-- Informações Profissionais -->
+                    <div class="perfil-section">
+                        <h2 class="perfil-section-title">
+                            <span class="perfil-section-icon"></span>
                             Informações Profissionais
                         </h2>
-                        <div class="editar-perfil-grid">
+                        <div class="perfil-grid">
                             @if ($dados['medico'])
-                                <div class="editar-perfil-field">
-                                    <label class="editar-perfil-label editar-perfil-label--required">Especialidade</label>
-                                    <input name="especialidade" id="especialidade" type="text" class="editar-perfil-input"
-                                        value="{{ $dados['medico']->especialidade }}"
-                                        placeholder="Digite sua especialidade">
+                                <div class="perfil-field">
+                                    <label class="perfil-field-label">Especialidade</label>
+                                    <div class="perfil-field-value">{{ $dados['medico']->especialidade }}</div>
                                 </div>
-                                <div class="editar-perfil-field">
-                                    <label class="editar-perfil-label editar-perfil-label--required">Anos de
-                                        Experiência</label>
-                                    <input name="ano_experiencia" id="ano_experiencia" type="number" class="editar-perfil-input"
-                                        value="{{ $dados['medico']->ano_experiencia }}" placeholder="0" min="0"
-                                        max="70">
+                                <div class="perfil-field">
+                                    <label class="perfil-field-label">Anos de Experiência</label>
+                                    <div class="perfil-field-value">{{ $dados['medico']->ano_experiencia }} anos</div>
                                 </div>
                             @endif
+                            <!--<div class="perfil-field">
+          <label class="perfil-field-label">Nível de Acesso</label>
+          <div class="perfil-field-value">
+           <span class="perfil-badge perfil-badge--admin">Administrador</span>
+          </div>
+         </div>-->
                         </div>
                     </div>
                 @endif
-                <!-- Botões de Ação -->
-                <div class="editar-perfil-actions">
-                    <a href="/visualizar-perfil" class="editar-perfil-btn editar-perfil-btn-cancel">Cancelar</a>
-                    <button type="submit" class="editar-perfil-btn editar-perfil-btn-save">Salvar Alterações</button>
-                </div>
-            </form>
+            </div>
         </div>
     </section>
-    <script>
-document.addEventListener("DOMContentLoaded", function () {
 
-const form = document.getElementById("formulario");
-
-if (!form) return; // segurança
-
-const nome = document.getElementById("nome");
-const data = document.getElementById("data_nascimento");
-const bi = document.getElementById("num_bi");
-const email = document.getElementById("email");
-const telefone = document.getElementById("num_telefone");
-const senha = document.getElementById("senha");
-const confirmarSenha = document.getElementById("confirmar_senha");
-
-// ================= REGEX =================
-const regexNome = /^[A-ZÁÉÍÓÚÂÊÔÃÕÇ][a-záéíóúâêôãõç]{2,}( [A-ZÁÉÍÓÚÂÊÔÃÕÇ][a-záéíóúâêôãõç]{2,})+$/;
-const regexBI = /^00\d{7}LA\d{3}$/;
-const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const regexTelefone = /^9\d{8}$/;
-const regexSenha = /^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{6,10}$/;
-
-// ================= FUNÇÃO GENÉRICA =================
-function validar(campo, regex, erroId, mensagem) {
-    const erro = document.getElementById(erroId);
-
-    if (!campo || !erro) return true;
-
-    if (!regex.test(campo.value.trim())) {
-        erro.textContent = mensagem;
-        campo.classList.add("input-erro");
-        campo.classList.remove("input-sucesso");
-        return false;
-    } else {
-        erro.textContent = "";
-        campo.classList.remove("input-erro");
-        campo.classList.add("input-sucesso");
-        return true;
-    }
-}
-
-// ================= DATA =================
-function validarDataNascimento(valor) {
-    if (!valor) return false;
-
-    const hoje = new Date();
-    const dataValor = new Date(valor);
-
-    hoje.setHours(0,0,0,0);
-    dataValor.setHours(0,0,0,0);
-
-    const dataMinima = new Date();
-    dataMinima.setFullYear(hoje.getFullYear() - 105);
-    if(dataValor>hoje || dataValor<dataMinima) return false;
-    
-
-    return true;
-}
-
-// ================= EVENTOS =================
-
-// Nome
-if (nome) {
-    nome.addEventListener("input", () => {
-        validar(nome, regexNome, "erro-nome", "Nome deve ter pelo menos 3 letras por palavra e iniciar com maiúscula");
-    });
-}
-
-// Email
-if (email) {
-    email.addEventListener("input", () => {
-        validar(email, regexEmail, "erro-email", "Email inválido");
-    });
-}
-
-// Telefone
-if (telefone) {
-    telefone.addEventListener("input", function () {
-        this.value = this.value.replace(/\D/g, '').slice(0, 9);
-        validar(telefone, regexTelefone, "erro-tel", "Número deve começar com 9 e ter 9 dígitos");
-    });
-}
-
-// Senha
-if (senha) {
-    senha.addEventListener("input", () => {
-        validar(senha, regexSenha, "erro-senha", "Senha deve ter 6 a 10 caracteres, deve conter uma letra maiúscula e  número");
-    });
-}
-
-// Confirmar senha
-if (confirmarSenha) {
-    confirmarSenha.addEventListener("input", function () {
-        const erro = document.getElementById("erro-confirmar-senha");
-
-        if (this.value !== senha.value) {
-            erro.textContent = "As senhas não coincidem";
-            this.classList.add("input-erro");
-        } else {
-            erro.textContent = "";
-            this.classList.remove("input-erro");
-            this.classList.add("input-sucesso");
-        }
-    });
-}
-
-// BI (opcional)
-if (bi) {
-    bi.addEventListener("input", function () {
-        if (bi.value.trim() === "") {
-            document.getElementById("erro-bi").textContent = "";
-            bi.classList.remove("input-erro", "input-sucesso");
-        } else {
-            validar(bi, regexBI, "erro-bi", "Campo opcional. Formato exigido: 00XXXXXXXLA000");
-        }
-    });
-}
-
-// Data
-if (data) {
-    data.addEventListener("input", function () {
-        const erro = document.getElementById("erro-data");
-
-        if (!validarDataNascimento(this.value)) {
-            erro.textContent = "Idade inválida! idades permitidas: 0 a 105 anos";
-            this.classList.add("input-erro");
-            this.classList.remove("input-sucesso");
-        } else {
-            erro.textContent = "";
-            this.classList.remove("input-erro");
-            this.classList.add("input-sucesso");
-        }
-    });
-}
-
-// ================= SUBMIT =================
-
-form.addEventListener("submit", function (e) {
-
-    let valido = true;
-
-    if (nome && !validar(nome, regexNome, "erro-nome", "Nome inválido")) {
-        valido = false;
-    }
-
-    if (email && !validar(email, regexEmail, "erro-email", "Email inválido")) {
-        valido = false;
-    }
-
-    if (telefone && !validar(telefone, regexTelefone, "erro-tel", "Telefone inválido")) {
-        valido = false;
-    }
-
-    if (senha && !validar(senha, regexSenha, "erro-senha", "Senha inválida")) {
-        valido = false;
-    }
-
-    // Confirmar senha
-    if (confirmarSenha && confirmarSenha.value !== senha.value) {
-        document.getElementById("erro-confirmar-senha").textContent = "As senhas não coincidem";
-        confirmarSenha.classList.add("input-erro");
-        valido = false;
-    }
-
-    // BI opcional
-    if (bi && bi.value.trim() !== "") {
-        if (!validar(bi, regexBI, "erro-bi", "BI inválido")) {
-            valido = false;
-        }
-    }
-
-    // Data
-    if (data && !validarDataNascimento(data.value)) {
-        valido = false;
-        const erro = document.getElementById("erro-data");
-         erro.textContent = "Idade inválida! nao é permitido datas futuras";
-        data.classList.add("input-erro");   
-    }
-
-    // 🔥 BLOQUEIO REAL
-    if (!valido) {
-        e.preventDefault();
-        mostrarAlert("Corrija os erros antes de enviar.");
-        return false;
-    }
-
-});
-
-});
-</script>
 @endsection

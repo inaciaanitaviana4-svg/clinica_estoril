@@ -16,7 +16,8 @@ class NotificacoesController extends Controller
         }
         $utilizador = Utilizador::find(session("id_utilizador"));
         $notificacoes = Notificacao::where("id_util", session("id_utilizador"))->orderByDesc("data")->get();
-        return view("notificacoes.listagem", compact("notificacoes"));
+            return view("notificacoes.listagem", compact("notificacoes"));
+       
     }
 
     public function ler_todas_notificacoes()

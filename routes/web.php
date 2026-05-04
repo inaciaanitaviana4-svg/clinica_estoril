@@ -29,7 +29,9 @@ Route::middleware(['web'])->group(function () {
     Route::get('/equipa', [SiteController::class, 'equipa']);
     Route::get('/contacto', [SiteController::class, 'contacto']);
     Route::get('/blog', [SiteController::class, 'blog']);
-    Route::get('/chatbot', [SiteController::class, 'chatbot']);
+    Route::get('/politica_seguranca', [SiteController::class, 'politica_seguranca'])->name('politica_seguranca');
+    Route::get('/termos-uso', [SiteController::class, 'termos_uso'])->name('termos_uso');
+    // Rout::get('/chatbot', [SiteController::class, 'chatbot']);
     Route::get('/login', [SiteController::class, 'login']);
 
     // ===== ROTAS DE AUTENTICAÇÃO =====
@@ -37,6 +39,7 @@ Route::middleware(['web'])->group(function () {
     Route::get('/sair', [UtilizadoresController::class, 'sair']);
     Route::post('/cadastrar-paciente', [UtilizadoresController::class, 'cadastrarpaciente']);
     Route::get('/criar-conta-paciente', [UtilizadoresController::class, 'criar_conta_paciente']);
+    Route::get('/recuperar_senha', [UtilizadoresController::class, 'recuperar_senha']);
 
     // ===== ROTAS DE PERFIL (para todos os utilizadores) =====
     Route::get('/visualizar-perfil', [UtilizadoresController::class, 'visualizar_perfil'])->name('visualizar_perfil');
@@ -51,14 +54,25 @@ Route::middleware(['web'])->group(function () {
     Route::post('/cancelar-consulta-paciente/{id_consulta}', [PacienteController::class, 'cancelar_consulta_paciente']);
     Route::post('/confirmar-consulta-paciente/{id_consulta}', [PacienteController::class, 'confirmar_consulta_paciente']);
     Route::get('/painel-paciente/relatorios', [RelatorioController::class, 'mostrar_relatorios_paciente'])->name('mostrar_relatorios_paciente');
+    Route::get('/api/pacientes/pesquisar', [PacienteController::class, 'api_pesquisar_pacientes'])->name('api_pesquisar_pacientes');
+
     Route::get('/painel-paciente/prontuario', [ProntuarioController::class, 'mostrar_prontuario_paciente'])->name('mostrar_prontuario_paciente');
     Route::get('/painel-paciente/prontuario/{id_consulta}', [ProntuarioController::class, 'mostrar_detalhes_consulta_paciente'])->name('mostrar_detalhes_consulta_paciente');
-
 
     // ===== ROTAS DE NOTIFICAÇÕES =====
     Route::get('/listar-minhas-notificacoes', [NotificacoesController::class, 'listar_minhas_notificacoes'])->name('listar_minhas_notificacoes');
     Route::get('/ler-notificacao/{id_notificacao}', [NotificacoesController::class, 'ler_notificacao']);
     Route::get('/ler-todas-notificacoes', [NotificacoesController::class, 'ler_todas_notificacoes']);
+    Route::get('/api/notificacoes-nao-lidas', function () {
+        if (! session('id_utilizador')) {
+            return response()->json(['total' => 0]);
+        }
+        $total = \App\Models\Notificacao::where('id_util', session('id_utilizador'))
+            ->where('lida', 0)
+            ->count();
+
+        return response()->json(['total' => $total]);
+    })->name('api_notificacoes_nao_lidas');
 
     // ===== ROTAS DA RECEPCIONISTA =====
     Route::get('/painel-recepcionista/agendamentos', [ConsultaController::class, 'mostrar_consultas_recepcionista'])->name('mostrar_consultas_recepcionista');
@@ -83,6 +97,7 @@ Route::middleware(['web'])->group(function () {
     Route::post('/consultas/{id_consulta}/mudar-estado-medico', [ConsultaController::class, 'mudar_estado_consulta_medico'])->name('mudar_estado_consulta_medico');
     Route::get('/painel-recepcionista/horarios', [HorarioController::class, 'mostrar_horarios_recepcionista'])->name('mostrar_horarios_recepcionista');
     Route::delete('/painel-recepcionista/remover-horario-medico/{id_horario}', [HorarioController::class, 'remover_horario_medico_recepcionista'])->name('remover_horario_medico_recepcionista');
+
     // ===== ROTAS DO MÉDICO =====
     Route::get('/painel-medico/consultas', [ConsultaController::class, 'mostrar_consultas_medico'])->name('mostrar_consultas_medico');
     Route::get('/painel-medico', [ConsultaController::class, 'painelmedico']);
@@ -134,6 +149,10 @@ Route::middleware(['web'])->group(function () {
     Route::get('/admin/cadastros/servicos_clinico/registro/{id_servico_clinico?}', [ServicoClinicoController::class, 'mostrar_registro_servico_clinico_admin'])->name('mostrar_registro_servico_clinico_admin');
     Route::post('/admin/cadastros/servicos_clinico/registro/{id_servico_clinico?}', [ServicoClinicoController::class, 'salvar_registro_servico_clinico_admin'])->name('salvar_registro_servico_clinico_admin');
     Route::get('/api/servicos-clinicos', [ServicoClinicoController::class, 'api_obter_servicos_clinicos'])->name('api_obter_servicos_clinicos');
+    Route::get('/admin/cadastros/servicos_clinico/remover/{id_servico_clinico}', [ServicoClinicoController::class, 'remover_servico_clinico_admin'])->name('remover_servico_clinico_admin');
+    Route::get('/admin/cadastros/servicos_clinico/registro/{id_servico_clinico?}', [ServicoClinicoController::class, 'mostrar_registro_servico_clinico_admin'])->name('mostrar_registro_servico_clinico_admin');
+    Route::post('/admin/cadastros/servicos_clinico/registro/{id_servico_clinico?}', [ServicoClinicoController::class, 'salvar_registro_servico_clinico_admin'])->name('salvar_registro_servico_clinico_admin');
+    Route::get('/api/servicos-clinicos', [ServicoClinicoController::class, 'api_obter_servicos_clinicos'])->name('api_obter_servicos_clinicos');
 
     // Visualizações do admin
     Route::get('/admin/consultas', [AdminController::class, 'mostrar_consultas_admin'])->name('mostrar_consultas_admin');
@@ -160,4 +179,15 @@ Route::middleware(['web'])->group(function () {
     Route::fallback(function () {
         return view('errors.404');
     });
+
+    // routes/web.php
+    Route::get('/imagem-perfil/{filename}', function ($filename) {
+        $path = storage_path('app/public/fotos/'.$filename);
+
+        if (! file_exists($path)) {
+            abort(404);
+        }
+
+        return response()->file($path);
+    })->name('imagem_perfil');
 });

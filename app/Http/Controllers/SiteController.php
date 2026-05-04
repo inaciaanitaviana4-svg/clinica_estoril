@@ -47,6 +47,10 @@ class SiteController extends Controller
     {
         return view('politica_seguranca');
     }
+     public function termos_uso()
+{
+    return view('termos_uso');
+}
 
     public function servicos(): View
     {
@@ -66,19 +70,21 @@ class SiteController extends Controller
         return view('servicos', compact('servicos'));
     }
 
-    public function especialidades(): View
-    {
-        $especialidades = Especialidade::where('activo', 1)->get();
 
-        return view('especialidades', compact('especialidades'));
-    }
 
-    public function equipa(): View
-    {
-        $medicos = Medico::all();
+   public function especialidades(): View
+{
+    $especialidades = Especialidade::where('activo', 1)->get();
 
-        return view('equipa', compact('medicos'));
-    }
+    return view('especialidades', compact('especialidades'));
+}
+
+   public function equipa(): View
+{
+    $medicos = Medico::all();
+
+    return view('equipa', compact('medicos'));
+}
 
     public function contacto(): View
     {
@@ -133,5 +139,5 @@ class SiteController extends Controller
         }
 
         return view('painel_recepcionista');
-    }
+     }
 }

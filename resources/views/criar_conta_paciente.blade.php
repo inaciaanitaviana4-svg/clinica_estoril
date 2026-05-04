@@ -14,78 +14,6 @@
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Criar conta Paciente</title>
-
-<style>
-    body {
-        font-family: Arial;
-    }
-
-    input {
-        display: block;
-        margin-bottom: 5px;
-        padding: 6px;
-        width: 250px;
-    }
-
-    .erro {
-        color: red;
-        font-size: 18px;
-        margin-bottom: 10px;
-    }
-
-    .sucesso {
-        color: green;
-        font-size: 18px;
-        margin-bottom: 10px;
-    }
-
-    .invalido {
-        border: 2px solid red;
-    }
-
-    .valido {
-        border: 2px solid green;
-    }
-    .custom-alert{
-        position:fixed;
-        top:0;
-        left:0;
-        width:100%;
-        height:100%;
-        background:rgba(0,0,0,0.5);
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        z-index:9999;
-         font-size:18px;
-        font-weight:bold;
-    }
-
-    .custom-alert-box{
-        background:white;
-        padding:20px;
-        border-radius:10px;
-        text-align:center;
-        min-width:250px;
-        box-shadow:0 5px 20px rgba(0,0,0,0.3);
-
-    }
-
-    .custom-alert button{
-        margin-top:10px;
-        padding:8px 15px;
-        border:none;
-        background:#0d6efd;
-        color:white;
-        border-radius:5px;
-        cursor:pointer;
-        font-weight:bold;
-    }
-
-    .hidden{
-        display:none;
-    }
-    </style>
 </head>
 
 <body>
@@ -109,6 +37,7 @@
             <!-- Seleção de Tipo de Usuário -->
             <div class="login-card" id="userTypeCard">
 
+
                 <div class="container">
                     <div class="photo"></div>
 
@@ -118,10 +47,37 @@
                             {{ session('erro') }}
                         </div>
                     @endif
-                    <form method="post" action="/cadastrar-paciente" id="formulario" >
-                        {{ csrf_field() }}
-                        <div style="text-align:center; margin-bottom:20px;">
+                   <form method="post" action="/cadastrar-paciente" id="formulario"
+      enctype="multipart/form-data">
+    {{ csrf_field() }}
+                        <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:28px;">
+    <label for="foto" id="foto-label" style="
+        position:relative; width:110px; height:110px; border-radius:50%;
+        cursor:pointer; overflow:hidden; border:3px dashed #a0aec0;
+        background:#f0f4f8; display:flex; align-items:center;
+        justify-content:center; transition:border-color 0.2s;"
+        onmouseover="this.style.borderColor='#0066cc';document.getElementById('foto-overlay').style.opacity='1'"
+        onmouseout="this.style.borderColor='#a0aec0';document.getElementById('foto-overlay').style.opacity='0'">
 
+        <img id="foto-preview" src="" alt="Foto"
+             style="display:none; width:100%; height:100%;
+                    object-fit:cover; border-radius:50%;">
+
+        <i id="foto-icon" class="fa-solid fa-circle-user"
+           style="font-size:58px; color:#a0aec0;"></i>
+
+             <div id="foto-overlay" style="
+            position:absolute; inset:0; background:rgba(0,0,0,0.38);
+            border-radius:50%; display:flex; align-items:center;
+            justify-content:center; opacity:0; transition:opacity 0.2s;
+            pointer-events:none;">
+            <i class="fa-solid fa-camera" style="color:white; font-size:22px;"></i>
+        </div>
+    </label>
+    <input type="file" id="foto" name="foto" accept="image/*" style="display:none">
+    <span style="margin-top:8px; font-size:13px; color:#718096;">
+        Clique para adicionar foto (opcional)
+    </span>
 </div>
                         <div class="form-group">
                             <label for="nome">Nome Completo</label>
@@ -218,10 +174,113 @@
                             </select>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-full">
-                            <i class="fas fa-sign-in-alt"></i>
-                            Concluir Registo
-                        </button>
+                        {{-- TERMOS DE USO — adiciona antes do botão submit --}}
+<div class="form-group" style="margin-top: 20px;">
+    <div style="
+        border: 1px solid #cbd5e0;
+        border-radius: 8px;
+        padding: 16px;
+        background: #f7fafc;
+        max-height: 180px;
+        overflow-y: auto;
+        font-size: 13px;
+        color: #4a5568;
+        line-height: 1.6;
+        margin-bottom: 12px;">
+
+        <strong style="display:block; margin-bottom:8px; color:#2d3748; font-size:14px;">
+            Termos de Uso — Clínica Estoril
+        </strong>
+
+        <strong>1. Aceitação dos Termos</strong><br>
+        Ao criar uma conta na plataforma da Clínica Estoril, o utilizador declara ter lido,
+        compreendido e aceite os presentes Termos de Uso e a Política de Privacidade.
+        <br><br>
+
+        <strong>2. Uso da Plataforma</strong><br>
+        A plataforma destina-se exclusivamente à gestão de consultas médicas, comunicação
+        entre pacientes e profissionais de saúde, e acesso a registos clínicos pessoais.
+        É proibido o uso da plataforma para fins ilícitos, fraudulentos ou que causem
+        dano a terceiros.
+        <br><br>
+
+        <strong>3. Dados Pessoais e Privacidade</strong><br>
+        Os seus dados pessoais e informações de saúde são tratados com total
+        confidencialidade, em conformidade com a legislação angolana de proteção de dados.
+        A Clínica Estoril não partilha os seus dados com terceiros sem o seu consentimento,
+        exceto quando exigido por lei ou para prestação direta dos serviços médicos.
+        <br><br>
+
+        <strong>4. Responsabilidades do Utilizador</strong><br>
+        O utilizador é responsável por manter as suas credenciais de acesso em segurança
+        e por fornecer informações verdadeiras e atualizadas. Informações falsas podem
+        resultar no cancelamento da conta.
+        <br><br>
+
+        <strong>5. Agendamento e Cancelamento de Consultas</strong><br>
+        O utilizador pode agendar e cancelar consultas através da plataforma.
+        Cancelamentos devem ser efetuados com antecedência mínima de 24 horas.
+        A clínica reserva o direito de reagendar consultas em casos de força maior.
+        <br><br>
+
+        <strong>6. Propriedade Intelectual</strong><br>
+        Todo o conteúdo da plataforma, incluindo textos, imagens e software, é propriedade
+        da Clínica Estoril e está protegido por direitos de autor. É proibida a reprodução
+        sem autorização expressa.
+        <br><br>
+
+        <strong>7. Limitação de Responsabilidade</strong><br>
+        A Clínica Estoril não se responsabiliza por falhas técnicas temporárias,
+        interrupções de serviço por causas externas ou uso indevido da plataforma
+        por parte do utilizador.
+        <br><br>
+
+        <strong>8. Alterações aos Termos</strong><br>
+        A Clínica Estoril reserva o direito de atualizar estes Termos de Uso.
+        Os utilizadores serão notificados de alterações significativas.
+        O uso continuado da plataforma após as alterações implica a sua aceitação.
+        <br><br>
+
+        <strong>9. Contacto</strong><br>
+        Para questões relacionadas com estes termos, contacte-nos através de
+        geral@clinicaestoril.AO ou pelo telefone +244 939 789 797.
+    </div>
+
+    {{-- Checkbox de aceitação --}}
+    <label style="
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #2d3748;">
+        <input type="checkbox"
+               id="aceitar_termos"
+               name="aceitar_termos"
+               style="
+                   width: 18px;
+                   height: 18px;
+                   margin-top: 2px;
+                   cursor: pointer;
+                   flex-shrink: 0;
+                   accent-color: #0066cc;">
+        <span>
+            Li e aceito os <strong>Termos de Uso</strong> e a
+            <a href="/politica_seguranca" target="_blank"
+               style="color: #0066cc; text-decoration: underline;">
+               Política de Privacidade
+            </a>
+            da Clínica Estoril.
+        </span>
+    </label>
+    <span id="termosErro" class="erro" style="display:block; margin-top:6px;"></span>
+</div>
+
+<button type="submit" class="btn btn-primary btn-full" id="btn-submit" disabled
+        style="opacity: 0.5; cursor: not-allowed; transition: opacity 0.2s;">
+    <i class="fas fa-sign-in-alt"></i>
+    Concluir Registo
+</button>
                     </form>
                 </div>
             </div>
@@ -301,7 +360,7 @@
                 <div class="footer-bottom-links">
                     <a href="/politica_seguranca">Política de Privacidade</a>
                     <span>|</span>
-                    <a href="#">Termos de Uso</a>
+                    <a href="/termos-uso">Termos de Uso</a>
                 </div>
             </div>
         </div>
@@ -313,6 +372,36 @@
         </div>
         </div>
         <script>
+document.getElementById('foto').addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+        document.getElementById('foto-preview').src           = e.target.result;
+        document.getElementById('foto-preview').style.display = 'block';
+        document.getElementById('foto-icon').style.display    = 'none';
+    };
+    reader.readAsDataURL(file);
+});
+// Ativa/desativa o botão conforme o checkbox
+const checkboxTermos = document.getElementById('aceitar_termos');
+const btnSubmit      = document.getElementById('btn-submit');
+
+checkboxTermos.addEventListener('change', function () {
+    if (this.checked) {
+        btnSubmit.disabled = false;
+        btnSubmit.style.opacity = '1';
+        btnSubmit.style.cursor  = 'pointer';
+        document.getElementById('termosErro').textContent = '';
+    } else {
+        btnSubmit.disabled = true;
+        btnSubmit.style.opacity = '0.5';
+        btnSubmit.style.cursor  = 'not-allowed';
+    }
+});
+</script>
+        <script>
+            
 function previewImagem(event){
 
     const input = event.target;
@@ -340,11 +429,13 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const senhasComuns = ["123456", "password", "12345678", "qwerty", "abc123", "111111"];
 
+
 // ===================== UTIL =====================
 
 function normalizarEspacos(valor) {
     return valor.replace(/\s+/g, ' ').trim();
 }
+
 
 // ===================== VALIDAÇÕES =====================
 
@@ -405,6 +496,7 @@ function validarNome() {
     return true;
 }
 
+
 // Email
 function validarEmail() {
     let input = document.getElementById("email");
@@ -425,6 +517,7 @@ function validarEmail() {
     return true;
 }
 
+
 // Telefone
 function validarTelefone() {
     let input = document.getElementById("num_telefone");
@@ -444,6 +537,7 @@ function validarTelefone() {
     input.classList.add("valido");
     return true;
 }
+
 
 // BI
 function validarBI() {
@@ -472,6 +566,7 @@ function validarBI() {
     input.classList.add("valido");
     return true;
 }
+
 
 // Data
 function validarData() {
@@ -516,6 +611,7 @@ function validarData() {
     input.classList.add("valido");
     return true;
 }
+
 
 // Bairro
 function validarBairro() {
@@ -563,6 +659,7 @@ function validarBairro() {
     input.classList.add("valido");
     return true;
 }
+
 
 // Senha
 function validarSenha() {
@@ -630,6 +727,7 @@ function validarSenha() {
     return true;
 }
 
+
 // Confirmar senha
 function validarConfirmarSenha() {
     let senha = document.getElementById("senha").value;
@@ -650,6 +748,7 @@ function validarConfirmarSenha() {
     confirmar.classList.add("valido");
     return true;
 }
+
 
 // ===================== EVENTOS =====================
 
@@ -680,6 +779,7 @@ document.getElementById("data_nascimento").addEventListener("change", validarDat
 document.getElementById("senha").addEventListener("input", validarSenha);
 document.getElementById("confirmar_senha").addEventListener("input", validarConfirmarSenha);
 
+
 // ===================== SUBMIT =====================
 
 function mostrarAlert(mensagem) {
@@ -694,23 +794,37 @@ function fecharAlert() {
     document.getElementById("custom-alert").classList.add("hidden");
 }
 
-document.getElementById("formulario").addEventListener("submit", function (e) {
+function validarTermos() {
+    const checkbox = document.getElementById('aceitar_termos');
+    const erro     = document.getElementById('termosErro');
 
+    if (!checkbox.checked) {
+        erro.textContent = 'Deve aceitar os Termos de Uso para continuar.';
+        erro.className   = 'erro';
+        return false;
+    }
+    erro.textContent = '';
+    return true;
+}
+
+document.getElementById("formulario").addEventListener("submit", function (e) {
     let valido =
-        validarNome() &&
-        validarEmail() &&
-        validarTelefone() &&
-        validarBI() &&
-        validarData() &&
-        validarBairro() &&
-        validarSenha() &&
-        validarConfirmarSenha();
+        validarNome()           &&
+        validarEmail()          &&
+        validarTelefone()       &&
+        validarBI()             &&
+        validarData()           &&
+        validarBairro()         &&
+        validarSenha()          &&
+        validarConfirmarSenha() &&
+        validarTermos();        // ← NOVO
 
     if (!valido) {
         e.preventDefault();
         mostrarAlert("Corrija os erros antes de enviar.");
     }
 });
+
 
 
 

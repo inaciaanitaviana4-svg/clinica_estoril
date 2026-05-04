@@ -14,6 +14,39 @@
             <form method="post" id="formulario" enctype="multipart/form-data" action="{{ route('salvar_cadastro_paciente_recepcionista') }}">
                 {{ csrf_field() }}
 
+                {{-- FOTO DE PERFIL --}}
+    <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:28px;">
+        <label for="foto" id="foto-label" style="
+            position:relative; width:120px; height:120px; border-radius:50%;
+            cursor:pointer; overflow:hidden; border:3px dashed #a0aec0;
+            background:#f0f4f8; display:flex; align-items:center;
+            justify-content:center; transition:border-color 0.2s;"
+            onmouseover="this.style.borderColor='#0066cc';document.getElementById('foto-overlay').style.opacity='1'"
+            onmouseout="this.style.borderColor='#a0aec0';document.getElementById('foto-overlay').style.opacity='0'">
+
+            <img id="foto-preview" src="" alt="Foto"
+                 style="display:none; width:100%; height:100%;
+                        object-fit:cover; border-radius:50%;">
+
+                         <i id="foto-icon" class="fa-solid fa-circle-user"
+               style="font-size:64px; color:#a0aec0;"></i>
+
+            <div id="foto-overlay" style="
+                position:absolute; inset:0; background:rgba(0,0,0,0.38);
+                border-radius:50%; display:flex; align-items:center;
+                justify-content:center; opacity:0; transition:opacity 0.2s;
+                pointer-events:none;">
+                <i class="fa-solid fa-camera" style="color:white; font-size:26px;"></i>
+            </div>
+        </label>
+
+        <input type="file" id="foto" name="foto" accept="image/*" style="display:none">
+        <span style="margin-top:8px; font-size:13px; color:#718096;">
+            Clique para adicionar foto (opcional)
+        </span>
+    </div>
+
+
                 <!-- Informações Pessoais -->
                 <div class="editar-perfil-section">
                     <h2 class="editar-perfil-section-title">
@@ -168,6 +201,24 @@
     </section>
 @endsection
 @section("script")
+<script>
+{{-- Preview da foto --}}
+document.getElementById('foto').addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+        document.getElementById('foto-preview').src           = e.target.result;
+        document.getElementById('foto-preview').style.display = 'block';
+        document.getElementById('foto-icon').style.display    = 'none';
+    };
+    reader.readAsDataURL(file);
+});
+
+{{-- restante JS que já tens... --}}
+</script>
+
+
     <script>
  const telefoneRegex = /^9[0-9]{8}$/;
 const biRegex = /^00[0-9]{7}LA[0-9]{3}$/;
@@ -175,11 +226,13 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const senhasComuns = ["123456", "password", "12345678", "qwerty", "abc123", "111111"];
 
+
 // ===================== UTIL =====================
 
 function normalizarEspacos(valor) {
     return valor.replace(/\s+/g, ' ').trim();
 }
+
 
 // ===================== VALIDAÇÕES =====================
 
@@ -240,6 +293,7 @@ function validarNome() {
     return true;
 }
 
+
 // Email
 function validarEmail() {
     let input = document.getElementById("email");
@@ -259,6 +313,7 @@ function validarEmail() {
     input.classList.add("valido");
     return true;
 }
+
 
 // Telefone
 function validarTelefone() {
@@ -280,6 +335,7 @@ function validarTelefone() {
     return true;
 }
 
+
 // BI
 function validarBI() {
     let input = document.getElementById("num_bi");
@@ -294,7 +350,7 @@ function validarBI() {
     }
 
     if (!biRegex.test(valor)) {
-        erro.textContent = "Formato: 00XXXXXXXLA000";
+        erro.textContent = "Campo Opcional! Formato Exigido: 00XXXXXXXLA000";
         erro.className = "erro";
         input.classList.add("invalido");
         input.classList.remove("valido");
@@ -307,6 +363,7 @@ function validarBI() {
     input.classList.add("valido");
     return true;
 }
+
 
 // Data
 function validarData() {
@@ -351,6 +408,7 @@ function validarData() {
     input.classList.add("valido");
     return true;
 }
+
 
 // Bairro
 function validarBairro() {
@@ -398,6 +456,7 @@ function validarBairro() {
     input.classList.add("valido");
     return true;
 }
+
 
 // Senha
 function validarSenha() {
@@ -465,6 +524,7 @@ function validarSenha() {
     return true;
 }
 
+
 // Confirmar senha
 function validarConfirmarSenha() {
     let senha = document.getElementById("senha").value;
@@ -485,6 +545,7 @@ function validarConfirmarSenha() {
     confirmar.classList.add("valido");
     return true;
 }
+
 
 // ===================== EVENTOS =====================
 
@@ -515,6 +576,7 @@ document.getElementById("data_nascimento").addEventListener("change", validarDat
 document.getElementById("senha").addEventListener("input", validarSenha);
 document.getElementById("confirmar_senha").addEventListener("input", validarConfirmarSenha);
 
+
 // ===================== SUBMIT =====================
 
 function mostrarAlert(mensagem) {
@@ -544,12 +606,8 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
     if (!valido) {
         e.preventDefault();
         mostrarAlert("Corrija os erros antes de enviar.");
-    } else {
-        e.preventDefault();
-        mostrarAlert("Formulário válido!");
     }
 });
-
         const select_tipo = document.querySelector('[name="tipo"]')
         select_tipo.addEventListener("change", function () {
             const valor_selecionado = this.value

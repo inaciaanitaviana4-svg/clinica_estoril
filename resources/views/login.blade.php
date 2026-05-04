@@ -5,8 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Área de Acesso - Clínica Estoril">
     <title>Acesso - Clínica Estoril</title>
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('all.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('toastify.min.css') }}" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 </head>
 <body class="login-page">
     <!-- HEADER SIMPLIFICADO -->
@@ -44,7 +51,7 @@
                     <div class="form-group">
                     <label for="numero-email">
                         <i class="fas fa-envelope"></i>
-                        Email
+                        Email ou número de telefone
                     </label>
                     <input type="text" id="email" name="email" required placeholder="Digite seu email">
                     </div>
@@ -61,9 +68,9 @@
                         </div>
                     </div>
                     <div class="form-options">
-                        <a  href="/recuperar_senha" class="forgot-password">Esqueci a senha</a>
+                        <a  href="#" class="forgot-password">Esqueci a senha</a>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-full">
+                    <button type="submit" class="btn btn-primary btn-full" >
                         <i class="fas fa-sign-in-alt"></i>
                         Entrar
                     </button>
@@ -105,6 +112,7 @@
                     <div class="social-links">
                         <a href="https://www.facebook.com/c.estoril/" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
                         <a href="https://www.instagram.com/clinica_estoril?igsh=cXRuMzBwYW5oM2ti" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        
                     </div>
                 </div>
 
@@ -148,9 +156,9 @@
             <div class="footer-bottom">
                 <p>&copy; 2026 Clínica Estoril. Todos os direitos reservados.</p>
                 <div class="footer-bottom-links">
-                    <a href="#">Política de Privacidade</a>
+                    <a href="/politica_seguranca">Política de Privacidade</a>
                     <span>|</span>
-                    <a href="#">Termos de Uso</a>
+                    <a href="/termos-uso">Termos de Uso</a>
                     <span>|</span>
                 </div>
             </div>

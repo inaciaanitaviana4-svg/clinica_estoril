@@ -23,7 +23,8 @@ class Utilizador extends Model
     protected $fillable = [
         "num_telefone",     // Número de telefone do utilizador
         "senha",            // Senha (deve estar com hash)
-        "nome",             // Nome completo
+        "nome", 
+        "foto",             // Foto do utilizador
         "genero",           // Gênero (M ou F)
         "email",            // Email único para autenticação
         "nivel_acesso",     // 0=admin, 1=recepcionista, 2=médico, 3=paciente
@@ -32,5 +33,14 @@ class Utilizador extends Model
         "id_recepcionista", // FK: relacionamento com tabela recepcionistas
         "id_paciente",      // FK: relacionamento com tabela pacientes
     ];
+
+    // Helper para obter o URL da foto (ou ícone padrão)
+// Substitui o accessor existente por este:
+public function getFotoUrlAttribute(): ?string
+{
+    return $this->foto
+        ? asset('storage/' . $this->foto)
+        : null;
+}
 }
 

@@ -271,7 +271,7 @@ ul {
 
 .nav-menu {
     display: flex;
-    gap: 1.5rem;
+    gap: 2.50rem;
 }
 
 .nav-link {
@@ -529,10 +529,12 @@ ul {
     background: white;
     color: var(--primary-color);
     border-color: white;
+    
 }
 
 .btn-secondary:hover {
     background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
 }
 
 .btn-white {
@@ -3136,4 +3138,119 @@ body {
     margin: 0;
     font-family: "Segoe UI", Tahoma, sans-serif;
     background: #f0f2f5;
+}
+
+   .sidebar-menu-item {
+    text-decoration: none;
+    display: block;
+    color: #0066cc;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.sidebar-menu-item-active {
+    background-color: #0066cc;
+    color: white !important;
+}
+
+.sidebar-menu-item:hover {
+    background-color: #0066cc30;
+}
+
+        .erro{
+            color:red;
+            font-size:17px;
+        }
+        .input-erro{
+            border:2px solid red;
+        }
+        .input-sucesso{
+            border:2px solid green;
+        }
+
+
+    .sucesso {
+        color: green;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .invalido {
+        border: 2px solid red;
+    }
+
+    .valido {
+        border: 2px solid green;
+    }
+    .custom-alert{
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:rgba(0,0,0,0.5);
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        z-index:9999;
+        font-size:18px;
+        font-weight:bold;
+        
+    }
+
+    .custom-alert-box{
+        background:white;
+        padding:40px;
+        border-radius:20px;
+        text-align:center;
+        min-width:250px;
+        box-shadow:0 5px 20px rgba(0,0,0,0.3);
+
+
+    }
+
+    .custom-alert button{
+        margin-top:20px;
+        padding:8px 15px;
+        width:150px;
+        border:none;
+        background:#0d6efd;
+        color:white;
+        border-radius:10px;
+        cursor:pointer;
+        font-weight:bold;
+    }
+
+    .hidden{
+        display:none;
+    }
+
+    
+    .team-photo{
+    width: 100%;
+    aspect-ratio: 1 / 1; /* deixa quadrado */
+    overflow: hidden;
+    border-radius: 12px;
+    background: #f3f4f6;
+}
+
+.team-photo img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+    .team-photo-placeholder{
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg,#dbeafe,#bfdbfe);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.team-photo-placeholder span{
+    font-size: 52px;
+    font-weight:700;
+    color:#1d4ed8;
 }

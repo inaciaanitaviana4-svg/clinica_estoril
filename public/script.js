@@ -2,6 +2,7 @@
    CLÍNICA ESTORIL - JAVASCRIPT
    ==================================== */
 
+   
 // Aguarda o carregamento do DOM
 document.addEventListener("DOMContentLoaded", function () {
     // ===== MENU MOBILE =====
@@ -693,9 +694,10 @@ function badge_todos_estados($estado) {
             $cor = "#10b981";
             $estado_nome = "Sucesso";
             break;
-        case "concluida":
+    
+     case "concluida":
             $cor = "#10b981";
-            $estado_nome = "Concluída";
+            $estado_nome = "concluida";
             break;
     }
 

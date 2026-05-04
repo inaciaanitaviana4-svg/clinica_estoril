@@ -20,17 +20,25 @@
                     <h2 class="card-title">Consultas</h2>
                 </div>
                 <form>
-                    <div class="form-group">
-                        <label for="id_paciente">
-                            Paciente
-                        </label>
-                        <select name="id_paciente" id="id_paciente">
-                            <option value="">Todos</option>
-                            @foreach ($pacientes as $paciente)
-                                <option value="{{ $paciente->id_paciente }}">{{ $paciente->nome }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+   <div class="form-group">
+    <label>Paciente</label>
+    <div class="pp-wrapper" id="pp-wrapper-consulta">
+        <div class="pp-input-row">
+            <input type="text"
+                   id="pp-input-consulta"
+                   placeholder="Pesquisar paciente..."
+                   autocomplete="off">
+            <button type="button" class="btn btn-primary"
+                    onclick="ppPesquisar('consulta')">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+        <div class="pp-selecionado" id="pp-sel-consulta"></div>
+        <div class="pp-dropdown" id="pp-drop-consulta"></div>
+    </div>
+    <input type="hidden" id="id_paciente" name="id_paciente" value="">
+</div>
+
                     <div class="form-group">
                         <label for="estado">
                             Estado
@@ -49,7 +57,6 @@
                             Recepcionista
                         </label>
                         <select name="id_recepcionista" id="id_recepcionista">
-                            <option value="">Todos</option>
                             @foreach ($recepcionistas as $recepcionista)
                                 <option value="{{ $recepcionista->id_recepcionista }}">{{ $recepcionista->nome }}</option>
                             @endforeach
@@ -102,16 +109,24 @@
                     <h2 class="card-title">Prontuários</h2>
                 </div>
                 <form>
-                    <div class="form-group">
-                        <label for="id_paciente">
-                            Paciente
-                        </label>
-                        <select name="id_paciente_prontuario" id="id_paciente_prontuario">
-                            @foreach ($pacientes as $paciente)
-                                <option value="{{ $paciente->id_paciente }}">{{ $paciente->nome }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                   <div class="form-group">
+    <label>Paciente <span style="color:#ef4444">*</span></label>
+    <div class="pp-wrapper" id="pp-wrapper-prontuario">
+        <div class="pp-input-row">
+            <input type="text"
+                   id="pp-input-prontuario"
+                   placeholder="Pesquisar paciente..."
+                   autocomplete="off">
+            <button type="button" class="btn btn-primary"
+                    onclick="ppPesquisar('prontuario')">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+        <div class="pp-selecionado" id="pp-sel-prontuario"></div>
+        <div class="pp-dropdown" id="pp-drop-prontuario"></div>
+    </div>
+    <input type="hidden" id="id_paciente_prontuario" name="id_paciente_prontuario" value="">
+</div>
                     <div class="form-group">
                         <label for="data_inicio_prontuario">
                             Data de início
@@ -137,16 +152,23 @@
                 </div>
                 <form>
                     <div class="form-group">
-                        <label for="id_paciente_pagamento">
-                            Paciente
-                        </label>
-                        <select name="id_paciente_pagamento" id="id_paciente_pagamento">
-                            <option value="">Todos</option>
-                            @foreach ($pacientes as $paciente)
-                                <option value="{{ $paciente->id_paciente }}">{{ $paciente->nome }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+    <label>Paciente</label>
+    <div class="pp-wrapper" id="pp-wrapper-pagamento">
+        <div class="pp-input-row">
+            <input type="text"
+                   id="pp-input-pagamento"
+                   placeholder="Pesquisar paciente..."
+                   autocomplete="off">
+            <button type="button" class="btn btn-primary"
+                    onclick="ppPesquisar('pagamento')">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+        <div class="pp-selecionado" id="pp-sel-pagamento"></div>
+        <div class="pp-dropdown" id="pp-drop-pagamento"></div>
+    </div>
+    <input type="hidden" id="id_paciente_pagamento" name="id_paciente_pagamento" value="">
+</div>
                     <div class="form-group">
                         <label for="estado_pagamento">
                             Estado
@@ -217,6 +239,105 @@
 
 @endsection
 @section('script')
+<script>
+ // ── Pesquisa de Paciente ──────────────────────────────────
+const PP_API = "{{ route('api_pesquisar_pacientes') }}";
+const PP_IDS = {
+    consulta:   'id_paciente',
+    prontuario: 'id_paciente_prontuario',
+    pagamento:  'id_paciente_pagamento',
+};
+let ppTimers = {};
+
+// Pesquisa ao clicar no botão
+async function ppPesquisar(s) {
+    const termo = document.getElementById(`pp-input-${s}`).value.trim();
+    const drop  = document.getElementById(`pp-drop-${s}`);
+
+    if (termo.length < 2) {
+        drop.innerHTML = '<div class="pp-vazio">Digite pelo menos 2 caracteres.</div>';
+        drop.classList.add('aberto');
+        return;
+    }
+
+    drop.innerHTML = '<div class="pp-loading"><i class="fa fa-spinner fa-spin"></i> A pesquisar...</div>';
+    drop.classList.add('aberto');
+
+    try {
+        const res  = await fetch(`${PP_API}?termo=${encodeURIComponent(termo)}`);
+        const data = await res.json();
+
+        if (!data.length) {
+            drop.innerHTML = '<div class="pp-vazio">Nenhum paciente encontrado.</div>';
+            return;
+        }
+
+        drop.innerHTML = data.map(p => `
+            <div class="pp-item" onclick="ppSelecionar('${s}', ${p.id_paciente}, '${p.nome.replace(/'/g,"\\'")}', '${(p.num_telefone||'').replace(/'/g,"\\'")}')">
+                <strong>${p.nome}</strong>
+                <div class="pp-item-sub">${p.num_telefone || ''} ${p.email ? '· ' + p.email : ''}</div>
+            </div>
+        `).join('');
+
+    } catch(e) {
+        drop.innerHTML = '<div class="pp-vazio">Erro ao pesquisar. Tente novamente.</div>';
+    }
+}
+
+// Pesquisa ao digitar (debounce 400ms)
+document.addEventListener('DOMContentLoaded', () => {
+    Object.keys(PP_IDS).forEach(s => {
+        const inp = document.getElementById(`pp-input-${s}`);
+        if (!inp) return;
+
+        inp.addEventListener('input', () => {
+            clearTimeout(ppTimers[s]);
+            ppTimers[s] = setTimeout(() => ppPesquisar(s), 400);
+        });
+
+        inp.addEventListener('keydown', e => {
+            if (e.key === 'Enter') { e.preventDefault(); ppPesquisar(s); }
+        });
+    });
+
+    // Fechar dropdown ao clicar fora
+    document.addEventListener('click', e => {
+        Object.keys(PP_IDS).forEach(s => {
+            const wrapper = document.getElementById(`pp-wrapper-${s}`);
+            if (wrapper && !wrapper.contains(e.target)) {
+                document.getElementById(`pp-drop-${s}`)?.classList.remove('aberto');
+            }
+        });
+    });
+});
+
+function ppSelecionar(s, id, nome, tel) {
+    document.getElementById(PP_IDS[s]).value = id;
+
+    // Destaca o item clicado a azul no dropdown
+    const drop = document.getElementById(`pp-drop-${s}`);
+    drop.querySelectorAll('.pp-item').forEach(item => item.classList.remove('selecionado'));
+    event.currentTarget.classList.add('selecionado');
+
+    // Actualiza o campo de confirmação por baixo
+    const sel = document.getElementById(`pp-sel-${s}`);
+    sel.innerHTML = `
+        <i class="fa-solid fa-circle-check" style="color:#1a56db; font-size:16px; flex-shrink:0;"></i>
+        <div style="flex:1; min-width:0;">
+            <div class="pp-sel-nome">${nome}</div>
+            ${tel ? `<div class="pp-sel-sub"><i class="fa-solid fa-phone" style="font-size:10px;"></i> ${tel}</div>` : ''}
+        </div>
+        <span class="pp-sel-badge" style="color:#111827; font-weight:700; font-size:12px;">Selecionado</span>
+    `;
+    sel.classList.add('visivel');
+
+    // Fecha dropdown e limpa input
+    drop.classList.remove('aberto');
+    document.getElementById(`pp-input-${s}`).value = '';
+    document.getElementById(`pp-input-${s}`).placeholder = 'Pesquisar outro paciente...';
+}
+// ─────────────────────────────────────────────────────────
+</script>
     <script src="/tabs.js"></script>
     <script src="/relatorio-consultas.js"></script>
     <script src="/relatorio-prontuario.js"></script>

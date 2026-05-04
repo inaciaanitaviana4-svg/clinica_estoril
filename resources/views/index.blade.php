@@ -106,88 +106,71 @@
 </section>
 
 <!-- ESPECIALIDADES DESTAQUE -->
-<section class="home-specialties">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Nossas Especialidades</h2>
-            <p class="section-subtitle">Atendimento multidisciplinar com profissionais especializados</p>
-        </div>
-
-        <div class="specialties-grid">
-            <div class="specialty-card">
-                <div class="specialty-icon">
-                    <i class="fas fa-heartbeat"></i>
-                </div>
-                <h3>Cardiologia</h3>
-                <p>Cuidados completos para a saúde do coração</p>
-                <a href="/especialidades" class="specialty-link">
-                    Saiba mais <i class="fas fa-arrow-right"></i>
-                </a>
+<section class="other-specialists">
+        <div class="container">
+            <div class="section-header center">
+                <h2 class="section-title">Nossas Especialidades</h2>
+                <p class="section-subtitle">Contamos com especialistas em diversas as áreas da medicina</p>
             </div>
 
-            <div class="specialty-card">
-                <div class="specialty-icon">
-                    <i class="fas fa-brain"></i>
+            <div class="specialties-list">
+                <div class="specialty-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Cardiologia</span>
                 </div>
-                <h3>Neurologia</h3>
-                <p>Diagnóstico e tratamento neurológico avançado</p>
-                <a href="/especialidades" class="specialty-link">
-                    Saiba mais <i class="fas fa-arrow-right"></i>
-                </a>
+                <div class="specialty-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Oftalmologia</span>
+                </div>
+                <div class="specialty-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Otorrinolarngologia</span>
+                </div>
+                <div class="specialty-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Pneumologia</span>
+                </div>
+                <div class="specialty-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Ginecologia e Obstetrícia</span>
+                </div>
+                <div class="specialty-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Nutrição</span>
+                </div>
+                <div class="specialty-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Fisioterapia</span>
+                </div>
+                <div class="specialty-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Neurologia</span>
+                </div>
+                <div class="specialty-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Urologia</span>
+                </div>
+                <div class="specialty-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Endocrinologia</span>
+                </div>
+                <div class="specialty-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Dermatologia</span>
+                </div>
+                <div class="specialty-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Ortopedia</span>
+                </div>
             </div>
 
-            <div class="specialty-card">
-                <div class="specialty-icon">
-                    <i class="fas fa-bone"></i>
-                </div>
-                <h3>Ortopedia</h3>
-                <p>Tratamento de lesões e doenças ósseas</p>
-                <a href="/especialidades" class="specialty-link">
-                    Saiba mais <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-
-            <div class="specialty-card">
-                <div class="specialty-icon">
-                    <i class="fas fa-baby"></i>
-                </div>
-                <h3>Pediatria</h3>
-                <p>Cuidado especializado para crianças</p>
-                <a href="/especialidades" class="specialty-link">
-                    Saiba mais <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-
-            <div class="specialty-card">
-                <div class="specialty-icon">
-                    <i class="fas fa-female"></i>
-                </div>
-                <h3>Ginecologia</h3>
-                <p>Saúde integral da mulher</p>
-                <a href="/especialidades" class="specialty-link">
-                    Saiba mais <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-
-            <div class="specialty-card">
-                <div class="specialty-icon">
-                    <i class="fas fa-eye"></i>
-                </div>
-                <h3>Oftalmologia</h3>
-                <p>Cuidados completos para a visão</p>
-                <a href="/especialidades" class="specialty-link">
-                    Saiba mais <i class="fas fa-arrow-right"></i>
+            <div class="section-cta">
+                <a href="/especialidades" class="btn btn-primary">
+                    Ver Todas as Especialidades
                 </a>
             </div>
         </div>
-
-        <div class="section-cta">
-            <a href="/especialidades" class="btn btn-primary">
-                Ver Todas as Especialidades
-            </a>
-        </div>
-    </div>
-</section>
+    </section>
 
 <!-- CTA AGENDAR -->
 <section class="cta-section">
