@@ -56,7 +56,7 @@ class SiteController extends Controller
     {
         $tipos_consulta = TipoConsulta::get();
         $servicos = $tipos_consulta->map(function ($tipo) {
-            $servicos_clinicos = ServicoClinico::select('id_servico_clinico', 'nome')->where('id_tipo_consulta', $tipo->id_tipo_consulta)->get()->toArray();
+            $servicos_clinicos = ServicoClinico::select('id_servico_clinico', 'nome')->where('id_tipo_consulta', $tipo->id_tipo_consulta)->limit(5)->get()->toArray();
 
             return [
                 'id' => $tipo->id_tipo_consulta,
@@ -66,7 +66,7 @@ class SiteController extends Controller
                 'servicos' => $servicos_clinicos,
             ];
         });
-
+         
         return view('servicos', compact('servicos'));
     }
 
