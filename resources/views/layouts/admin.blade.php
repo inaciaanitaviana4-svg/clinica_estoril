@@ -137,6 +137,15 @@
     function fecharAlert() {
         document.getElementById("custom-alert").classList.add("hidden");
     } 
+     const sucessoMsg = "{{ session('sucesso') }}";
+        const erroMsg = "{{ session('erro') }}";
+
+        if (sucessoMsg) {
+             mostrarMensagemSucesso(sucessoMsg);
+        }
+        if (erroMsg) {
+             mostrarMensagemErro(erroMsg);
+        }
     </script>
 </body>
 

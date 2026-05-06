@@ -193,6 +193,15 @@ if (session('tipo_utilizador') == 'paciente') {
 
         // Repete a cada 30 segundos
         setInterval(atualizarBadgeNotificacoes, 30000);
+        const sucessoMsg = "{{ session('sucesso') }}";
+        const erroMsg = "{{ session('erro') }}";
+
+        if (sucessoMsg) {
+             mostrarMensagemSucesso(sucessoMsg);
+        }
+        if (erroMsg) {
+             mostrarMensagemErro(erroMsg);
+        }
     </script>
 </body>
 

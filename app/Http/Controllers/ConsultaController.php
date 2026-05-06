@@ -186,7 +186,7 @@ class ConsultaController extends Controller
             'data' => date('Y-m-d H:i:s'),
         ]);
 
-        return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
+        return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta))->with('sucesso', 'Consulta salva com sucesso');
     }
 
     public function detalhes_consulta_admin($id_consulta)
