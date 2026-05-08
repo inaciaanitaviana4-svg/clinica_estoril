@@ -56,7 +56,7 @@ Route::middleware(['web'])->group(function () {
     Route::get('/painel-paciente/relatorios', [RelatorioController::class, 'mostrar_relatorios_paciente'])->name('mostrar_relatorios_paciente');
     Route::get('/api/pacientes/pesquisar', [PacienteController::class, 'api_pesquisar_pacientes'])->name('api_pesquisar_pacientes');
 
-    Route::get('/painel-paciente/prontuario', [ProntuarioController::class, 'mostrar_prontuario_paciente'])->name('mostrar_prontuario_paciente');
+    Route::get('/painel-paciente/prontuario', [ProntuarioController::class, 'mostrar_prontuário_paciente'])->name('mostrar_prontuário_paciente');
     Route::get('/painel-paciente/prontuario/{id_consulta}', [ProntuarioController::class, 'mostrar_detalhes_consulta_paciente'])->name('mostrar_detalhes_consulta_paciente');
 
     // ===== ROTAS DE NOTIFICAÇÕES =====
