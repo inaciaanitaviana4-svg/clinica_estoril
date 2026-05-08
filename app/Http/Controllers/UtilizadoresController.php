@@ -307,7 +307,7 @@ class UtilizadoresController extends Controller
             'recepcionista' => $recepcionista,
         ];
 
-        return view('utilizadores.editar_perfil', compact('dados', 'utilizador'));
+        return view('utilizadores.editar_perfil', compact('dados', 'utilizador'))->with('sucesso', 'Dados carregados. Edite seu perfil abaixo.');
 
     }
 
@@ -453,7 +453,7 @@ class UtilizadoresController extends Controller
             $medico->save();
         }
 
-        return redirect('/visualizar-perfil');
+        return redirect('/visualizar-perfil')->with('sucesso', 'Perfil atualizado com sucesso.');
     }
 
     /**
