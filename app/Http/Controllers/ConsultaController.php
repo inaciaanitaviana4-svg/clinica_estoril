@@ -174,14 +174,14 @@ class ConsultaController extends Controller
         Notificacao::create([
             'titulo' => $request->modalidade == 'imediata' ? 'Consulta em espera' : 'Consulta agendada',
             'mensagem' => $request->modalidade == 'imediata' ? 'Aguarde a sua vez' : 'A sua consulta foi agendada com sucesso, aguardamos a sua confirmação',
-            'id_util' => Utilizador::where('id_paciente', $request->id_paciente)->first()->id_util ?? '',
+            'id_util' => Utilizador::where('id_paciente', $request->id_paciente)->first()->id_util ?? 0,
             'lida' => false,
             'data' => date('Y-m-d H:i:s'),
         ]);
         Notificacao::create([
             'titulo' => 'Nova consulta associada',
             'mensagem' => 'A consulta '.$consulta->id_consulta.' foi associada ao paciente '.$paciente->nome.' com sucesso',
-            'id_util' => Utilizador::where('id_medico',$request->id_medico)->first()->id_util ?? '',
+            'id_util' => Utilizador::where('id_medico',$request->id_medico)->first()->id_util ?? 0,
             'lida' => false,
             'data' => date('Y-m-d H:i:s'),
         ]);

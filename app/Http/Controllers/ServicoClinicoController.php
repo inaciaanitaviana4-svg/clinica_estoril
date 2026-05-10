@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Especialidade;
+use App\Models\Medico;
 use App\Models\ServicoClinico;
 use App\Models\ServicoClinicoEspecialidade;
 use App\Models\TipoConsulta;
@@ -49,7 +50,7 @@ class ServicoClinicoController extends Controller
                 ]);
 
             }
-            $especialidades_ids = array_map(function ($especialidade)use ($servico_clinico) {
+            $especialidades_ids = array_map(function ($especialidade) use ($servico_clinico) {
                 $es['id_especialidade'] = $especialidade;
                 $es['id_servico_clinico'] = $servico_clinico->id_servico_clinico;
 
@@ -96,5 +97,30 @@ class ServicoClinicoController extends Controller
         $servicos_clinicos = $servicos_clinicos->get();
 
         return response()->json($servicos_clinicos);
+    }
+
+    public function api_listar_medicos_servico_clinico(Request $request)
+    {
+        $id_servico_clinico = $request->get('id_servico_clinico');
+        if (! $id_servico_clinico) {
+            return response()->json(['erro' => 'id_servico_clinico é obrigatório', 'medicos' => []], 400);
+        }
+        $medicos_sem_especialidade = Medico::where('especialidade', '=', 'Nenhuma')->select('medico.id_medico', 'medico.nome', 'medico.especialidade')->get()->toArray();
+        $especialidades_total = ServicoClinicoEspecialidade::where('id_servico_clinico', $id_servico_clinico)->count();
+        if ($especialidades_total == 0) {
+            return response()->json(['erro' => 'Nenhuma especialidade associada a este serviço clínico', 'medicos' => $medicos_sem_especialidade], 404);
+        }
+        $medicos = Medico::join('especialidades', 'medico.especialidade', 'especialidades.nome')
+            ->join('servicos_clinicos_especialidades', 'especialidades.id_espec', 'servicos_clinicos_especialidades.id_especialidade')
+            ->where('servicos_clinicos_especialidades.id_servico_clinico', $id_servico_clinico)
+            // ->where(function ($query) use ($id_servico_clinico) {
+               // $query->where();
+           // })
+            ->select('medico.id_medico', 'medico.nome', 'medico.especialidade')
+            ->distinct()
+            ->get()
+            ->toArray();
+
+        return response()->json(['medicos' => array_merge($medicos_sem_especialidade, $medicos)], 200);
     }
 }

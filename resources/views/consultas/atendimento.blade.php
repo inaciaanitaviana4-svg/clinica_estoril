@@ -17,15 +17,6 @@
                     {{ csrf_field() }}
                     <div class="row">
                         <div class="col form-group">
-                            <label for="modalidade">Modalidade</label>
-                            <select class="w-100" id="modalidade" name="modalidade">
-                                <option value="">Selecione a modalidade</option>
-                                <option value="imediata">Imediata</option>
-                                <option value="agendada">Agendada</option>
-
-                            </select>
-                        </div>
-                        <div class="col form-group">
                             <label for="id_paciente">Paciente</label>
                             <select class="w-100" id="id_paciente" name="id_paciente">
                                 <option value="">Selecione o paciente</option>
@@ -35,23 +26,21 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="row">
+                        <div class="col form-group">
+                            <label for="modalidade">Modalidade</label>
+                            <select class="w-100" id="modalidade" name="modalidade">
+                                <option value="">Selecione a modalidade</option>
+                                <option value="imediata">Imediata</option>
+                                <option value="agendada">Agendada</option>
 
+                            </select>
+                        </div>
                         <div class="col form-group">
                             <label for="data">Data da consulta</label>
                             <input class="w-100" type="date" id="data" name="data" required>
-                                 <small class="erro" id="erro-data"></small>
+                            <small class="erro" id="erro-data"></small>
 
-                        </div>
-                        <div class="col form-group">
-                            <label for="hora">Horário Preferencial</label>
-                            <select class="w-100" id="hora" name="hora">
-                                <option value="">Selecione um horário</option>
-                                @foreach ($horarios as $horario)
-                                    <option value="{{ $horario->hora }}"> {{ $horario->hora }}</option>
-                                @endforeach
-
-                            </select>
                         </div>
                     </div>
                     <div class="row">
@@ -71,13 +60,19 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col form-group">
+                    <div class=" form-group">
                         <label for="id_medico">Medico</label>
-                        <select class="w-100" id="id_medico" name="id_medico">
+                        <select class="w-100 medico_auto_select" id="id_medico" name="id_medico">
                             <option value="">Selecione um medico</option>
-                            @foreach ($medicos as $medico)
-                                <option value="{{ $medico->id_medico }}">{{ $medico->nome }}</option>
-                            @endforeach
+                            
+
+                        </select>
+                    </div>
+
+                    <div class=" form-group">
+                        <label for="hora">Horário Preferencial</label>
+                        <select class="w-100 horario_auto_select" id="hora" name="hora">
+                            <option value="">Selecione um horário</option>
 
                         </select>
                     </div>
@@ -85,7 +80,7 @@
                         <label for="observacao">observação</label>
                         <textarea id="observacao" name="observacao" rows="5"
                             placeholder="Descreva brevemente o motivo da consulta ou dúvidas"></textarea>
-                             <small class="erro" id="erro-obs"></small>
+                        <small class="erro" id="erro-obs"></small>
                     </div>
 
                     <div>
@@ -105,103 +100,103 @@
 @section('script')
     <script src="/auto-select.js"></script>
     <script>
-   const dataInput = document.getElementById("data");
-const obsInput = document.getElementById("observacao");
+        const dataInput = document.getElementById("data");
+        const obsInput = document.getElementById("observacao");
 
-// ================= FUNÇÃO LIMITE DE DATA =================
-function obterLimiteMaximo() {
-    const hoje = new Date();
-    const limite = new Date();
+        // ================= FUNÇÃO LIMITE DE DATA =================
+        function obterLimiteMaximo() {
+            const hoje = new Date();
+            const limite = new Date();
 
-    limite.setMonth(hoje.getMonth() + 2); // +2 meses
+            limite.setMonth(hoje.getMonth() + 2); // +2 meses
 
-    return limite.toISOString().split("T")[0];
-}
+            return limite.toISOString().split("T")[0];
+        }
 
-// ================= DATA =================
-dataInput.addEventListener("input", function () {
+        // ================= DATA =================
+        dataInput.addEventListener("input", function() {
 
-    const hoje = new Date().toISOString().split("T")[0];
-    const limiteMax = obterLimiteMaximo();
-    const erro = document.getElementById("erro-data");
+            const hoje = new Date().toISOString().split("T")[0];
+            const limiteMax = obterLimiteMaximo();
+            const erro = document.getElementById("erro-data");
 
-    if (this.value < hoje) {
-        erro.textContent = "Não pode escolher uma data passada";
-        erro.className = "erro";
+            if (this.value < hoje) {
+                erro.textContent = "Não pode escolher uma data passada";
+                erro.className = "erro";
 
-        this.classList.add("input-erro");
-        this.classList.remove("input-sucesso");
+                this.classList.add("input-erro");
+                this.classList.remove("input-sucesso");
 
-    } else if (this.value > limiteMax) {
-        erro.textContent = "Só pode agendar até 2 meses à frente";
-        erro.className = "erro";
+            } else if (this.value > limiteMax) {
+                erro.textContent = "Só pode agendar até 2 meses à frente";
+                erro.className = "erro";
 
-        this.classList.add("input-erro");
-        this.classList.remove("input-sucesso");
+                this.classList.add("input-erro");
+                this.classList.remove("input-sucesso");
 
-    } else {
-        erro.textContent = "";
-        this.classList.remove("input-erro");
-        this.classList.add("input-sucesso");
-    }
-});
+            } else {
+                erro.textContent = "";
+                this.classList.remove("input-erro");
+                this.classList.add("input-sucesso");
+            }
+        });
 
-// ================= OBSERVAÇÃO =================
-obsInput.addEventListener("input", function () {
+        // ================= OBSERVAÇÃO =================
+        obsInput.addEventListener("input", function() {
 
-    const erro = document.getElementById("erro-obs");
+            const erro = document.getElementById("erro-obs");
 
-    if (this.value.trim().length < 30) {
-        erro.textContent = "Mínimo de 30 caracteres";
-        erro.className = "erro";
+            if (this.value.trim().length < 30) {
+                erro.textContent = "Mínimo de 30 caracteres";
+                erro.className = "erro";
 
-        this.classList.add("input-erro");
-        this.classList.remove("input-sucesso");
+                this.classList.add("input-erro");
+                this.classList.remove("input-sucesso");
 
-    } else {
-        erro.textContent = "";
-        this.classList.remove("input-erro");
-        this.classList.add("input-sucesso");
-    }
-});
+            } else {
+                erro.textContent = "";
+                this.classList.remove("input-erro");
+                this.classList.add("input-sucesso");
+            }
+        });
 
-// ================= SUBMIT =================
+        // ================= SUBMIT =================
 
-function mostrarAlert(mensagem) {
-    const box= document.getElementById("custom-alert");
-    const text= document.getElementById("custom-alert-text");
+        function mostrarAlert(mensagem) {
+            const box = document.getElementById("custom-alert");
+            const text = document.getElementById("custom-alert-text");
 
-    text.textContent= mensagem;
-    box.classList.remove("hidden");
-}
+            text.textContent = mensagem;
+            box.classList.remove("hidden");
+        }
 
-function fecharAlert() {
-    document.getElementById("custom-alert").classList.add("hidden");
-}
-document.getElementById("formAgendamento")
-.addEventListener("submit", function (e) {
+        function fecharAlert() {
+            document.getElementById("custom-alert").classList.add("hidden");
+        }
+        document.getElementById("formAgendamento")
+            .addEventListener("submit", function(e) {
 
-    const hoje = new Date().toISOString().split("T")[0];
-    const limiteMax = obterLimiteMaximo();
+                const hoje = new Date().toISOString().split("T")[0];
+                const limiteMax = obterLimiteMaximo();
 
-    const data = dataInput.value;
-    const obs = obsInput.value.trim();
+                const data = dataInput.value;
+                const obs = obsInput.value.trim();
 
-    let valido = true;
+                let valido = true;
 
-    if (data < hoje || data > limiteMax) {
-        valido = false;
-    }
+                if (data < hoje || data > limiteMax) {
+                    valido = false;
+                }
 
-    if (obs.length < 30) {
-        valido = false;
-    }
+                if (obs.length < 30) {
+                    valido = false;
+                }
 
-    if (!valido) {
-        e.preventDefault();
-        mostrarAlert("Corrija os erros antes de enviar!");
-    }
+                if (!valido) {
+                    e.preventDefault();
+                    mostrarAlert("Corrija os erros antes de enviar!");
+                }
 
-});
-</script>
+            });
+    </script>
 @endsection

@@ -74,4 +74,32 @@ class HorarioController extends Controller
         return response()->json(['mensagem' => 'horario removido com secesso'], 200);
 
     }
+
+    public function api_listar_horarios_medico(Request $request)
+    {
+        $id_medico = $request->query('id_medico');
+        $id_servico_clinico = $request->query('id_servico_clinico');
+        if (! $id_medico && ! $id_servico_clinico) {
+            return response()->json(['erro' => 'deve fornecer id_medico ou id_servico_clinico'], 400);
+        }
+        $horarios = [];
+        if ($id_servico_clinico) {
+            $horarios = Horario::select('horarios.*')
+                ->join('medico', 'horarios.id_medico', '=', 'medico.id_medico')
+                ->join('especialidades', 'medico.especialidade', '=', 'especialidades.nome')
+                ->join('servicos_clinicos_especialidades', 'especialidades.id_espec', '=', 'servicos_clinicos_especialidades.id_especialidade')
+                ->where('servicos_clinicos_especialidades.id_servico_clinico', $id_servico_clinico)
+                ->where('horarios.activo', true)
+                ->distinct()
+                ->get();
+        } elseif ($id_medico) {
+            $horarios = Horario::where('id_medico', $id_medico)->where('activo', true)->get();
+        }
+        $horariototal = count($horarios);
+        if ($horariototal == 0) {
+            return response()->json(['erro' => 'Nenhum horário ativo encontrado para este médico'], 404);
+        }
+
+        return response()->json($horarios);
+    }
 }
