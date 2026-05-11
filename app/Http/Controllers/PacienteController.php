@@ -44,6 +44,7 @@ class PacienteController extends Controller
             'consultas.modalidade',
             'consultas.data',
             'consultas.hora',
+            'consultas.data_marcacao',
             'consultas.estado',
             'medico.nome as nome_medico',
             'servicos_clinicos.nome as nome_servico_clinico',

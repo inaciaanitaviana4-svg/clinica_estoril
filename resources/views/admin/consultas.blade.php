@@ -37,6 +37,7 @@
                                 <th>Recepcionista</th>
                                 <th>Data</th>
                                 <th>Hora</th>
+                                <th>Data de Marcação</th>
                                 <th>Estado</th>
                                 <th>Ações</th>
                             </tr>
@@ -51,6 +52,7 @@
                                     <td>{{ $consulta->nome_recepcionista }}</td>
                                     <td>{{ $consulta->data }}</td>
                                     <td>{{ $consulta->hora }}</td>
+                                    <td>{{ $consulta->data_marcacao->format('Y-m-d H:i') }}</td>
                                     <td>
                                         {{ badge_estados($consulta->estado) }}
                                     </td>

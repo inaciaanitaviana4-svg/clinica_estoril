@@ -390,6 +390,7 @@ class AdminController extends Controller
             'consultas.modalidade',
             'consultas.data',
             'consultas.hora',
+            'consultas.data_marcacao',
             'consultas.estado',
             'paciente.nome as nome_paciente',
             'medico.nome as nome_medico',

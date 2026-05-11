@@ -12,26 +12,28 @@ use Illuminate\Database\Eloquent\Model;
 class Consulta extends Model
 {
     // Define a chave primária customizada
-    protected $primaryKey = "id_consulta";
-    
+    protected $primaryKey = 'id_consulta';
+
     // Define o nome da tabela
-    protected $table = "consultas";
+    protected $table = 'consultas';
 
     // Desativa timestamps automáticos
-    public $timestamps = false;
-    
+    // public $timestamps = false;
+    public const CREATED_AT = 'data_marcacao';
+
+    public const UPDATED_AT = 'data_atualizacao';
+
     // Define colunas editáveis
     protected $fillable = [
-        "id_medico",            // FK: aponta para o médico da consulta
-        "id_paciente",          // FK: aponta para o paciente
-        "id_tipo_consulta",     // FK: tipo de consulta (presencial, online, etc)
-        "id_servico_clinico",   // FK: serviço clínico (raio-x, análise, etc)
-        "data",                 // Data da consulta
-        "hora",                 // Hora da consulta
-        "estado",               // Estado (agendada, confirmada, realizada, cancelada)
-        "observacao",           // Observações do médico
-        "modalidade",           // Modalidade (presencial, telemedicina, etc)
-        "id_recepcionista",     // FK: recepcionista que agendou
+        'id_medico',            // FK: aponta para o médico da consulta
+        'id_paciente',          // FK: aponta para o paciente
+        'id_tipo_consulta',     // FK: tipo de consulta (presencial, online, etc)
+        'id_servico_clinico',   // FK: serviço clínico (raio-x, análise, etc)
+        'data',                 // Data da consulta
+        'hora',                 // Hora da consulta
+        'estado',               // Estado (agendada, confirmada, realizada, cancelada)
+        'observacao',           // Observações do médico
+        'modalidade',           // Modalidade (presencial, telemedicina, etc)
+        'id_recepcionista',     // FK: recepcionista que agendou
     ];
 }
-
