@@ -30,13 +30,13 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Tipo</th>
+                                <th>Tipo de consulta</th>
                                 <th>Serviço clinico</th>
                                 <th>Paciente</th>
                                 <th>Medico</th>
                                 <th>Recepcionista</th>
-                                <th>Data</th>
-                                <th>Hora</th>
+                                <th>Data da consulta</th>
+                                <th>Hora da consulta</th>
                                 <th>Data de Marcação</th>
                                 <th>Estado</th>
                                 <th>Ações</th>

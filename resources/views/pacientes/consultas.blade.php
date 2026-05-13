@@ -32,12 +32,12 @@
                         <thead>
                             <tr>
                                 <th>Modalidade</th>
-                                <th>Tipo</th>
+                                <th>Tipo de consulta</th>
                                 <th>Serviço clinico</th>
                                 <th>Preço</th>
                                 <th>Médico</th>
-                                <th>Data</th>
-                                <th>Hora</th>
+                                <th>Data da consulta</th>
+                                <th>Hora da consulta</th>
                                 <th>Data de Marcação</th>
                                 <th>Estado</th>
                                 <th>Ações</th>
