@@ -167,14 +167,6 @@ document.getElementById("formAgendamento")
 
 });
 </script>
-        <div class="login-help">
-            <div class="help-card">
-                <i class="fas fa-question-circle"></i>
-                <h3>Precisa de Ajuda?</h3>
-                <p>Entre em contacto com o nosso suporte</p>
-                <a href="/contacto">Contactar Suporte</a>
-            </div>
-        </div>
     </section>
 @endsection
 @section('script')

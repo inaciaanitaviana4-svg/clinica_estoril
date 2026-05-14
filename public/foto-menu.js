@@ -289,15 +289,15 @@ function criarModal({
             menuContent = `
                 <div class="foto-menu-item" data-acao="visualizar">
                     <i class="fa-regular fa-eye"></i>
-                    <span>Visualizar foto</span>
+                    <span style="color:black;">Visualizar foto</span>
                 </div>
                 <div class="foto-menu-item" data-acao="editar">
                     <i class="fa-regular fa-pen-to-square"></i>
-                    <span>Trocar de foto</span>
+                    <span style="color:black;">Trocar de foto</span>
                 </div>
                 <div class="foto-menu-item" data-acao="deletar">
                     <i class="fa-regular fa-trash-can"></i>
-                    <span>Deletar foto</span>
+                    <span style="color:black;">Deletar foto</span>
                 </div>
             `;
         } else {
@@ -305,11 +305,11 @@ function criarModal({
             menuContent = `
                 <div class="foto-menu-item" data-acao="abrir-camera">
                     <i class="fa-solid fa-camera"></i>
-                    <span>Abrir câmera</span>
+                    <span style="color:black;">Abrir câmera</span>
                 </div>
                 <div class="foto-menu-item" data-acao="abrir-ficheiros">
                     <i class="fa-regular fa-folder-open"></i>
-                    <span>Ir para ficheiros</span>
+                    <span style="color:black;">Ir para ficheiros</span>
                 </div>
             `;
         }
