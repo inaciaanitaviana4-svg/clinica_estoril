@@ -56,7 +56,7 @@ class HorarioController extends Controller
             ]);
         }
 
-        return redirect(route('mostrar_horarios_medico'));
+        return redirect(route('mostrar_horarios_medico'))->with('mensagem', 'Horario salvo com sucesso');
     }
 
     public function remover_horario_medico_recepcionista($id_horario)

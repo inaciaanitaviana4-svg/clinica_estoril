@@ -254,7 +254,7 @@ class PagamentosController extends Controller
             return back()->with('erro', 'Ocorreu um erro ao salvar o pagamento: ');
         }
 
-        return redirect(route('mostrar_pagamentos_recepcionista'));
+        return redirect(route('mostrar_pagamentos_recepcionista'))->with('success', 'Pagamento salvo com sucesso.');
     }
 
     public function detalhes_pagamento_recepcionista($id_pagamento)

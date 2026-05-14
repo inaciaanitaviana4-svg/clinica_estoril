@@ -10,10 +10,13 @@
     {{-- Script anti-flash: aplica dark mode ANTES dos estilos carregarem --}}
     <script>
         (function () {
-            if (localStorage.getItem('clinica_dark_mode') === '1') {
-                document.documentElement.classList.add('pre-dark');
-            }
-        })();
+        const userId = "{{ session('id_utilizador', 'guest') }}";
+        const key = 'clinica_dark_mode_' + userId;
+        if (localStorage.getItem(key) === '1') {
+            document.documentElement.classList.add('pre-dark');
+            document.documentElement.classList.add('dark-ready');
+        }
+    })();
     </script>
 
     <link rel="stylesheet" href="{{ asset('styles.css') }}">
@@ -165,7 +168,51 @@
     <script src="{{ asset('foto-menu.js') }}"></script>
 
     @yield('script')
+<script>
+    const _userId = "{{ session('id_utilizador', 'guest') }}";
+    const DARK_KEY = 'clinica_dark_mode_' + _userId;
 
+    function ativarDark() {
+        document.body.classList.add('dark-mode');
+        document.documentElement.classList.add('pre-dark');
+        localStorage.setItem(DARK_KEY, '1');
+        const icon  = document.getElementById('darkToggleIcon');
+        const label = document.getElementById('darkToggleLabel');
+        if (icon)  icon.textContent  = '☀️';
+        if (label) label.textContent = 'Modo Claro';
+    }
+
+    function desativarDark() {
+        document.body.classList.remove('dark-mode');
+        document.documentElement.classList.remove('pre-dark');
+        localStorage.setItem(DARK_KEY, '0');
+        const icon  = document.getElementById('darkToggleIcon');
+        const label = document.getElementById('darkToggleLabel');
+        if (icon)  icon.textContent  = '🌙';
+        if (label) label.textContent = 'Modo Noturno';
+    }
+
+    (function () {
+        const saved = localStorage.getItem(DARK_KEY);
+        if (saved === '1') {
+            ativarDark();
+        } else if (saved === null && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            ativarDark();
+        } else {
+            desativarDark(); // garante reset se outro utilizador deixou dark ativo
+        }
+    })();
+
+    document.getElementById('darkToggleBtn').addEventListener('click', function () {
+        document.body.classList.contains('dark-mode') ? desativarDark() : ativarDark();
+    });
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+        if (localStorage.getItem(DARK_KEY) === null) {
+            e.matches ? ativarDark() : desativarDark();
+        }
+    });
+</script>
     <script>
         // ── Marca item ativo na sidebar ──────────────────────────
         const urlAtual = window.location.pathname;
@@ -193,47 +240,7 @@
         }
 
         // ── Modo Noturno ─────────────────────────────────────────
-        const DARK_KEY = 'clinica_dark_mode';
-
-        function ativarDark() {
-            document.body.classList.add('dark-mode');
-            localStorage.setItem(DARK_KEY, '1');
-            const icon  = document.getElementById('darkToggleIcon');
-            const label = document.getElementById('darkToggleLabel');
-            if (icon)  icon.textContent  = '☀️';
-            if (label) label.textContent = 'Modo Claro';
-        }
-
-        function desativarDark() {
-            document.body.classList.remove('dark-mode');
-            localStorage.setItem(DARK_KEY, '0');
-            const icon  = document.getElementById('darkToggleIcon');
-            const label = document.getElementById('darkToggleLabel');
-            if (icon)  icon.textContent  = '🌙';
-            if (label) label.textContent = 'Modo Noturno';
-        }
-
-        // Aplica preferência guardada ou do sistema
-        (function () {
-            const saved = localStorage.getItem(DARK_KEY);
-            if (saved === '1') {
-                ativarDark();
-            } else if (saved === null && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                ativarDark();
-            }
-        })();
-
-        // Clique no botão
-        document.getElementById('darkToggleBtn').addEventListener('click', function () {
-            document.body.classList.contains('dark-mode') ? desativarDark() : ativarDark();
-        });
-
-        // Escuta mudança de preferência do sistema
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
-            if (localStorage.getItem(DARK_KEY) === null) {
-                e.matches ? ativarDark() : desativarDark();
-            }
-        });
+      
           const sucessoMsg = "{{ session('sucesso') }}";
         const erroMsg = "{{ session('erro') }}";
 

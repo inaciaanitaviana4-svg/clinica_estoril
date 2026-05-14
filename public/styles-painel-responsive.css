@@ -71,6 +71,34 @@ body.dark-mode {
     --input-focus:          #60a5fa;
     --shadow-sm:  0 1px 3px rgba(0,0,0,.3);
     --shadow-md:  0 4px 6px rgba(0,0,0,.4);
+    /* Elementos com cores hardcoded que não herdavam variáveis */
+body.dark-mode .texto {
+    color: var(--logo-text-color) !important;
+}
+
+body.dark-mode .card-title,
+body.dark-mode .section-title,
+body.dark-mode .rc-tab-title,
+body.dark-mode .rc-section-title {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .pp-sel-nome {
+    color: #93c5fd !important;
+}
+
+body.dark-mode .pp-selecionado {
+    background: #1e3a5f !important;
+    border-color: #3b82f6 !important;
+}
+
+body.dark-mode .pp-sel-sub {
+    color: #7dd3fc !important;
+}
+
+body.dark-mode .form-note {
+    color: var(--text-gray) !important;
+}
 }
 
 /* ─────────────────────────────────────────────────────
@@ -470,4 +498,42 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
     .btn-group { flex-wrap: wrap !important; gap: 4px !important; }
     .btn-small { font-size: 11px !important; padding: 5px 9px !important; }
+}
+
+/* ── Títulos e textos do header no dark mode ── */
+body.dark-mode .painel-header span,
+body.dark-mode .painel-header strong,
+body.dark-mode .painel-header h1,
+body.dark-mode .painel-header h2,
+body.dark-mode .painel-header h3 {
+    color: var(--text-dark) !important;
+}
+
+/* ── Textos gerais que ficavam pretos ── */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6,
+body.dark-mode p,
+body.dark-mode span:not(.badge):not(.notif-badge):not(.toggle-icon) {
+    color: var(--text-dark);
+}
+
+/* ── Login card no dark mode ── */
+body.dark-mode .login-card {
+    background-color: var(--bg-card) !important;
+    color: var(--text-dark) !important;
+}
+
+/* ── Garantir transição suave em TUDO ── */
+body,
+body *,
+body *::before,
+body *::after {
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease !important;
 }

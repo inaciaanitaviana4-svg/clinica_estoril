@@ -127,7 +127,7 @@ public function agendar_consulta_paciente_salvar(Request $request)
             return back()->with('erro', 'não foi posssivel agendar a consulta');
         }
 
-        return redirect('/consultas-paciente');
+        return redirect('/consultas-paciente')->with('sucesso', 'Consulta agendada com sucesso');
 
     }
   
