@@ -1,4 +1,3 @@
-
 <?php
 // Importações necessárias
 use App\Models\Utilizador;
@@ -20,6 +19,20 @@ if (! function_exists('label_detalhes')) {
     }
 }
 
+if (!function_exists('dia_semana')) {
+    function dia_semana($numero) {
+        $dias = [
+            1 => 'Segunda-Feira',
+            2 => 'Terça-Feira',
+            3 => 'Quarta-Feira',
+            4 => 'Quinta-Feira',
+            5 => 'Sexta-Feira',
+            6 => 'Sábado',
+            7 => 'Domingo',
+        ];
+        return $dias[$numero] ?? '—';
+    }
+}
 /**
  * verificar_medico - Verifica se o utilizador logado é um médico
  * Valida sessão, existência de perfil médico e nível de acesso

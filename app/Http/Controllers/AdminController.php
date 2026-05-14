@@ -356,21 +356,21 @@ class AdminController extends Controller
             $query->where('nome', 'like', "%$pesquisar%")
                   ->orWhere('email', 'like', "%$pesquisar%")
                   ->orWhere('num_telefone', 'like', "%$pesquisar%");
-        })->paginate(10, ['*'], 'users_page')->appends(request()->input());
+        })->orderBy('nome')  ->paginate(10, ['*'], 'users_page')->appends(request()->input());
 
     $pesquisar_especialidade = $request->query('pesquisar_especialidade') ?? '';
     $especialidades = Especialidade::where('nome', 'like', "%$pesquisar_especialidade%")
-        ->paginate(10, ['*'], 'especialidades_page')->appends(request()->input());
+       ->orderBy('nome')  ->paginate(10, ['*'], 'especialidades_page')->appends(request()->input());
 
     $pesquisar_tipo_consulta = $request->query('pesquisar_tipo_consulta') ?? '';
     $tipo_consultas = TipoConsulta::where('nome', 'like', "%$pesquisar_tipo_consulta%")
-        ->paginate(10, ['*'], 'consultas_page')->appends(request()->input());
+      ->orderBy('nome')   ->paginate(10, ['*'], 'consultas_page')->appends(request()->input());
 
     $pesquisar_servico_clinico = $request->query('pesquisar_servico_clinico') ?? '';
     $servicos_clinicos = ServicoClinico::select('servicos_clinicos.*', 'tipos_consultas.nome as tipo_consulta')
         ->join('tipos_consultas', 'tipos_consultas.id_tipo_consulta', '=', 'servicos_clinicos.id_tipo_consulta')
         ->where('servicos_clinicos.nome', 'like', "%$pesquisar_servico_clinico%")
-        ->paginate(10, ['*'], 'servicos_page')->appends(request()->input());
+        ->orderBy('servicos_clinicos.nome') ->paginate(10, ['*'], 'servicos_page')->appends(request()->input());
 
     // ← Adiciona $tab ao compact
     return view('admin.cadastros', compact(
@@ -389,8 +389,8 @@ class AdminController extends Controller
             'tipos_consultas.nome as tipo_consulta',
             'consultas.modalidade',
             'consultas.data',
-            'consultas.hora',
             'consultas.data_marcacao',
+            'consultas.hora',
             'consultas.estado',
             'paciente.nome as nome_paciente',
             'medico.nome as nome_medico',
@@ -416,8 +416,8 @@ class AdminController extends Controller
                     ->orWhere('consultas.estado', 'like', "%$pesquisar_consultas%");
 
             })
-            ->orderBy('data', 'asc')
-            ->orderBy('hora', 'asc')
+           ->orderByDesc('data')
+           ->orderByDesc('hora')
             ->paginate(10);
 
         return view('admin.consultas', compact('consultas'));

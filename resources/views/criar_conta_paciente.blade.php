@@ -50,33 +50,57 @@
                    <form method="post" action="/cadastrar-paciente" id="formulario"
       enctype="multipart/form-data">
     {{ csrf_field() }}
-                        <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:28px;">
+  <!-- FOTO DE PERFIL COMPLETA -->
+<div style="display:flex; flex-direction:column; align-items:center; margin-bottom:20px;">
     <label for="foto" id="foto-label" style="
-        position:relative; width:110px; height:110px; border-radius:50%;
-        cursor:pointer; overflow:hidden; border:3px dashed #a0aec0;
-        background:#f0f4f8; display:flex; align-items:center;
-        justify-content:center; transition:border-color 0.2s;"
-        onmouseover="this.style.borderColor='#0066cc';document.getElementById('foto-overlay').style.opacity='1'"
-        onmouseout="this.style.borderColor='#a0aec0';document.getElementById('foto-overlay').style.opacity='0'">
+        position:relative; 
+        width:120px; 
+        height:120px; 
+        border-radius:50%;
+        cursor:pointer; 
+        overflow:hidden; 
+        border:3px solid #cbd5e0;
+        background:#f7fafc; 
+        display:flex; 
+        align-items:center;
+        justify-content:center; 
+        transition:all 0.2s;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);"
+        onmouseover="this.style.borderColor='#0066cc';this.style.transform='scale(1.02)';"
+        onmouseout="this.style.borderColor='#cbd5e0';this.style.transform='scale(1)';">
 
-        <img id="foto-preview" src="" alt="Foto"
-             style="display:none; width:100%; height:100%;
-                    object-fit:cover; border-radius:50%;">
+        @if(isset($utilizador) && $utilizador->foto)
+            <img id="foto-preview"
+                 src="{{ asset('storage/' . $utilizador->foto) }}"
+                 alt="Foto de perfil"
+                 style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+            <i id="foto-icon" class="fa-solid fa-circle-user"
+               style="display:none; font-size:64px; color:#a0aec0;"></i>
+        @else
+            <img id="foto-preview" src="" alt="Foto de perfil"
+                 style="display:none; width:100%; height:100%;
+                        object-fit:cover; border-radius:50%;">
+            <i id="foto-icon" class="fa-solid fa-circle-user"
+               style="font-size:64px; color:#a0aec0;"></i>
+        @endif
 
-        <i id="foto-icon" class="fa-solid fa-circle-user"
-           style="font-size:58px; color:#a0aec0;"></i>
-
-             <div id="foto-overlay" style="
-            position:absolute; inset:0; background:rgba(0,0,0,0.38);
-            border-radius:50%; display:flex; align-items:center;
-            justify-content:center; opacity:0; transition:opacity 0.2s;
+        <div style="
+            position:absolute; 
+            inset:0; 
+            background:rgba(0,0,0,0.4);
+            border-radius:50%; 
+            display:flex; 
+            align-items:center;
+            justify-content:center; 
+            opacity:0; 
+            transition:opacity 0.2s;
             pointer-events:none;">
-            <i class="fa-solid fa-camera" style="color:white; font-size:22px;"></i>
+            <i class="fa-solid fa-camera" style="color:white; font-size:24px;"></i>
         </div>
     </label>
     <input type="file" id="foto" name="foto" accept="image/*" style="display:none">
-    <span style="margin-top:8px; font-size:13px; color:#718096;">
-        Clique para adicionar foto (opcional)
+    <span style="margin-top:8px; font-size:12px; color:#718096;">
+        Clique na foto para opções
     </span>
 </div>
                         <div class="form-group">
@@ -115,7 +139,7 @@
                             ><span id="biErro" class="erro"></span>
                         </div>
                         <div class="form-group">
-                            <label for="genero">Gênero</label>
+                            <label for="genero" >Gênero</label>
                             <select id="genero" name="genero">
                                 <option value="M">Masculino</option>
                                 <option value="F">Feminino</option>
@@ -123,7 +147,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="estado_civil">Estado Civil</label>
+                            <label for="estado_civil" >Estado Civil</label>
                             <select id="estado_civil" name="estado_civil">
                                 <option value="solteiro">Solteiro/a</option>
                                 <option value="casado">Casado/a</option>
@@ -371,6 +395,7 @@
             <button onclick="fecharAlert()">Ok</button>
         </div>
         </div>
+        <script src="{{ asset('foto-menu.js') }}"></script>
         <script>
 document.getElementById('foto').addEventListener('change', function () {
     const file = this.files[0];

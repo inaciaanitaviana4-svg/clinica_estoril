@@ -114,7 +114,7 @@
             </div>
             <h3>Resultados de Exames</h3>
             <p>Acesse seus resultados de exames através da área do paciente.</p>
-            <a href="/login" class="btn btn-outline">Ver Resultados</a>
+            <a href="{{ route("mostrar_prontuario_paciente") }}" class="btn btn-outline">Ver Resultados</a>
         </div>
 
         <div class="sidebar-card sidebar-social">

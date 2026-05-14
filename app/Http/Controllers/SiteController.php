@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Configuracao;
 use App\Models\Especialidade;
 use App\Models\Medico;
@@ -47,16 +48,12 @@ class SiteController extends Controller
     {
         return view('politica_seguranca');
     }
-     public function termos_uso()
-{
-    return view('termos_uso');
-}
 
     public function servicos(): View
     {
         $tipos_consulta = TipoConsulta::get();
         $servicos = $tipos_consulta->map(function ($tipo) {
-            $servicos_clinicos = ServicoClinico::select('id_servico_clinico', 'nome')->where('id_tipo_consulta', $tipo->id_tipo_consulta)->limit(5)->get()->toArray();
+            $servicos_clinicos = ServicoClinico::select('id_servico_clinico', 'nome')->where('id_tipo_consulta', $tipo->id_tipo_consulta)->get()->toArray();
 
             return [
                 'id' => $tipo->id_tipo_consulta,
@@ -66,10 +63,13 @@ class SiteController extends Controller
                 'servicos' => $servicos_clinicos,
             ];
         });
-         
+
         return view('servicos', compact('servicos'));
     }
-
+    public function termos_uso()
+{
+    return view('termos_uso');
+}
 
 
    public function especialidades(): View

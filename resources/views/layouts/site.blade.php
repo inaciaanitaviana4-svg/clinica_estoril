@@ -24,87 +24,83 @@
 
 
     <!-- HEADER E NAVEGAÇÃO -->
-    <header class="header">
-        <div class="container">
-            <div class="nav-wrapper">
-                <!-- Logo -->
-                <a href="/">
-                    <div class="logo">
-                        <img src="imagem/logo.jpg" alt="logotipo da clinica">
-                        <span>Clínica Estoril</span>
-                    </div>
+<header class="header">
+    <div class="container">
+        <div class="nav-wrapper">
+            <!-- Logo -->
+            <a href="/">
+                <div class="logo">
+                    <img src="imagem/logo.jpg" alt="logotipo da clinica">
+                    <span>Clínica Estoril</span>
+                </div>
+            </a>
+
+            <!-- Navegação Desktop -->
+            <nav class="nav-menu">
+                <a href="/" class="nav-link">Início</a>
+                <a href="/sobre" class="nav-link">Sobre</a>
+                <a href="/servicos" class="nav-link">Serviços</a>
+                <a href="/especialidades" class="nav-link">Especialidades</a>
+                <a href="/equipa" class="nav-link">Equipa</a>
+                <a href="/contacto" class="nav-link">Contacto</a>
+                <a href="/blog" class="nav-link">Blog</a>
+            </nav>
+
+            <!-- Botão de Login / Avatar (desktop + mobile) -->
+            @if (session('id_utilizador'))
+                @php
+                    $utilizador_logado = \App\Models\Utilizador::find(session('id_utilizador'));
+                    $link_painel = match(session('tipo_utilizador')) {
+                        'admi'          => '/admin/dashboard',
+                        'recepcionista' => route('mostrar_consultas_recepcionista'),
+                        'medico'        => route('mostrar_consultas_medico'),
+                        'paciente'      => '/painel-paciente/dashboard',
+                        default         => '/'
+                    };
+                @endphp
+                <a href="{{ $link_painel }}" class="btn-login btn-login--avatar" title="Ir para o painel">
+                    @if ($utilizador_logado && $utilizador_logado->foto)
+                        <img src="{{ $utilizador_logado->foto_url }}" alt="Foto de perfil" class="btn-login__foto">
+                    @else
+                        <span class="btn-login__iniciais">
+                            {{ strtoupper(substr($utilizador_logado->nome ?? 'U', 0, 1)) }}
+                        </span>
+                    @endif
+                    <span class="btn-login__label">
+                        @if (session('tipo_utilizador') == 'admi') Dashboard
+                        @elseif (session('tipo_utilizador') == 'recepcionista') Agendamentos
+                        @elseif (session('tipo_utilizador') == 'medico') Consultas
+                        @else Consultas
+                        @endif
+                    </span>
                 </a>
+            @else
+                <a href="/login" class="btn-login">
+                    <i class="fas fa-user"></i>
+                    <span>Entrar</span>
+                </a>
+            @endif
 
-                <!-- Navegação Desktop   active -->
-                <nav class="nav-menu">
-                    <a href="/" class="nav-link ">Início</a>
-                    <a href="/sobre" class="nav-link ">Sobre</a>
-                    <a href="/servicos" class="nav-link">Serviços</a>
-                    <a href="/especialidades" class="nav-link">Especialidades</a>
-                    <a href="/equipa" class="nav-link">Equipa</a>
-                    <a href="/contacto" class="nav-link">Contacto</a>
-                    <a href="/blog" class="nav-link">Blog</a>
-                   <!-- <a href="/chatbot" class="nav-link">Chat Bot</a>-->
-                </nav>
-
-                <!-- Botão de Login -->
-                @if (session('id_utilizador'))
-                    <div style="display: flex; align-items: center; gap:8px;">
-                        @if (session('tipo_utilizador') == 'admi')
-                            <a href="/admin/dashboard" class="btn-login">
-                               <i class="fa-solid fa-gauge"></i><span>Dashboard</span>
-                            </a>
-                        @endif
-                        @if (session('tipo_utilizador') == 'recepcionista')
-                            <a href="{{ route('mostrar_consultas_recepcionista') }}" class="btn-login">
-                                <i class="fa-solid fa-stethoscope"></i><span>Agendamentos</span>
-                            </a>
-                        @endif
-                        @if (session('tipo_utilizador') == 'medico')
-                            <a href= "{{ route('mostrar_consultas_medico') }}" class="btn-login">
-                                <i class="fa-solid fa-stethoscope"></i><span>Consultas</span>
-                            </a>
-                        @endif
-                        @if (session('tipo_utilizador') == 'paciente')
-                            <a href="/painel-paciente/dashboard" class="btn-login">
-                                <i class="fa-solid fa-stethoscope"></i><span>Consultas</span>
-                            </a>
-                        @endif
-
-                    </div>
-                @else
-                    <a href="/login" class="btn-login">
-                        <i class="fas fa-user"></i>
-                        <span>Entrar</span>
-                    </a>
-                @endif
-
-                <!-- Menu Mobile Toggle -->
-                <button class="mobile-menu-toggle" aria-label="Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
+            <!-- Menu Mobile Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
+    </div>
 
-        <!-- Menu Mobile -->
-        <div class="mobile-menu">
-            <a href="/" class="mobile-link "><i class="fas fa-home"></i></a>
-            <a href="/sobre" class="mobile-link">Sobre</a>
-            <a href="/servicos" class="mobile-link">Serviços</a>
-            <a href="/especialidades" class="mobile-link">Especialidades</a>
-            <a href="/equipa" class="mobile-link">Equipa</a>
-            <a href="/contacto" class="mobile-link">Contacto</a>
-            <a href="/blog" class="mobile-link">Blog</a>
-            <a href="/visualizar-perfil" class="mobile-link">
-                        <i class="fas fa-user"></i>
-                        
-                    </a>
-           <!-- <a href="/chatbot" class="mobile-link">Chat Bot</a>-->
-           
-        </div>
-    </header>
+    <!-- Menu Mobile (só links de navegação, sem botão de acesso) -->
+    <div class="mobile-menu">
+        <a href="/" class="mobile-link">Início</a>
+        <a href="/sobre" class="mobile-link">Sobre</a>
+        <a href="/servicos" class="mobile-link">Serviços</a>
+        <a href="/especialidades" class="mobile-link">Especialidades</a>
+        <a href="/equipa" class="mobile-link">Equipa</a>
+        <a href="/contacto" class="mobile-link">Contacto</a>
+        <a href="/blog" class="mobile-link">Blog</a>
+    </div>
+</header>
            
 <button id="chat-fab" aria-label="Abrir assistente virtual Clínica Estoril">
   <i class="bi bi-chat-dots-fill"></i>

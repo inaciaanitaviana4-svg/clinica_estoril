@@ -289,21 +289,60 @@ ul {
 }
 
 .btn-login {
+   
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 24px;
+    padding: 10px 20px;
     background: var(--gradient-primary);
     color: white;
     border-radius: 8px;
     font-weight: 600;
     transition: var(--transition);
+    white-space: nowrap;
 }
+
 
 .btn-login:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+    color:white;
 }
+/* Variante com avatar */
+.btn-login--avatar {
+    padding: 6px 16px 6px 6px;
+    border-radius: 50px;
+}
+
+.btn-login__foto {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    flex-shrink: 0;
+}
+
+.btn-login__iniciais {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.btn-login__label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
 
 /* Menu Mobile */
 .mobile-menu-toggle {
@@ -2412,6 +2451,31 @@ ul {
     }
 
     .btn-login {
+        /* Mantém visível no mobile — fora do toggle */
+        display: flex;
+    }
+
+    .btn-login__label {
+        display: none;
+    }
+
+    .btn-login--avatar {
+        padding: 5px;
+        border-radius: 50%;
+        
+     
+    }
+
+    .btn-login:not(.btn-login--avatar) {
+        padding: 10px 14px;
+        border-radius: 8px;
+    }
+
+     .btn-login:not(.btn-login--avatar) span {
+        display: none;
+    }
+    /* Quando NÃO logado: esconde o texto "Entrar", mantém só o ícone */
+    .btn-login:not(.btn-login--avatar) span {
         display: none;
     }
 
@@ -2517,6 +2581,24 @@ ul {
     .btn {
         padding: 12px 24px;
         font-size: 14px;
+    }
+    .btn-login {
+        display: flex !important;
+        padding: 8px 12px;
+        border-radius: 8px;
+    }
+
+    .btn-login__label {
+        display: none;
+    }
+
+    /* Quando logado: só mostra o avatar em círculo */
+    .btn-login--avatar {
+        padding: 5px !important;
+        border-radius: 50% !important;
+        width: 42px;
+        height: 42px;
+        justify-content: center;
     }
 
     .stat-card {
@@ -3253,4 +3335,28 @@ body {
     font-size: 52px;
     font-weight:700;
     color:#1d4ed8;
+}
+/* Animações para o menu de foto */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -55%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.foto-menu {
+    animation: slideIn 0.2s ease-out;
+}
+
+/* Efeito de hover no container da foto */
+#foto-label {
+    transition: all 0.2s ease;
+}
+
+#foto-label:hover {
+    box-shadow: 0 4px 12px rgba(0,102,204,0.2);
 }

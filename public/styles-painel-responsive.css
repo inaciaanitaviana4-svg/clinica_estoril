@@ -1,0 +1,473 @@
+/* =====================================================
+   CLÍNICA ESTORIL — RESPONSIVIDADE + MODO NOTURNO
+   Ficheiro: styles-painel-responsive.css
+   Colocar na pasta public/ e linkar DEPOIS de styles-painel.css
+   ===================================================== */
+
+/* ─────────────────────────────────────────────────────
+   ANTI-FLASH: evita piscar branco antes do dark mode
+   ───────────────────────────────────────────────────── */
+html.pre-dark body {
+    background-color: #0f172a !important;
+}
+
+/* ─────────────────────────────────────────────────────
+   VARIÁVEIS — MODO CLARO
+   ───────────────────────────────────────────────────── */
+:root {
+    --bg-page:              #f8fafc;
+    --bg-white:             #ffffff;
+    --bg-light:             #ffffff;
+    --bg-card:              #ffffff;
+    --text-dark:            #111827;
+    --text-gray:            #4b5563;
+    --text-light:           #9ca3af;
+    --border-color:         #e5e7eb;
+    --sidebar-bg:           #ffffff;
+    --sidebar-text:         #0066cc;
+    --sidebar-active-bg:   #0066cc;
+    --sidebar-active-text:  #ffffff;
+    --sidebar-hover-bg:     #4994df;
+    --logo-text-color:      #0066cc;
+    --header-bg:            #ffffff;
+    --header-border:        #e5e7eb;
+    --table-head-bg:        #f8fafc;
+    --table-row-hover:      #f0f7ff;
+    --table-border:         #e5e7eb;
+    --input-bg:             #ffffff;
+    --input-border:         #d1d5db;
+    --input-text:           #111827;
+    --input-focus:          #1a56db;
+    --shadow-sm:  0 1px 3px rgba(0,0,0,.06);
+    --shadow-md:  0 4px 6px rgba(0,0,0,.07);
+}
+
+/* ─────────────────────────────────────────────────────
+   VARIÁVEIS — MODO NOTURNO
+   ───────────────────────────────────────────────────── */
+body.dark-mode {
+    --bg-page:              #0f172a;
+    --bg-white:             #1e293b;
+    --bg-light:             #1e293b;
+    --bg-card:              #1e293b;
+    --text-dark:            #f1f5f9;
+    --text-gray:            #94a3b8;
+    --text-light:           #64748b;
+    --border-color:         #334155;
+    --sidebar-bg:           #1e293b;
+    --sidebar-text:         #cbd5e1;
+    --sidebar-active-bg:    #1e3a5f;
+    --sidebar-active-text:  #60a5fa;
+    --sidebar-hover-bg:     #273549;
+    --logo-text-color:      #f1f5f9;
+    --header-bg:            #1e293b;
+    --header-border:        #334155;
+    --table-head-bg:        #162032;
+    --table-row-hover:      #1e3248;
+    --table-border:         #334155;
+    --input-bg:             #0f172a;
+    --input-border:         #475569;
+    --input-text:           #f1f5f9;
+    --input-focus:          #60a5fa;
+    --shadow-sm:  0 1px 3px rgba(0,0,0,.3);
+    --shadow-md:  0 4px 6px rgba(0,0,0,.4);
+}
+
+/* ─────────────────────────────────────────────────────
+   HEADER E MAIN — classes controladas por JS/CSS
+   ───────────────────────────────────────────────────── */
+.painel-header {
+    position: fixed;
+    top: 0;
+    left: 240px;
+    right: 0;
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--header-border);
+    padding: 8px 16px;
+    height: 52px;
+    z-index: 100;
+    transition: background-color 0.3s ease, border-color 0.3s ease, left 0.3s ease;
+}
+
+.painel-main {
+    margin-left: 240px;
+    margin-top: 52px;
+    padding: 16px;
+    transition: margin-left 0.3s ease;
+}
+
+/* ─────────────────────────────────────────────────────
+   APLICAR VARIÁVEIS — ELEMENTOS GERAIS
+   ───────────────────────────────────────────────────── */
+body {
+    background-color: var(--bg-page) !important;
+    color: var(--text-dark);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.bg-light {
+    background-color: var(--bg-page) !important;
+}
+
+/* Sidebar */
+.menu-vertical {
+    background-color: var(--sidebar-bg) !important;
+    border-right: 1px solid var(--border-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease, width 0.3s ease;
+}
+
+.sidebar-menu-item {
+    color: var(--sidebar-text) !important;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.15s ease, color 0.15s ease;
+    text-decoration: none !important;
+}
+
+.sidebar-menu-item:hover {
+    background-color: var(--sidebar-hover-bg) !important;
+}
+
+.sidebar-menu-item-active {
+    background-color: var(--sidebar-active-bg) !important;
+    color: var(--sidebar-active-text) !important;
+}
+
+.texto {
+    color: var(--logo-text-color) !important;
+    transition: color 0.3s ease;
+}
+
+/* Cards */
+.card {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: var(--shadow-sm);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.card-header {
+    border-bottom-color: var(--border-color) !important;
+}
+
+.card-title {
+    color: var(--text-dark) !important;
+}
+
+/* Tabela */
+thead {
+    background-color: var(--table-head-bg) !important;
+}
+
+th {
+    color: var(--text-dark) !important;
+    border-bottom-color: var(--table-border) !important;
+}
+
+td {
+    color: var(--text-gray) !important;
+    border-bottom-color: var(--table-border) !important;
+}
+
+tbody tr:hover {
+    background-color: var(--table-row-hover) !important;
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+    background-color: var(--input-bg) !important;
+    border-color: var(--input-border) !important;
+    color: var(--input-text) !important;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--input-focus) !important;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.15) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-light) !important;
+}
+
+label {
+    color: var(--text-gray) !important;
+}
+
+/* Modal */
+.modal-content {
+    background-color: var(--bg-card) !important;
+    color: var(--text-dark) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+.modal-header {
+    border-bottom-color: var(--border-color) !important;
+}
+
+/* Alert */
+.custom-alert-box {
+    background-color: var(--bg-card) !important;
+    color: var(--text-dark) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+/* Notificações */
+.notification {
+    background-color: var(--bg-card) !important;
+}
+
+.notification-title  { color: var(--text-dark) !important; }
+.notification-message { color: var(--text-gray) !important; }
+
+/* Search bar */
+.search-bar input {
+    background-color: var(--input-bg) !important;
+    border-color: var(--input-border) !important;
+    color: var(--input-text) !important;
+}
+
+/* Componente pesquisa paciente */
+.pp-dropdown {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+.pp-item {
+    color: var(--text-dark) !important;
+    border-bottom-color: var(--border-color) !important;
+}
+
+.pp-item:hover {
+    background-color: var(--table-row-hover) !important;
+}
+
+.pp-input-row input[type="text"] {
+    background-color: var(--input-bg) !important;
+    border-color: var(--input-border) !important;
+    color: var(--input-text) !important;
+}
+
+/* ─────────────────────────────────────────────────────
+   BADGES NO DARK MODE
+   ───────────────────────────────────────────────────── */
+body.dark-mode .badge-success { background: #14532d !important; color: #86efac !important; }
+body.dark-mode .badge-warning { background: #78350f !important; color: #fde68a !important; }
+body.dark-mode .badge-danger  { background: #7f1d1d !important; color: #fca5a5 !important; }
+body.dark-mode .badge-info    { background: #0c4a6e !important; color: #7dd3fc !important; }
+
+body.dark-mode .back-to-top {
+    background-color: #1e293b !important;
+    color: #60a5fa !important;
+    border: 1px solid #334155 !important;
+}
+
+body.dark-mode .btn-todos-pacientes {
+    background: #1e3a5f !important;
+    color: #60a5fa !important;
+    border-color: #3b82f6 !important;
+}
+
+/* Scrollbar no dark mode */
+body.dark-mode ::-webkit-scrollbar        { width: 6px; height: 6px; }
+body.dark-mode ::-webkit-scrollbar-track  { background: #1e293b; }
+body.dark-mode ::-webkit-scrollbar-thumb  { background: #475569; border-radius: 4px; }
+body.dark-mode ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+/* ─────────────────────────────────────────────────────
+   BOTÃO TOGGLE MODO NOTURNO
+   ───────────────────────────────────────────────────── */
+.dark-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: 1.5px solid var(--border-color);
+    border-radius: 20px;
+    padding: 5px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-gray);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.dark-toggle-btn:hover {
+    border-color: var(--input-focus);
+    color: var(--input-focus);
+    background-color: rgba(26, 86, 219, 0.06);
+}
+
+.dark-toggle-btn .toggle-icon {
+    font-size: 15px;
+    line-height: 1;
+}
+
+.perfil-link{
+    display:flex;
+    align-items:center;
+    height:fit-content;
+    gap:8px;
+    text-decoration:none;
+    color:var(--text-dark) !important;
+}
+/* ─────────────────────────────────────────────────────
+   RESPONSIVIDADE — TABLET (≤ 1024px)
+   ───────────────────────────────────────────────────── */
+/* =========================================
+   MENU RESPONSIVO COM TOGGLE
+========================================= */
+
+.menu-toggle-btn{
+    display:none;
+    align-items:center;
+    justify-content:center;
+    width:40px;
+    height:40px;
+    border:none;
+    border-radius:8px;
+    background:transparent;
+    cursor:pointer;
+    font-size:20px;
+    color:var(--text-dark);
+}
+
+/* overlay */
+.sidebar-overlay{
+    display:none;
+}
+
+/* MOBILE */
+@media (max-width: 768px){
+
+    .menu-toggle-btn{
+        display:flex;
+    }
+
+    .menu-vertical{
+        position:fixed;
+        left:-260px;
+        top:0;
+        width:240px !important;
+        height:100vh;
+        z-index:999;
+        transition:left .3s ease;
+    }
+
+    .menu-vertical.aberto{
+        left:0;
+    }
+
+    .sidebar-overlay.ativo{
+        display:block;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.45);
+        z-index:998;
+    }
+
+    .painel-header{
+        left:0 !important;
+    }
+
+    .painel-main{
+        margin-left:0 !important;
+    }
+
+    header[style*="left:240px"],
+    header[style*="left: 240px"]{
+        left:0 !important;
+    }
+
+    main[style*="margin-left:240px"],
+    main[style*="margin-left: 240px"]{
+        margin-left:0 !important;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr !important;
+    }
+
+    .table-container{
+        overflow-x:auto !important;
+        -webkit-overflow-scrolling:touch;
+    }
+
+
+    /* Esconde labels no header para não amontoar */
+    .dark-toggle-btn .toggle-label { display: none !important; }
+    .user-name-text                { display: none !important; }
+}
+
+/* ─────────────────────────────────────────────────────
+   TOOLTIP NA SIDEBAR (aparece ao hover em mobile)
+   ───────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .sidebar-menu-item { position: relative; }
+
+    .sidebar-menu-item::after {
+        content: attr(data-titulo);
+        position: absolute;
+        left: 68px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #1e293b;
+        color: #f1f5f9;
+        font-size: 12px !important;
+        font-weight: 500;
+        padding: 5px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        z-index: 300;
+        box-shadow: 0 4px 12px rgba(0,0,0,.25);
+        transition: opacity 0.15s ease;
+    }
+
+    .sidebar-menu-item:hover::after { opacity: 1; }
+}
+
+/* ─────────────────────────────────────────────────────
+   RESPONSIVIDADE — MOBILE PEQUENO (≤ 480px)
+   ───────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+    .menu-vertical { width: 52px !important; }
+    .painel-header { left: 52px !important; padding: 6px 10px !important; }
+    .painel-main   { margin-left: 52px !important; padding: 10px !important; }
+
+    header[style*="left:240px"],
+    header[style*="left: 240px"]     { left: 52px !important; }
+    main[style*="margin-left: 240px"],
+    main[style*="margin-left:240px"] { margin-left: 52px !important; }
+
+    .sidebar-menu-item::after { left: 56px !important; }
+    .sidebar-menu-item i,
+    .sidebar-menu-item .notif-icon-wrapper { font-size: 15px !important; }
+
+    /* Tabs scroll horizontal */
+    .tabs {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        flex-wrap: nowrap !important;
+        gap: 2px !important;
+        padding-bottom: 2px;
+    }
+    .tab { flex-shrink: 0 !important; font-size: 13px !important; padding: 8px 11px !important; }
+
+    th, td  { font-size: 12px !important; padding: 7px 8px !important; }
+    .card   { padding: 12px !important; margin-bottom: 10px !important; }
+    .card-title { font-size: 15px !important; }
+
+    .btn-group { flex-wrap: wrap !important; gap: 4px !important; }
+    .btn-small { font-size: 11px !important; padding: 5px 9px !important; }
+}

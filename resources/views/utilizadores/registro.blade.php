@@ -18,42 +18,57 @@
     {{ csrf_field() }}
 
          {{-- Foto de perfil --}}
-<div style="display:flex; flex-direction:column; align-items:center; margin-bottom:32px;">
+<!-- FOTO DE PERFIL COMPLETA -->
+<div style="display:flex; flex-direction:column; align-items:center; margin-bottom:20px;">
     <label for="foto" id="foto-label" style="
-        position:relative; width:120px; height:120px; border-radius:50%;
-        cursor:pointer; overflow:hidden; border:3px dashed #a0aec0;
-        background:#f0f4f8; display:flex; align-items:center;
-        justify-content:center; transition:border-color 0.2s;"
-        onmouseover="this.style.borderColor='#0066cc';document.getElementById('foto-overlay').style.opacity='1'"
-        onmouseout="this.style.borderColor='#a0aec0';document.getElementById('foto-overlay').style.opacity='0'">
+        position:relative; 
+        width:120px; 
+        height:120px; 
+        border-radius:50%;
+        cursor:pointer; 
+        overflow:hidden; 
+        border:3px solid #cbd5e0;
+        background:#f7fafc; 
+        display:flex; 
+        align-items:center;
+        justify-content:center; 
+        transition:all 0.2s;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);"
+        onmouseover="this.style.borderColor='#0066cc';this.style.transform='scale(1.02)';"
+        onmouseout="this.style.borderColor='#cbd5e0';this.style.transform='scale(1)';">
 
         @if(isset($utilizador) && $utilizador->foto)
             <img id="foto-preview"
                  src="{{ asset('storage/' . $utilizador->foto) }}"
-                 alt="Foto" style="width:100%; height:100%;
-                 object-fit:cover; border-radius:50%;">
+                 alt="Foto de perfil"
+                 style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
             <i id="foto-icon" class="fa-solid fa-circle-user"
                style="display:none; font-size:64px; color:#a0aec0;"></i>
         @else
-
-         <img id="foto-preview" src="" alt="Foto"
+            <img id="foto-preview" src="" alt="Foto de perfil"
                  style="display:none; width:100%; height:100%;
                         object-fit:cover; border-radius:50%;">
             <i id="foto-icon" class="fa-solid fa-circle-user"
                style="font-size:64px; color:#a0aec0;"></i>
         @endif
 
-        <div id="foto-overlay" style="
-            position:absolute; inset:0; background:rgba(0,0,0,0.38);
-            border-radius:50%; display:flex; align-items:center;
-            justify-content:center; opacity:0; transition:opacity 0.2s;
+        <div style="
+            position:absolute; 
+            inset:0; 
+            background:rgba(0,0,0,0.4);
+            border-radius:50%; 
+            display:flex; 
+            align-items:center;
+            justify-content:center; 
+            opacity:0; 
+            transition:opacity 0.2s;
             pointer-events:none;">
-            <i class="fa-solid fa-camera" style="color:white; font-size:26px;"></i>
+            <i class="fa-solid fa-camera" style="color:white; font-size:24px;"></i>
         </div>
     </label>
     <input type="file" id="foto" name="foto" accept="image/*" style="display:none">
-    <span style="margin-top:8px; font-size:13px; color:#718096;">
-        {{ isset($utilizador) && $utilizador->foto ? 'Alterar foto' : 'Adicionar foto (opcional)' }}
+    <span style="margin-top:8px; font-size:12px; color:#718096;">
+        Clique na foto para opções
     </span>
 </div>
 

@@ -1,5 +1,5 @@
 @extends('layouts.painel')
-@section('titulo', 'Consultas paciente')
+@section('titulo', 'Consultas Paciente')
 @section('conteudo')
     <section id="medico" class="section active">
 
@@ -32,13 +32,13 @@
                         <thead>
                             <tr>
                                 <th>Modalidade</th>
-                                <th>Tipo de consulta</th>
+                                <th>Tipo de Consulta</th>
                                 <th>Serviço clinico</th>
                                 <th>Preço</th>
                                 <th>Médico</th>
-                                <th>Data da consulta</th>
-                                <th>Hora da consulta</th>
-                                <th>Data de Marcação</th>
+                                 <th>Data da Consulta</th>
+                                <th>Hora da Consulta</th>
+                                <th>Data da Marcação</th>
                                 <th>Estado</th>
                                 <th>Ações</th>
                             </tr>
@@ -53,7 +53,7 @@
                                     <td>{{ $consulta->nome_medico ?? 'ainda não definido' }}</td>
                                     <td>{{ $consulta->data }}</td>
                                     <td>{{ $consulta->hora }}</td>
-                                    <td>{{ $consulta->data_marcacao->format('Y-m-d H:i') }}</td>
+                                    <td>{{ $consulta->data_marcacao}}</td>
                                     <td>
                                         <span
                                             style="
@@ -64,10 +64,10 @@
                                             background-color:
                                             @switch($consulta->estado)
                                                 @case('pendente') #F59E0B @break
-                                                @case('agendada') #3B82F6 @break
-                                                @case('confirmada') #22C55E @break
+                                                @case('agendada')  #6B7280 @break
+                                                @case('confirmada') #3B82F6 @break
                                                 @case('cancelada') #EF4444 @break
-                                                @case('concluida') #6B7280 @break
+                                                @case('concluida')  #22C55E @break
                                             @endswitch
                                         ">
                                             {{ ucfirst($consulta->estado) }}

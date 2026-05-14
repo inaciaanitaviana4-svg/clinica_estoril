@@ -60,7 +60,7 @@ class ProntuarioController extends Controller
         return view('admin.prontuarios', compact('pacientes'));
     }
 
-    public function mostrar_prontuário_paciente(Request $request)
+    public function mostrar_prontuario_paciente(Request $request)
     {
         $paciente = verificar_paciente();
         if (! $paciente) {
@@ -97,7 +97,7 @@ class ProntuarioController extends Controller
             ->orderBy('data')
             ->orderBy('hora')
             ->paginate(10);
-        return view('pacientes.prontuário', compact('consultas'));
+        return view('pacientes.prontuario', compact('consultas'));
     }
 
     public function mostrar_detalhes_prontuario_medico($id_paciente)

@@ -18,7 +18,7 @@
                     <h2 class="card-title">Consultas</h2>
                 </div>
                 <form>
-                   <div class="form-group">
+                  <div class="form-group">
     <label>Paciente</label>
     <div class="pp-wrapper" id="pp-wrapper-consulta">
         <div class="pp-input-row">
@@ -31,6 +31,11 @@
                 <i class="fa fa-search"></i>
             </button>
         </div>
+        <button type="button"
+                class="btn-todos-pacientes"
+                onclick="ppSelecionarTodos('consulta')">
+            <i class="fa-solid fa-users"></i> Todos os pacientes
+        </button>
         <div class="pp-selecionado" id="pp-sel-consulta"></div>
         <div class="pp-dropdown" id="pp-drop-consulta"></div>
     </div>
@@ -120,6 +125,11 @@
                 <i class="fa fa-search"></i>
             </button>
         </div>
+        <button type="button"
+                class="btn-todos-pacientes"
+                onclick="ppSelecionarTodos('prontuario')">
+            <i class="fa-solid fa-users"></i> Todos os pacientes
+        </button>
         <div class="pp-selecionado" id="pp-sel-prontuario"></div>
         <div class="pp-dropdown" id="pp-drop-prontuario"></div>
     </div>
@@ -243,6 +253,27 @@ function ppSelecionar(s, id, nome, tel) {
     drop.classList.remove('aberto');
     document.getElementById(`pp-input-${s}`).value = '';
     document.getElementById(`pp-input-${s}`).placeholder = 'Pesquisar outro paciente...';
+}
+function ppSelecionarTodos(s) {
+    // Limpa o id — backend interpreta vazio como "todos"
+    document.getElementById(PP_IDS[s]).value = '';
+
+    // Fecha dropdown se estiver aberto
+    document.getElementById(`pp-drop-${s}`)?.classList.remove('aberto');
+    document.getElementById(`pp-input-${s}`).value = '';
+    document.getElementById(`pp-input-${s}`).placeholder = 'Pesquisar paciente...';
+
+    // Mostra badge de confirmação
+    const sel = document.getElementById(`pp-sel-${s}`);
+    sel.innerHTML = `
+        <i class="fa-solid fa-users" style="color:#1a56db; font-size:16px; flex-shrink:0;"></i>
+        <div style="flex:1; min-width:0;">
+            <div class="pp-sel-nome">Todos os pacientes</div>
+            <div class="pp-sel-sub">O relatório incluirá todos os pacientes</div>
+        </div>
+        <span class="pp-sel-badge" style="color:#111827; font-weight:700; font-size:12px;">Selecionado</span>
+    `;
+    sel.classList.add('visivel');
 }
 // ─────────────────────────────────────────────────────────
 </script>

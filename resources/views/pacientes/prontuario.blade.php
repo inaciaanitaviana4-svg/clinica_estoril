@@ -13,7 +13,7 @@
                         {{ session('erro') }}
                     </div>
                 @endif
-                <form method="GET" action="{{ route('mostrar_prontuário_paciente') }}">
+                <form method="GET" action="{{ route('mostrar_prontuario_paciente') }}">
                     <div class="form-group" style="display:flex;flex-direction:row;gap:8px;margin-top:20px">
                         <input name="pesquisar_consultas" value="{{ request('pesquisar_consultas') }}" type="text"
                             id="searchInput" placeholder="Pesquisar...">
@@ -22,7 +22,7 @@
                     </div>
                     @if (request('pesquisar_consultas'))
                         <a style="margin-bottom: 12px"
-                            href="{{ route('mostrar_prontuário_paciente') }}"
+                            href="{{ route('mostrar_prontuario_paciente') }}"
                             class="btn btn-danger">Limpar pesquisa</a>
                     @endif
                 </form>
@@ -61,10 +61,10 @@
                                             background-color:
                                             @switch($consulta->estado)
                                                 @case('pendente') #F59E0B @break
-                                                @case('agendada') #3B82F6 @break
-                                                @case('confirmada') #22C55E @break
+                                                @case('agendada')  #6B7280 @break
+                                                @case('confirmada') #3B82F6 @break
                                                 @case('cancelada') #EF4444 @break
-                                                @case('concluida') #6B7280 @break
+                                                @case('concluida')  #22C55E @break
                                             @endswitch
                                         ">
                                             {{ ucfirst($consulta->estado) }}

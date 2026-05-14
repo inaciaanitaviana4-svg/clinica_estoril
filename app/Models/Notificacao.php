@@ -28,4 +28,8 @@ class Notificacao extends Model
         "lida",                 // Flag: 0=não lida, 1=lida
         "data",                 // Data/hora da notificação
     ];
+
+     protected $casts = [
+        'data' => 'datetime',
+    ];
 }

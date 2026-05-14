@@ -68,7 +68,7 @@
                         </div>
                     </div>
                     <div class="form-options">
-                        <a  href="#" class="forgot-password">Esqueci a senha</a>
+                        <a href="{{ route('recuperar-senha') }}" class="forgot-password">Esqueci a senha</a>
                     </div>
                     <button type="submit" class="btn btn-primary btn-full" >
                         <i class="fas fa-sign-in-alt"></i>
