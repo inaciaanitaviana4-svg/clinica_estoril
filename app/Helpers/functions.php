@@ -170,7 +170,7 @@ if (! function_exists('badge_estados')) {
     function badge_estados($estado)
     {
         $cor = '#000000'; // Cor padrão
-        $estado_nome = '';
+        $estado_nome = ucfirst(str_replace('_', ' ', $estado)); // Formata o nome do estado
         switch ($estado) {
             case 'pendente':
                 $cor = '#f59e0b';
@@ -207,14 +207,9 @@ if (! function_exists('badge_estados')) {
                 $estado_nome = 'Concluida';
                 break;
 
-            case 'PENDENTE':
-                $cor = '#f59e0b';
-                $estado_nome = 'Pendente';
-                break;
-
-            case 'REALIZADO':
+            case 'realizado':
                 $cor = '#10b981';
-                $estado_nome = 'Realizado';
+                $estado_nome = 'realizado';
                 break;
         }
 

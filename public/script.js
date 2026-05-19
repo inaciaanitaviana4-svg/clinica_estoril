@@ -662,7 +662,7 @@ function badge_estados_exames(estado) {
 
 function badge_todos_estados($estado) {
     $cor = "#000000"; // Cor padrão
-    $estado_nome = "";
+    $estado_nome = $estado; // Exibe o estado original por padrão
     switch ($estado) {
         case "pendente":
             $cor = "#f59e0b";
@@ -693,6 +693,10 @@ function badge_todos_estados($estado) {
         case "sucesso":
             $cor = "#10b981";
             $estado_nome = "Sucesso";
+            break;
+        case "concluida":
+            $cor = "#10b981";
+            $estado_nome = "Concluída";
             break;
     }
 
