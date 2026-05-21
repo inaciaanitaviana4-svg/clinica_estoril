@@ -254,7 +254,6 @@ document.getElementById('formAgendamento').addEventListener('submit', function(e
     <script src="/auto-select.js"></script>
     <script>
    const dataInput = document.getElementById("data");
-const obsInput = document.getElementById("observacao");
 
 // ================= FUNÇÃO LIMITE DE DATA =================
 function obterLimiteMaximo() {
@@ -294,25 +293,6 @@ dataInput.addEventListener("input", function () {
     }
 });
 
-
-// ================= OBSERVAÇÃO =================
-obsInput.addEventListener("input", function () {
-
-    const erro = document.getElementById("erro-obs");
-
-    if (this.value.trim().length < 30) {
-        erro.textContent = "Mínimo de 30 caracteres";
-        erro.className = "erro";
-
-        this.classList.add("input-erro");
-        this.classList.remove("input-sucesso");
-
-    } else {
-        erro.textContent = "";
-        this.classList.remove("input-erro");
-        this.classList.add("input-sucesso");
-    }
-});
 
 
 // ================= SUBMIT =================

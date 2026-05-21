@@ -30,15 +30,17 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Tipo de consulta</th>
+                                <th>Tipo de Consulta</th>
+                                <th>Modalidade</th>
                                 <th>Serviço clinico</th>
+                                <th>Preço</th>
                                 <th>Paciente</th>
-                                <th>Medico</th>
+                                <th>Médico</th>
                                 <th>Recepcionista</th>
-                                <th>Data da consulta</th>
-                                <th>Hora da consulta</th>
-                                <th>Data de Marcação</th>
-                                <th>Estado</th>
+                                <th>Data da Consulta</th>
+                                <th>Hora da Consulta</th>
+                                <th>Data da Marcação</th>
+                                <th>Estado da Consulta</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -46,15 +48,16 @@
                             @foreach ($consultas as $consulta)
                                 <tr>
                                     <td>{{ $consulta->tipo_consulta }}</td>
+                                    <td>{{ $consulta->modalidade }}</td>
                                     <td>{{ $consulta->nome_servico_clinico }}</td>
+                                    <td>{{ $consulta->preco_servico_clinico }}</td>
                                     <td>{{ $consulta->nome_paciente }}</td>
                                     <td>{{ $consulta->nome_medico }}</td>
                                     <td>{{ $consulta->nome_recepcionista }}</td>
                                     <td>{{ $consulta->data }}</td>
                                     <td>{{ $consulta->hora }}</td>
-                                    <td>{{ $consulta->data_marcacao->format('Y-m-d H:i') }}</td>
-                                    <td>
-                                        {{ badge_estados($consulta->estado) }}
+                                    <td>{{ $consulta->data_marcacao}}</td>
+                                    <td>{{ badge_estados($consulta->estado) }}
                                     </td>
                                     <td>
                                         <div class="btn-group">

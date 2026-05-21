@@ -298,7 +298,7 @@ if(menuBtn){
         const icon  = document.getElementById('darkToggleIcon');
         const label = document.getElementById('darkToggleLabel');
         if (icon)  icon.textContent  = '☀️';
-        if (label) label.textContent = 'Modo Claro';
+        if (label) label.textContent = 'Activar Modo Claro';
     }
 
     function desativarDark() {
@@ -308,7 +308,7 @@ if(menuBtn){
         const icon  = document.getElementById('darkToggleIcon');
         const label = document.getElementById('darkToggleLabel');
         if (icon)  icon.textContent  = '🌙';
-        if (label) label.textContent = 'Modo Noturno';
+        if (label) label.textContent = 'Activar Modo Noturno';
     }
 
     (function () {

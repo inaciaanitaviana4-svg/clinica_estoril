@@ -107,11 +107,7 @@
 
                         </div>
 
-                        <!-- BOTÃO -->
-                        <a href="/login" class="service-btn">
-                            Agendar Consulta
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
+                       
 
                     </div>
 
@@ -143,11 +139,6 @@
                 </div>
 
                 <div class="cta-buttons">
-
-                    <a href="/" class="btn btn-white">
-                        <i class="fas fa-calendar-plus"></i>
-                        Agendar Consulta
-                    </a>
 
                     <a href="tel:+244943500700" class="btn btn-outline-white">
                         <i class="fas fa-phone"></i>

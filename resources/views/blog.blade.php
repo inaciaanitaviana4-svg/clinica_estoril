@@ -9,34 +9,45 @@
 <body>
 
     <!-- Hero Section -->
-    <section class="page-header" id="main-sections">
-        <div class="page-header-overlay"></div>
-    
-        <div class="container">
-            <div class="hero-content" style="display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;">
-                <div class="hero-text fade-in" style="z-index: 2;">
-                    <h1>Centro de Educação em Saúde</h1>
-                    <p class="hero-subtitle" style="font-size: 1.45rem;
-            color: white;
-            margin-bottom: 1rem;
-            font-weight: 500;">Informação confiável baseada em orientações médicas internacionais.</p>
-                    <p class="hero-description" style="color: white;
-            margin-bottom: 2rem;
-            line-height: 1.8;
-            font-size:19px;">Conteúdos educativos sobre prevenção, doenças comuns, primeiros socorros, nutrição e bem-estar. Acesso à informação de qualidade para cuidar melhor da sua saúde e da sua família.</p>
-                    
-                   
-                </div>
-                
-                <div class="hero-image fade-in">
-                    <img src="imagem/familia.jpg" alt="Profissional de saúde analisando informações médicas">
+  <!-- Hero Section -->
+<section class="page-header" id="main-sections">
+    <div class="page-header-overlay"></div>
+
+    <div class="container">
+        <div class="hero-content" style="display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;">
+            <div class="hero-text fade-in" style="z-index: 2;">
+                <h1>Centro de Educação em Saúde</h1>
+                <p class="hero-subtitle" style="font-size: 1.45rem;
+        color: white;
+        margin-bottom: 1rem;
+        font-weight: 500;">Informação confiável baseada em orientações médicas internacionais.</p>
+                <p class="hero-description" style="color: white;
+        margin-bottom: 2rem;
+        line-height: 1.8;
+        font-size:19px;">Conteúdos educativos sobre prevenção, doenças comuns, primeiros socorros, nutrição e bem-estar. Acesso à informação de qualidade para cuidar melhor da sua saúde e da sua família.</p>
+            </div>
+
+            <!-- Slideshow -->
+            <div class="hero-image fade-in">
+                <div class="hero-slideshow">
+                    <div class="slide active">
+                        <img src="imagem/bem-vindo.jpg" alt="Família saudável e feliz">
+                    </div>
+                    <div class="slide">
+                        <img src="imagem/familia.jpg" alt="Cuidado e bem-estar familiar">
+                    </div>
+                    <div class="slide-dots">
+                        <span class="sdot active"></span>
+                        <span class="sdot"></span>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Categorias Principais -->
     <section class="main-content">
@@ -93,7 +104,7 @@
             
             <div class="articles-grid">
                 <article class="article-card">
-                    <img src="imagem/gripe.jpg" alt="Pessoa com sintomas de gripe" class="article-image">
+                    <img src="imagem/IMG-20260415-WA0038(1).jpg" alt="Pessoa com sintomas de gripe" class="article-image">
                     <div class="article-content">
                         <span class="article-label">Doenças Comuns</span>
                         <h3>Gripe: Sintomas, Prevenção e Quando Procurar Atendimento</h3>
@@ -113,7 +124,7 @@
                 </article>
                 
                 <article class="article-card">
-                    <img src="imagem/paludismo.jpg" alt="Prevenção do paludismo" class="article-image">
+                    <img src="imagem/IMG-20260415-WA0039.jpg" alt="Prevenção do paludismo" class="article-image">
                     <div class="article-content">
                         <span class="article-label">Doenças Comuns</span>
                         <h3>Paludismo: Como Prevenir e Identificar os Sinais</h3>
@@ -257,9 +268,85 @@
         </div>
     </section>
 <script src="{{ asset('blog.js') }}"></script>
+<!-- JS do Carrossel -->
 
+<script>
+(function () {
+    const slides = document.querySelectorAll('.hero-slideshow .slide');
+    const dots   = document.querySelectorAll('.sdot');
+    let current  = 0;
+    let timer;
+
+    // Pré-carrega todas as imagens silenciosamente
+    slides.forEach(slide => {
+        const img = slide.querySelector('img');
+        const preload = new Image();
+        preload.src = img.src;
+    });
+
+    function goToSlide(next) {
+        const prev = current;
+        if (next === prev) return;
+
+        // Próximo slide fica visível por baixo
+        slides[next].style.zIndex = 0;
+        slides[next].style.opacity = 1;
+
+        // Slide atual faz fade out por cima
+        slides[prev].style.zIndex = 2;
+        slides[prev].style.transition = 'opacity 2s ease-in-out';
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                slides[prev].style.opacity = 0;
+            });
+        });
+
+        // Após transição, limpa
+        setTimeout(() => {
+            slides[prev].style.zIndex = 0;
+            slides[prev].classList.remove('active');
+            slides[next].classList.add('active');
+            slides[next].style.zIndex = 1;
+        }, 2000);
+
+        // Dots
+        dots[prev].classList.remove('active');
+        dots[next].classList.add('active');
+
+        current = next;
+    }
+
+    function next() {
+        goToSlide((current + 1) % slides.length);
+    }
+
+    function startTimer() {
+        timer = setInterval(next, 8500);
+    }
+
+    function stopTimer() {
+        clearInterval(timer);
+    }
+
+    // Dots clicáveis
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+            stopTimer();
+            goToSlide(i);
+            startTimer();
+        });
+    });
+
+    // Pausa ao hover
+    const slideshow = document.querySelector('.hero-slideshow');
+    slideshow.addEventListener('mouseenter', stopTimer);
+    slideshow.addEventListener('mouseleave', startTimer);
+
+    startTimer();
+})();
+</script>
 </body>
 </html>
-
 
 @endsection
