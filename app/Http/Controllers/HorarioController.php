@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Horario;
+use App\Models\ServicoClinico;
 use Illuminate\Http\Request;
 
 class HorarioController extends Controller
@@ -84,6 +85,11 @@ class HorarioController extends Controller
         }
         $horarios = [];
         if ($id_servico_clinico) {
+            $servico_clinico = ServicoClinico::find($id_servico_clinico);
+            if (! $servico_clinico->possui_horario) {
+                 $horarios = Horario::where('activo', true)->distinct()->orderBy('hora')->get();
+                return response()->json($horarios);
+            }
             $horarios = Horario::select('horarios.*')
                 ->join('medico', 'horarios.id_medico', '=', 'medico.id_medico')
                 ->join('especialidades', 'medico.especialidade', '=', 'especialidades.nome')
@@ -91,9 +97,10 @@ class HorarioController extends Controller
                 ->where('servicos_clinicos_especialidades.id_servico_clinico', $id_servico_clinico)
                 ->where('horarios.activo', true)
                 ->distinct()
+                ->orderBy('hora')
                 ->get();
         } elseif ($id_medico) {
-            $horarios = Horario::where('id_medico', $id_medico)->where('activo', true)->get();
+            $horarios = Horario::where('id_medico', $id_medico)->where('activo', true)->orderBy('hora')->get();
         }
         $horariototal = count($horarios);
         if ($horariototal == 0) {

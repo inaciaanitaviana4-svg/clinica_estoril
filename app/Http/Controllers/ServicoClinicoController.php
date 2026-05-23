@@ -38,6 +38,7 @@ class ServicoClinicoController extends Controller
                 $servico_clinico->duracao_min = $request->duracao_min;
                 $servico_clinico->preco = $request->preco;
                 $servico_clinico->activo = $request->boolean('activo');
+                $servico_clinico->possui_horario = $request->boolean('possui_horario');
                 $servico_clinico->save();
             } else {
                 $servico_clinico = ServicoClinico::create([
@@ -46,7 +47,7 @@ class ServicoClinicoController extends Controller
                     'duracao_min' => $request->duracao_min,
                     'preco' => $request->preco,
                     'activo' => $request->boolean('activo'),
-
+                    'possui_horario' => $request->boolean('possui_horario'),
                 ]);
 
             }

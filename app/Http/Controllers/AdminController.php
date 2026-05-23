@@ -399,11 +399,10 @@ class AdminController extends Controller
             'servicos_clinicos.preco as preco_servico_clinico'
         )
             ->join('paciente', 'consultas.id_paciente', '=', 'paciente.id_paciente')
-            ->join('medico', 'consultas.id_medico', '=', 'medico.id_medico')
-            ->join('recepcionista', 'consultas.id_recepcionista', '=', 'recepcionista.id_recepcionista')
+            ->leftJoin('medico', 'consultas.id_medico', '=', 'medico.id_medico')
+            ->LeftJoin('recepcionista', 'consultas.id_recepcionista', '=', 'recepcionista.id_recepcionista')
             ->leftJoin('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
             ->leftJoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
-            ->whereIn('estado', ['agendada', 'concluida', 'em_andamento', 'confirmada'])
             ->where(function ($query) use ($pesquisar_consultas) {
                 $query->where('tipos_consultas.nome', 'like', "%$pesquisar_consultas%")
                     ->orWhere('servicos_clinicos.nome', 'like', "%$pesquisar_consultas%")

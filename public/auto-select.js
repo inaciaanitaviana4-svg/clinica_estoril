@@ -40,7 +40,7 @@ servicoClinicoSelect?.addEventListener("change", (e) => {
             data.forEach(horrio => {
                 const option = document.createElement('option');
                 option.value = horrio.hora;
-                option.text = `${mostrarDiaSemana(horrio.dia_semana)} - ${horrio.hora}`;
+                option.text = `${horrio.hora}`;
                 horarioPacienteSelect.appendChild(option);
             });
         });

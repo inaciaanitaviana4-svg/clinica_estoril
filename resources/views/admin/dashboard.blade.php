@@ -134,8 +134,6 @@
                     <thead>
                         <tr>
                             <th>Paciente</th>
-                            <th>Médico</th>
-                            <th>Data</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
@@ -351,9 +349,17 @@
         consultasData.forEach((c, i) => {
             const initials = c.paciente.split(' ').slice(0, 2).map(n => n[0]).join('');
             tbody.innerHTML += `<tr>
-                <td><div class="td-name-wrap"><div class="td-avatar" style="background:${avatarColors[i%5]}">${initials}</div><span class="td-name">${c.paciente}</span></div></td>
-                <td><span style="font-size:12px;color:var(--text-gray)">${c.medico}</span></td>
-                <td><span style="font-size:12px">${c.data} · ${c.hora}</span></td>
+                <td>
+                    <div>
+                        <div class="td-name-wrap">
+                            <div class="td-avatar" style="background:${avatarColors[i%5]}">${initials}</div>
+                            <span class="td-name">${c.paciente}</span>
+                        </div>
+                        <div>
+                           <span style="font-size:12px;font-weight:500">Medico: </span><span style="font-size:12px;color:var(--text-gray)">${c.medico}</span><span style="font-size:12px">${c.data} · ${c.hora}</span>
+                        </div>  
+                    </div>
+                </td>
                 <td>${badge_todos_estados(c.estado)}</td>
             </tr>`;
         });

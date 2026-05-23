@@ -25,7 +25,8 @@ class ServicoClinico extends Model
         "id_tipo_consulta",     // FK: tipo de consulta associado
         "duracao_min",          // Duração em minutos
         "preco",                // Preço do serviço
-        "activo",               // Status ativo/inativo
+        "activo",     // Status ativo/inativo
+        "possui_horario"        // Indica se o serviço possui horário definido
     ];
 }
 

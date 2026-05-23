@@ -65,6 +65,12 @@
                         <span>Activo</span>
                     </label>
                 </div>
+                <div class="form-options">
+                    <label class="checkbox-label">
+                        <input @checked($servico_clinico->possui_horario ?? false) type="checkbox" name="possui_horario">
+                        <span>Possui Horário</span>
+                    </label>
+                </div>
                 <button type="submit" class="btn btn-primary btn-full">
                     Guardar
                 </button>
