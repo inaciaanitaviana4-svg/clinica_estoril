@@ -60,12 +60,44 @@ class DashboardController extends Controller
         $noficacoes = Notificacao::select('notificacoes.*', 'notificacoes.id_notificacao as id')
             ->where('id_util', $paciente->id_util)->get()->toArray();
 
+        // Obter últimos pagamentos do paciente (limitar aos 5 mais recentes)
+        $pagamentos = Pagamento::select('pagamentos.*', 'metodos_pagamentos.nome as metodo_pagamento')
+            ->where('pagamentos.id_paciente', $paciente->id_paciente)
+            ->join('metodos_pagamentos', 'pagamentos.id_metodo_pagamento', '=', 'metodos_pagamentos.id_metodo_pagamento')
+            ->orderBy('pagamentos.data', 'desc')
+            ->limit(5)
+            ->get()
+            ->toArray();
+
+        // Carregar itens de pagamento relacionados (para evitar N+1)
+        $idsPag = array_map(function ($p) { return $p['id_pagamento']; }, $pagamentos);
+        $itens = [];
+        if (!empty($idsPag)) {
+            $itens = \App\Models\ItemPagamento::select('items_pagamentos.*', 'servicos_clinicos.nome as servico_clinico')
+                ->whereIn('id_pagamento', $idsPag)
+                ->join('servicos_clinicos', 'items_pagamentos.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+                ->get()
+                ->toArray();
+        }
+
+        // Agrupar itens por pagamento
+        $itensPorPagamento = [];
+        foreach ($itens as $it) {
+            $itensPorPagamento[$it['id_pagamento']][] = $it;
+        }
+
+        // Anexar itens a cada pagamento
+        foreach ($pagamentos as &$p) {
+            $p['itens'] = $itensPorPagamento[$p['id_pagamento']] ?? [];
+        }
+
         return response()->json([
             'paciente' => $paciente,
             'stats' => $stats,
             'proxima_consulta' => $proxima_consulta,
             'consultas' => $consultas,
             'notificacoes' => $noficacoes,
+            'pagamentos' => $pagamentos,
         ]);
     }
 

@@ -106,6 +106,28 @@
 
         </div><!-- /page-dashboard -->
 
+            <!-- Histórico de Pagamentos -->
+            <div class="page" id="page-pagamentos" style="margin-top:18px">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <div class="ct-icon" style="background:#eef7f6">
+                                <svg fill="none" viewBox="0 0 24 24" stroke="#009879" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .672-3 1.5S10.343 11 12 11s3-.672 3-1.5S13.657 8 12 8zM6 20s1-4 6-4 6 4 6 4" />
+                                </svg>
+                            </div>
+                            Histórico de Pagamentos Recentes
+                        </div>
+                        <a class="card-link" href="{{ route('mostrar_pagamentos_recepcionista') }}">Ver todos</a>
+                    </div>
+                    <div class="card-body" id="dashPagamentos">
+                        <div class="skel" style="height:44px;margin-bottom:8px;border-radius:10px;"></div>
+                        <div class="skel" style="height:44px;margin-bottom:8px;border-radius:10px;opacity:.7"></div>
+                        <div class="skel" style="height:44px;border-radius:10px;opacity:.4"></div>
+                    </div>
+                </div>
+            </div>
+
     </div>
 @endsection
 @section('script')
@@ -167,9 +189,11 @@
                 renderDashNotificacoes(data.notificacoes?.slice(0, 4) || []);
                 renderConsultasTabela(data.consultas || []);
                 renderNotificacoesPage(data.notificacoes || []);
+                renderDashPagamentos(data.pagamentos || []);
 
                 _todasConsultas = data.consultas || [];
                 _notificacoes = data.notificacoes || [];
+                _pagamentosGlobal = data.pagamentos || [];
 
                 // Badge de notificações não lidas
                 const naoLidas = (_notificacoes).filter(n => !n.lida).length;
@@ -349,6 +373,48 @@
             ${!n.lida ? '<span class="badge badge-agendada" style="flex-shrink:0;align-self:flex-start">Nova</span>' : ''}
             </div>`).join('');
         }
+
+        // ── Pagamentos no dashboard ─────────────────────────
+        function renderDashPagamentos(lista) {
+            const el = document.getElementById('dashPagamentos');
+            if (!lista || !lista.length) {
+                el.innerHTML = '<div class="no-data">Sem pagamentos registados.</div>';
+                return;
+            }
+
+            el.innerHTML = lista.map(p => `
+            <div class="pag-row" style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0;">
+                <div>
+                    <div style="font-weight:600">${fmtData(p.data)} · ${p.metodo_pagamento || '—'}</div>
+                    <div style="font-size:13px;color:var(--text-gray)">${(p.itens||[]).map(i=>i.servico_clinico).filter(Boolean).join(', ')}</div>
+                </div>
+                <div style="text-align:right">
+                    <div style="font-weight:700">${Number(p.total_pago||0).toLocaleString('pt-AO')} Kz</div>
+                    <div style="margin-top:6px"> <span class="badge ${p.estado==='sucesso'?'badge-pago':(p.estado==='pendente'?'badge-pendente':'badge-cancelada')}">${p.estado || ''}</span></div>
+                    <div style="margin-top:6px"><button class="btn-detalhe" onclick="abrirPagamentoModal(${p.id_pagamento})">Ver</button></div>
+                </div>
+            </div>`).join('');
+        }
+
+        function abrirPagamentoModal(id_pagamento) {
+            const p = (_pagamentosGlobal || []).find(x => x.id_pagamento === id_pagamento);
+            // fallback: procurar na lista da página
+            if (!p) return;
+            document.getElementById('modalBody').innerHTML = `
+                <div style="margin-bottom:12px"><strong>Data:</strong> ${fmtData(p.data)} ${p.total_pago?(' · '+Number(p.total_pago).toLocaleString('pt-AO')+' Kz'):''}</div>
+                <div style="margin-bottom:12px"><strong>Método:</strong> ${p.metodo_pagamento || '—'}</div>
+                <div style="margin-bottom:12px"><strong>Estado:</strong> <span class="badge ${p.estado==='sucesso'?'badge-pago':(p.estado==='pendente'?'badge-pendente':'badge-cancelada')}">${p.estado || ''}</span></div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Itens</div>
+                    ${(p.itens||[]).length ? (p.itens||[]).map(i=>`<div style="display:flex;justify-content:space-between;padding:6px 0"><div>${i.servico_clinico||'—'}</div><div>${Number(i.total||0).toLocaleString('pt-AO')} Kz</div></div>`).join('') : '<div class="no-data">Sem itens.</div>'}
+                </div>`;
+            document.getElementById('modalTitulo').textContent = 'Detalhes do Pagamento';
+            document.getElementById('modalMeta').textContent = '';
+            document.getElementById('modalOverlay').classList.add('open');
+        }
+
+        // manter cópia global para modal lookup
+        let _pagamentosGlobal = [];
 
         // ── Marcar notificação como lida ──────────────────────
         async function marcarLida(id, el) {
