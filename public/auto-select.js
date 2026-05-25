@@ -40,7 +40,7 @@ servicoClinicoSelect?.addEventListener("change", (e) => {
             data.forEach(horrio => {
                 const option = document.createElement('option');
                 option.value = horrio.hora;
-                option.text = `${horrio.hora}`;
+                     option.text = `${mostrarDiaSemana(horrio.dia_semana)} - ${horrio.hora}`;
                 horarioPacienteSelect.appendChild(option);
             });
         });
@@ -74,7 +74,7 @@ function mostrarDiaSemana(diaSemana) {
         6: 'Sábado',
         7: 'Domingo'
     };
-    return diasSemana[diaSemana] || 'Dia da semana inválido';
+    return diasSemana[diaSemana] || '';
 }
 const medicoSelect = document.querySelector('.medico_auto_select');
 medicoSelect?.addEventListener("change", (e) => {
