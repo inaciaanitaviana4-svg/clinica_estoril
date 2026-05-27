@@ -97,7 +97,6 @@
                     <label for="observacao">Observação</label>
                     <textarea id="observacao" name="observacao" rows="5"
                         placeholder="Descreva brevemente o motivo da consulta ou dúvidas"></textarea>
-                    <small class="erro" id="erro-obs"></small>
                 </div>
 
                 <div>
@@ -316,15 +315,10 @@ document.getElementById("formAgendamento")
     const limiteMax = obterLimiteMaximo();
 
     const data = dataInput.value;
-    const obs = obsInput.value.trim();
 
     let valido = true;
 
     if (data < hoje || data > limiteMax) {
-        valido = false;
-    }
-
-    if (obs.length < 30) {
         valido = false;
     }
 

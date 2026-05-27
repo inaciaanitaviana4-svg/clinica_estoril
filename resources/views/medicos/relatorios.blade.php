@@ -366,8 +366,7 @@ function ppSelecionarTodos(s) {
             } catch (error) {
                 console.error("Erro ao gerar relatório de prontuario :", error);
                 mostrarMensagemErro(
-                    "Ocorreu um erro ao gerar relatório de prontuario. Por favor, tente novamente.\n" +
-                    error?.message || "",
+                    "Ocorreu um erro ao gerar relatório de prontuario. Por favor, tente novamente." ,
                 );
             }
         })

@@ -41,11 +41,11 @@
                         </label>
                         <select name="estado" id="estado">
                             <option value="">Todos</option>
-                            <option value="pedente">Pedente</option>
+                            <option value="pendente">Pendente</option>
                             <option value="agendada">Agendada</option>
                             <option value="confirmada">Confirmada</option>
-                            <option value="cancelada">cancelada</option>
-                            <option value="concluida">concluida</option>
+                            <option value="cancelada">Cancelada</option>
+                            <option value="concluida">Concluída</option>
                         </select>
                     </div>
                     <div class="form-group">

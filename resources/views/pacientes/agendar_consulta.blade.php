@@ -53,7 +53,7 @@
                             <label for="observacao">observação</label>
                             <textarea id="observacao" name="observacao" rows="5"
                                 placeholder="Descreva brevemente o motivo da consulta ou dúvidas"></textarea>
-                            <small class="erro" id="erro-obs"></small>
+                            
                         </div>
 
                         <div class=" d-flex justify-content-center flex-column align-items-center">
@@ -132,7 +132,7 @@
                         const limiteMax = obterLimiteMaximo();
 
                         const data = dataInput.value;
-                        const obs = obsInput.value.trim();
+                        
 
                         let valido = true;
 
@@ -140,9 +140,6 @@
                             valido = false;
                         }
 
-                        if (obs.length < 30) {
-                            valido = false;
-                        }
 
                         if (!valido) {
                             e.preventDefault();

@@ -246,6 +246,7 @@ class RelatorioController extends Controller
                 'paciente.id_paciente')->where('consultas.id_consulta', $id_consulta);
 
         $consultas = $query->orderBy('consultas.data', 'desc')->get();
+        
 
         return response()->json($consultas);
     }

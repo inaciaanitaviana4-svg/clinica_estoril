@@ -56,13 +56,15 @@
                 <div class="paginas-vertical">
                     <?php
                     $menus = [
-                        ['href' => '/admin/dashboard',                              'titulo' => 'Dashboard',   'icon' => 'fa-solid fa-gauge'],
-                        ['href' => '/admin/pagamentos',                             'titulo' => 'Pagamentos',  'icon' => 'fa-solid fa-credit-card'],
-                        ['href' => '/admin/cadastros',                              'titulo' => 'Cadastros',   'icon' => 'fa-solid fa-users'],
-                        ['href' => '/admin/consultas',                              'titulo' => 'Consultas',   'icon' => 'fa-solid fa-stethoscope'],
-                        ['href' => route('mostrar_prontuarios_medico_admin'),       'titulo' => 'Prontuários', 'icon' => 'fa-solid fa-file-medical'],
-                        ['href' => '/admin/relatorios',                             'titulo' => 'Relatórios',  'icon' => 'fa-solid fa-file-alt'],
-                    ];
+    ['href' => '/admin/dashboard',                            'titulo' => 'Dashboard',   'icon' => 'fa-solid fa-gauge'],
+    ['href' => '/admin/pagamentos',                           'titulo' => 'Pagamentos',  'icon' => 'fa-solid fa-credit-card'],
+    ['href' => '/admin/cadastros',                            'titulo' => 'Cadastros',   'icon' => 'fa-solid fa-users'],
+    ['href' => '/admin/consultas',                            'titulo' => 'Consultas',   'icon' => 'fa-solid fa-stethoscope'],
+    ['href' => route('mostrar_prontuarios_medico_admin'),     'titulo' => 'Prontuários', 'icon' => 'fa-solid fa-file-medical'],
+    ['href' => '/admin/relatorios',                           'titulo' => 'Relatórios',  'icon' => 'fa-solid fa-file-alt'],
+    ['href' => route('mostrar_historico_atividade_admin'),    'titulo' => 'Histórico',   'icon' => 'fa-solid fa-clock-rotate-left'],
+    ['href' => route('mostrar_backup_admin'),                 'titulo' => 'Backup',      'icon' => 'fa-solid fa-database'],  // ← NOVO
+];
                     ?>
 
                     @foreach ($menus as $menu)
@@ -179,7 +181,7 @@
         const icon  = document.getElementById('darkToggleIcon');
         const label = document.getElementById('darkToggleLabel');
         if (icon)  icon.textContent  = '☀️';
-        if (label) label.textContent = 'Activar Modo Claro';
+        if (label) label.textContent = 'Ativar Modo Claro';
     }
 
     function desativarDark() {
@@ -189,7 +191,7 @@
         const icon  = document.getElementById('darkToggleIcon');
         const label = document.getElementById('darkToggleLabel');
         if (icon)  icon.textContent  = '🌙';
-        if (label) label.textContent = 'Activar Modo Noturno';
+        if (label) label.textContent = 'Ativar Modo Noturno';
     }
 
     (function () {

@@ -43,7 +43,7 @@
 @endsection
 @section('script')
     <script>
-        const url = "{{ route('remover_horario_medico_recepcionista', ['id_horario' => ':id']) }}"
+    
       const csrfToken = "{{ csrf_token() }}";
       function remover_horario(id_horario) {
         
