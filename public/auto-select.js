@@ -22,7 +22,7 @@ tipoConsultaSelect?.addEventListener("change", (e) => {
             });
         });
 })
-const horarioPacienteSelect = document.querySelector('.horario_paciente_auto_select');
+const horarioPacienteSelect = document.querySelector('.horario_auto_select');
 servicoClinicoSelect?.addEventListener("change", (e) => {
     const servicoClinicoId = e.target.value;
 
@@ -40,11 +40,10 @@ servicoClinicoSelect?.addEventListener("change", (e) => {
             data.forEach(horrio => {
                 const option = document.createElement('option');
                 option.value = horrio.hora;
-                     option.text = `${mostrarDiaSemana(horrio.dia_semana)} - ${horrio.hora}`;
+                     option.text = `${mostrarDiaSemana(horrio.dia_semana)}${horrio.hora}`;
                 horarioPacienteSelect.appendChild(option);
             });
         });
-        return;
     }
      medicoSelect.innerHTML = '<option value="">Selecione o médico</option>';
     fetch(`/api/servicos-clinicos/medicos?id_servico_clinico=${servicoClinicoId}`)
@@ -66,13 +65,13 @@ servicoClinicoSelect?.addEventListener("change", (e) => {
 const horarioSelect = document.querySelector('.horario_auto_select');
 function mostrarDiaSemana(diaSemana) {
     const diasSemana = {
-        1: 'Segunda-feira',
-        2: 'Terca-feira',
-        3: 'Quarta-feira',
-        4: 'Quinta-feira',
-        5: 'Sexta-feira',
-        6: 'Sábado',
-        7: 'Domingo'
+        1: 'Segunda-feira - ',
+        2: 'Terca-feira - ',
+        3: 'Quarta-feira - ',
+        4: 'Quinta-feira - ',
+        5: 'Sexta-feira - ',
+        6: 'Sábado - ',
+        7: 'Domingo - '
     };
     return diasSemana[diaSemana] || '';
 }
@@ -92,7 +91,7 @@ medicoSelect?.addEventListener("change", (e) => {
             data.forEach(horrio => {
                 const option = document.createElement('option');
                 option.value = horrio.hora;
-                option.text = `${mostrarDiaSemana(horrio.dia_semana)} - ${horrio.hora}`;
+                option.text = `${mostrarDiaSemana(horrio.dia_semana)}${horrio.hora}`;
                 horarioSelect.appendChild(option);
             });
         });

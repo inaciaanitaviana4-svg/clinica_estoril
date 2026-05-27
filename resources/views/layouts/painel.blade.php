@@ -19,6 +19,8 @@ if (session('tipo_utilizador') == 'recepcionista') {
         ['href' => route('mostrar_pagamentos_recepcionista'), 'titulo' => 'Pagamentos',   'icon' => 'fa-solid fa-credit-card'],
         ['href' => route('mostrar_pacientes_recepcionista'),  'titulo' => 'Pacientes',    'icon' => 'fa-solid fa-users'],
         ['href' => route('mostrar_horarios_recepcionista'),   'titulo' => 'Horários',     'icon' => 'fa-solid fa-clock'],
+        ['href' => route('mostrar_relatorios_recepcionista'), 'titulo' => 'Relatórios',   'icon' => 'fa-solid fa-file-alt'],
+        ['href' => route('listar_minhas_notificacoes'),       'titulo' => 'Notificações', 'icon' => 'fa-solid fa-bell'],
     ];
 }
 

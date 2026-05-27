@@ -113,9 +113,9 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .672-3 1.5S10.343 11 12 11s3-.672 3-1.5S13.657 8 12 8zM6 20s1-4 6-4 6 4 6 4" />
                         </svg>
                     </div>
-                    Histórico de Pagamentos Recentes
+                    Histórico de Pagamentos
                 </div>
-                <a class="card-link" href="{{ route('mostrar_pagamentos_recepcionista') }}">Ver todos</a>
+                <a class="card-link"></a>
             </div>
             <div class="card-body" id="dashPagamentos">
                 <div class="skel" style="height:44px;margin-bottom:8px;border-radius:10px;"></div>
@@ -316,13 +316,6 @@
             return matchFiltro && matchSearch;
         });
 
-        const tbody = document.getElementById('consultasTableBody');
-        if (!lista.length) {
-            tbody.innerHTML = `<tr><td colspan="5" class="no-data">Nenhuma consulta encontrada.</td></tr>`;
-            return;
-        }
-
-
     }
 
     function setFiltro(val, el) {
@@ -349,7 +342,6 @@
                 <div style="text-align:right">
                     <div style="font-weight:700">${Number(p.total_pago||0).toLocaleString('pt-AO')} Kz</div>
                     <div style="margin-top:6px"> <span class="badge ${p.estado==='sucesso'?'badge-pago':(p.estado==='pendente'?'badge-pendente':'badge-cancelada')}">${p.estado || ''}</span></div>
-                    <div style="margin-top:6px"><button class="btn-detalhe" onclick="abrirPagamentoModal(${p.id_pagamento})">Ver</button></div>
                 </div>
             </div>`).join('');
     }

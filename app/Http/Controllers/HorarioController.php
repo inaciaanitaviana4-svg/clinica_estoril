@@ -60,22 +60,7 @@ class HorarioController extends Controller
         return redirect(route('mostrar_horarios_medico'))->with('mensagem', 'Horario salvo com sucesso');
     }
 
-    public function remover_horario_medico_recepcionista($id_horario)
-    {
-        $utilizador = verificar_recepcionista();
-        if (! $utilizador) {
-            return response()->json(['erro' => 'Não tem permissão para acessar esta API'], status: 403);
-        }
-        $horario = Horario::find($id_horario);
-        if (! $horario) {
-            return response()->json(['erro' => 'horario não encontrado '], 404);
-        }
-        $horario->delete();
-
-        return response()->json(['mensagem' => 'horario removido com secesso'], 200);
-
-    }
-
+    
     public function api_listar_horarios_medico(Request $request)
     {
         $id_medico = $request->query('id_medico');

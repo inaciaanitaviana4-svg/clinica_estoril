@@ -311,7 +311,19 @@ class ConsultaController extends Controller
         $paciente = Paciente::find($consulta->id_paciente);
         $medico = $consulta->id_medico ? Medico::select('medico.nome', 'medico.email', 'medico.num_telefone', 'medico.especialidade')
             ->where('id_medico', $consulta->id_medico)->first() : null;
-        $medicos = ! $consulta->id_medico ? Medico::select('id_medico', 'nome', 'especialidade')->get() : [];
+        $medicos_sem_especialidade = Medico::where('especialidade', '=', 'Nenhuma')->select('medico.id_medico', 'medico.nome', 'medico.especialidade')->get();
+        $medicos_com_especialidade = Medico::join('especialidades', 'medico.especialidade', 'especialidades.nome')
+            ->join('servicos_clinicos_especialidades', 'especialidades.id_espec', 'servicos_clinicos_especialidades.id_especialidade')
+            ->where('servicos_clinicos_especialidades.id_servico_clinico', $consulta->id_servico_clinico)
+            // ->where(function ($query) use ($id_servico_clinico) {
+               // $query->where();
+           // })
+            ->select('medico.id_medico', 'medico.nome', 'medico.especialidade')
+            ->distinct()
+            ->get();
+        $medicos = ! $consulta->id_medico ?
+    [...$medicos_sem_especialidade, ...$medicos_com_especialidade]
+        : [];
         $metodos_pagamento = MetodoPagamento::select('id_metodo_pagamento', 'nome')->get();
         $servicos_clinicos = ServicoClinico::where('activo', true)->get();
         $pagamentos = ItemPagamento::select(

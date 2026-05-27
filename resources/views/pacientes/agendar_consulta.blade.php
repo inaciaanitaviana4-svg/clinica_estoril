@@ -45,7 +45,7 @@
 
                         <div class="col form-group">
                             <label for="hora">Horário Preferencial</label>
-                            <select class="w-100 horario_paciente_auto_select" id="hora" name="hora">
+                            <select class="w-100 horario_auto_select" id="hora" name="hora">
                                 <option value="">Selecione um horário</option>
                             </select>
                         </div>

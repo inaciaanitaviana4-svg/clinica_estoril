@@ -23,7 +23,6 @@
                                 <th>Dia da Semana</th>
                                 <th>Hora</th>
                                 <th>Activo</th>
-                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -33,12 +32,6 @@
                                     <td>{{ dia_semana($horario->dia_semana) }}</td>
                                     <td>{{ $horario->hora }}</td>
                                     <td>{{ $horario->activo ? 'Sim' : 'Não' }}</td>
-                                    <td>
-                                        <div class="btn-group">
-                                           <button onclick="remover_horario({{ $horario->id_horario }})"
-                                                class="btn btn-bg-red btn-small">Remover</button>
-                                        </div>
-                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

@@ -104,8 +104,8 @@ Route::get('/recuperar-senha', function () {
     Route::post('/consultas/{id_consulta}/mudar-estado-consulta/{view?}', [ConsultaController::class, 'mudar_estado_consulta'])->name('mudar_estado_consulta');
     Route::post('/consultas/{id_consulta}/mudar-estado-medico', [ConsultaController::class, 'mudar_estado_consulta_medico'])->name('mudar_estado_consulta_medico');
     Route::get('/painel-recepcionista/horarios', [HorarioController::class, 'mostrar_horarios_recepcionista'])->name('mostrar_horarios_recepcionista');
-    Route::delete('/painel-recepcionista/remover-horario-medico/{id_horario}', [HorarioController::class, 'remover_horario_medico_recepcionista'])->name('remover_horario_medico_recepcionista');
     Route::get('/api/pesquisar-medicos', [ConsultaController::class, 'api_pesquisar_medicos']);
+    Route::get('/painel-recepcionista/relatorios', [RelatorioController::class, 'mostrar_relatorios_recepcionista'])->name('mostrar_relatorios_recepcionista');
     
     
     // ===== ROTAS DO MÉDICO =====
@@ -176,6 +176,7 @@ Route::get('/recuperar-senha', function () {
     Route::get('/admin/relatorios', [RelatorioController::class, 'mostrar_relatorios_admin'])->name('mostrar_relatorios_admin');
     // relatorios
     Route::post('/api/relatorios/consultas', [RelatorioController::class, 'api_relatorio_consultas'])->name('api_relatorio_consultas');
+    Route::post('/api/relatorios/consultas/recepcionista', [RelatorioController::class, 'api_relatorio_consultas_recepcionista'])->name('api_relatorio_consultas_recepcionista');
     Route::post('/api/relatorios/consultas/{id_consulta}', [RelatorioController::class, 'api_relatorio_consultas_paciente'])->name('api_relatorio_consultas_paciente');
     Route::post('/api/relatorios/pagamentos', [RelatorioController::class, 'api_relatorio_pagamentos'])->name('api_relatorio_pagamentos');
     Route::get('/api/relatorios/prontuario/{id_paciente}', [RelatorioController::class, 'api_relatorio_prontuario_paciente'])->name('api_relatorio_prontuario_paciente');
