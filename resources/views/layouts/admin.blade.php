@@ -64,6 +64,7 @@
     ['href' => '/admin/relatorios',                           'titulo' => 'Relatórios',  'icon' => 'fa-solid fa-file-alt'],
     ['href' => route('mostrar_historico_atividade_admin'),    'titulo' => 'Histórico',   'icon' => 'fa-solid fa-clock-rotate-left'],
     ['href' => route('mostrar_backup_admin'),                 'titulo' => 'Backup',      'icon' => 'fa-solid fa-database'],  // ← NOVO
+    
 ];
                     ?>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 // Importações de Models
 use App\Models\Admi;
+use App\Models\HistoricoAtividade;
 use App\Models\Especialidade;
 use App\Models\Medico;
 use App\Models\Paciente;
@@ -144,79 +145,86 @@ class UtilizadoresController extends Controller
      *
      * @param  Request  $request  Dados do formulário de cadastro
      */
- public function cadastrarpaciente(Request $request)
-{
-    $emailexiste           = Paciente::where('email', $request->email)->first();
-    $emailexisteutilizador = Utilizador::where('email', $request->email)->first();
-    if ($emailexiste || $emailexisteutilizador) {
-        return back()->with('erro', 'Este email já está cadastrado. Use outro ou faça login.');
-    }
-
-    $num_telefoneexiste           = Paciente::where('num_telefone', $request->num_telefone)->first();
-    $num_telefoneexisteutilizador = Utilizador::where('num_telefone', $request->num_telefone)->first();
-    if ($num_telefoneexiste || $num_telefoneexisteutilizador) {
-        return back()->with('erro', 'Este número de telefone já está registrado.');
-    }
-
-    if ($request->senha != $request->confirmar_senha) {
-        return back()->with('erro', 'As senhas não correspondem.');
-    }
-
+  public function cadastrarpaciente(Request $request)
+    {
+        $emailexiste           = Paciente::where('email', $request->email)->first();
+        $emailexisteutilizador = Utilizador::where('email', $request->email)->first();
+        if ($emailexiste || $emailexisteutilizador) {
+            return back()->with('erro', 'Este email já está cadastrado. Use outro ou faça login.');
+        }
  
-
-    $paciente = Paciente::create([
-        'nome'            => $request['nome'],
-        'email'           => $request['email'],
-        'num_telefone'    => $request['num_telefone'],
-        'genero'          => $request['genero'],
-        'morada'          => $request['morada'],
-        'senha'           => Hash::make($request['senha']),
-        'data_nascimento' => $request['data_nascimento'],
-        'num_bi'          => $request['num_bi'],
-        'estado_civil'    => $request['estado_civil'],
-        'cidade'          => $request['cidade'],
-        'bairro'          => $request['bairro'],
-        'seguro'          => $request['seguro'],
-        'id_clinica'      => 1,
-    ]);
-
-$foto = null;
+        $num_telefoneexiste           = Paciente::where('num_telefone', $request->num_telefone)->first();
+        $num_telefoneexisteutilizador = Utilizador::where('num_telefone', $request->num_telefone)->first();
+        if ($num_telefoneexiste || $num_telefoneexisteutilizador) {
+            return back()->with('erro', 'Este número de telefone já está registrado.');
+        }
+ 
+        if ($request->senha != $request->confirmar_senha) {
+            return back()->with('erro', 'As senhas não correspondem.');
+        }
+ 
+        $paciente = Paciente::create([
+            'nome'            => $request['nome'],
+            'email'           => $request['email'],
+            'num_telefone'    => $request['num_telefone'],
+            'genero'          => $request['genero'],
+            'morada'          => $request['morada'],
+            'senha'           => Hash::make($request['senha']),
+            'data_nascimento' => $request['data_nascimento'],
+            'num_bi'          => $request['num_bi'],
+            'estado_civil'    => $request['estado_civil'],
+            'cidade'          => $request['cidade'],
+            'bairro'          => $request['bairro'],
+            'seguro'          => $request['seguro'],
+            'id_clinica'      => 1,
+        ]);
+ 
+        $foto = null;
         if ($request->hasFile('foto')) {
             $ficheiro = $request->file('foto');
             if ($ficheiro->isValid() && $ficheiro->getSize() > 0) {
                 $pastaDestino = storage_path('app/public/fotos');
-                if (!file_exists($pastaDestino)) {
-                    mkdir($pastaDestino, 0775, true);
-                }
+                if (!file_exists($pastaDestino)) mkdir($pastaDestino, 0775, true);
                 $extensao  = $ficheiro->getClientOriginalExtension();
                 $nomeUnico = uniqid('foto_') . '.' . $extensao;
                 $ficheiro->move($pastaDestino, $nomeUnico);
                 $foto = 'fotos/' . $nomeUnico;
             }
         }
-
-$utilizador = Utilizador::create([
-    'num_telefone' => $request['num_telefone'],
-    'senha'        => Hash::make($request['senha']),
-    'nome'         => $request['nome'],
-    'genero'       => $request['genero'],
-    'email'        => $request['email'],
-    'foto'         => $foto,         // ← LINHA NOVA
-    'nivel_acesso' => 3,
-    'id_paciente'  => $paciente->id_paciente,
-]);
-
-   if ($utilizador) {
-    session(['id_utilizador'   => $utilizador->id_util]);
-    session(['tipo_utilizador' => 'paciente']);
-    session(['nome_utilizador' => $utilizador->nome]);
-    session(['foto_utilizador' => $utilizador->foto]);
-
-    // ANTES: return redirect('/');
-    // DEPOIS — redireciona para o dashboard do paciente:
-    return redirect(route('mostrar_dashboard_paciente'))->with("sucesso", "conta criada com sucesso. ");
-}
-}
+ 
+        $utilizador = Utilizador::create([
+            'num_telefone' => $request['num_telefone'],
+            'senha'        => Hash::make($request['senha']),
+            'nome'         => $request['nome'],
+            'genero'       => $request['genero'],
+            'email'        => $request['email'],
+            'foto'         => $foto,
+            'nivel_acesso' => 3,
+            'id_paciente'  => $paciente->id_paciente,
+        ]);
+ 
+        if ($utilizador) {
+            session(['id_utilizador'   => $utilizador->id_util]);
+            session(['tipo_utilizador' => 'paciente']);
+            session(['nome_utilizador' => $utilizador->nome]);
+            session(['foto_utilizador' => $utilizador->foto]);
+ 
+            // ✅ CORRIGIDO: registar ANTES do return
+            HistoricoAtividade::registar(
+                'registro',
+                'cadastrou_paciente',
+                $utilizador->nome . ' criou conta de paciente no sistema',
+                [
+                    'entidade'      => 'Utilizador',
+                    'id_entidade'   => $utilizador->id_util,
+                    'nome_entidade' => $utilizador->nome,
+                ]
+            );
+ 
+            return redirect(route('mostrar_dashboard_paciente'))
+                ->with('sucesso', 'Conta criada com sucesso.');
+        }
+    }
 
     /**
      * Retorna a view para criar conta de paciente
@@ -319,151 +327,117 @@ $utilizador = Utilizador::create([
      *
      * @param  Request  $request  Dados atualizados do formulário
      */
- public function editar_perfil_salvar(Request $request)
-{
-    if (!session('id_utilizador')) {
-        return redirect('/login');
-    }
-
-    $utilizador = Utilizador::find(session('id_utilizador'));
-    if (!$utilizador) {
-        return back()->with('erro', 'Usuário não encontrado.');
-    }
-
-    $paciente      = null;
-    $admin         = null;
-    $medico        = null;
-    $recepcionista = null;
-
-    if ($utilizador->id_admi)          $admin         = Admi::find($utilizador->id_admi);
-    if ($utilizador->id_medico)        $medico        = Medico::find($utilizador->id_medico);
-    if ($utilizador->id_recepcionista) $recepcionista = Recepcionista::find($utilizador->id_recepcionista);
-    if ($utilizador->id_paciente)      $paciente      = Paciente::find($utilizador->id_paciente);
-
-    if ($request->senha && $request->senha != $request->confirmar_senha) {
-        return back()->with('erro', 'As senhas não correspondem.');
-    }
-
-    $senha = $request->senha ? Hash::make($request->senha) : $utilizador->senha;
-
-    // ── FOTO ─────────────────────────────────────────────
-  $foto = $utilizador->foto;
-
-if ($request->hasFile('foto')) {
-    $ficheiro = $request->file('foto');
-
-    if ($ficheiro->isValid() && $ficheiro->getSize() > 0) {
-        // Apaga foto antiga
-        if ($utilizador->foto) {
-            $caminhoAntigo = storage_path('app/public/' . $utilizador->foto);
-            if (file_exists($caminhoAntigo)) {
-                unlink($caminhoAntigo);
+  public function editar_perfil_salvar(Request $request)
+    {
+        if (!session('id_utilizador')) return redirect('/login');
+ 
+        $utilizador = Utilizador::find(session('id_utilizador'));
+        if (!$utilizador) return back()->with('erro', 'Usuário não encontrado.');
+ 
+        $paciente      = null;
+        $admin         = null;
+        $medico        = null;
+        $recepcionista = null;
+ 
+        if ($utilizador->id_admi)          $admin         = Admi::find($utilizador->id_admi);
+        if ($utilizador->id_medico)        $medico        = Medico::find($utilizador->id_medico);
+        if ($utilizador->id_recepcionista) $recepcionista = Recepcionista::find($utilizador->id_recepcionista);
+        if ($utilizador->id_paciente)      $paciente      = Paciente::find($utilizador->id_paciente);
+ 
+        if ($request->senha && $request->senha != $request->confirmar_senha) {
+            return back()->with('erro', 'As senhas não correspondem.');
+        }
+ 
+        // ✅ Detectar campos que mudaram ANTES de salvar
+        $camposAlterados = [];
+        $camposVerificar = ['nome', 'email', 'num_telefone', 'genero', 'morada'];
+        foreach ($camposVerificar as $campo) {
+            if ($request->has($campo) && $request->$campo != $utilizador->$campo) {
+                $camposAlterados[] = $campo;
             }
         }
-         // Gera nome único para o ficheiro
-        $extensao  = $ficheiro->getClientOriginalExtension();
-        $nomeUnico = uniqid('foto_') . '.' . $extensao;
-        
-        // Caminho absoluto da pasta destino
-        $pastaDestino = storage_path('app/public/fotos');
-        
-        // Cria a pasta se não existir
-        if (!file_exists($pastaDestino)) {
-            mkdir($pastaDestino, 0775, true);
+        if ($request->senha) $camposAlterados[] = 'senha';
+ 
+        $senha = $request->senha ? Hash::make($request->senha) : $utilizador->senha;
+ 
+        // ── FOTO ──────────────────────────────────────────────
+        $foto = $utilizador->foto;
+        if ($request->hasFile('foto')) {
+            $ficheiro = $request->file('foto');
+            if ($ficheiro->isValid() && $ficheiro->getSize() > 0) {
+                if ($utilizador->foto) {
+                    $caminhoAntigo = storage_path('app/public/' . $utilizador->foto);
+                    if (file_exists($caminhoAntigo)) unlink($caminhoAntigo);
+                }
+                $extensao     = $ficheiro->getClientOriginalExtension();
+                $nomeUnico    = uniqid('foto_') . '.' . $extensao;
+                $pastaDestino = storage_path('app/public/fotos');
+                if (!file_exists($pastaDestino)) mkdir($pastaDestino, 0775, true);
+                if ($request->has('remover_foto') && $request->remover_foto == '1') {
+                    if ($utilizador->foto) {
+                        $c = storage_path('app/public/' . $utilizador->foto);
+                        if (file_exists($c)) unlink($c);
+                        $utilizador->foto = null;
+                        session(['foto_utilizador' => null]);
+                    }
+                }
+                $ficheiro->move($pastaDestino, $nomeUnico);
+                $foto = 'fotos/' . $nomeUnico;
+                $camposAlterados[] = 'foto';
+            }
         }
-    
-
-// Verifica se deve remover a foto
-if ($request->has('remover_foto') && $request->remover_foto == '1') {
-    if ($utilizador->foto) {
-        $caminhoAntigo = storage_path('app/public/' . $utilizador->foto);
-        if (file_exists($caminhoAntigo)) {
-            unlink($caminhoAntigo);
+ 
+        $utilizador->num_telefone = $request['num_telefone'];
+        $utilizador->email        = $request['email'];
+        $utilizador->genero       = $request['genero'];
+        $utilizador->nome         = $request['nome'];
+        $utilizador->senha        = $senha;
+        $utilizador->foto         = $foto;
+        $utilizador->save();
+ 
+        session(['nome_utilizador' => $utilizador->nome]);
+        session(['foto_utilizador' => $utilizador->foto]);
+ 
+        if ($admin) {
+            $admin->morada = $request['morada']; $admin->num_telefone = $request['num_telefone'];
+            $admin->nome = $request['nome']; $admin->genero = $request['genero'];
+            $admin->email = $request['email']; $admin->senha = $senha; $admin->save();
         }
-        $utilizador->foto = null;
-        
-        // Atualiza na session
-        session(['foto_utilizador' => null]);
+        if ($paciente) {
+            $paciente->morada = $request['morada']; $paciente->num_telefone = $request['num_telefone'];
+            $paciente->nome = $request['nome']; $paciente->genero = $request['genero'];
+            $paciente->email = $request['email']; $paciente->data_nascimento = $request['data_nascimento'];
+            $paciente->num_bi = $request['num_bi']; $paciente->estado_civil = $request['estado_civil'];
+            $paciente->cidade = $request['cidade']; $paciente->bairro = $request['bairro'];
+            $paciente->seguro = $request['seguro']; $paciente->senha = $senha; $paciente->save();
+        }
+        if ($recepcionista) {
+            $recepcionista->morada = $request['morada']; $recepcionista->num_telefone = $request['num_telefone'];
+            $recepcionista->nome = $request['nome']; $recepcionista->genero = $request['genero'];
+            $recepcionista->email = $request['email']; $recepcionista->senha = $senha; $recepcionista->save();
+        }
+        if ($medico) {
+            $medico->morada = $request['morada']; $medico->num_telefone = $request['num_telefone'];
+            $medico->nome = $request['nome']; $medico->genero = $request['genero'];
+            $medico->email = $request['email']; $medico->especialidade = $request['especialidade'];
+            $medico->ano_experiencia = $request['ano_experiencia']; $medico->senha = $senha; $medico->save();
+        }
+ 
+        // ✅ ESTAVA CORRETO — melhorado com $camposAlterados dinâmico
+        HistoricoAtividade::registar(
+            'atualizacao',
+            'atualizou_perfil',
+            session('nome_utilizador') . ' atualizou o próprio perfil',
+            [
+                'entidade'         => 'Utilizador',
+                'id_entidade'      => $utilizador->id_util,
+                'nome_entidade'    => $utilizador->nome,
+                'campos_alterados' => $camposAlterados,
+            ]
+        );
+ 
+        return redirect('/visualizar-perfil')->with('sucesso', 'Perfil atualizado com sucesso.');
     }
-}
-        // Move o ficheiro manualmente
-        $ficheiro->move($pastaDestino, $nomeUnico);
-        
-        // Guarda o caminho relativo (como o store() guardaria)
-        $foto = 'fotos/' . $nomeUnico;
-    }
-}
-$utilizador->foto = $foto;
-    // ─────────────────────────────────────────────────────
-
-    // Atualiza utilizador
-    $utilizador->num_telefone = $request['num_telefone'];
-    $utilizador->email        = $request['email'];
-    $utilizador->genero       = $request['genero'];
-    $utilizador->nome         = $request['nome'];
-    $utilizador->senha        = $senha;
-    $utilizador->foto         = $foto;  // ← guarda a foto
-    $utilizador->save();
-
-    // Atualiza session
-    session(['nome_utilizador' => $utilizador->nome]);
-    session(['foto_utilizador' => $utilizador->foto]);
-
-    // Atualiza admin se aplicável
-    if ($admin) {
-        $admin->morada       = $request['morada'];
-        $admin->num_telefone = $request['num_telefone'];
-        $admin->nome         = $request['nome'];
-        $admin->genero       = $request['genero'];
-        $admin->email        = $request['email'];
-        $admin->senha        = $senha;
-        $admin->save();
-    }
-
-    // Atualiza paciente se aplicável
-    if ($paciente) {
-        $paciente->morada          = $request['morada'];
-        $paciente->num_telefone    = $request['num_telefone'];
-        $paciente->nome            = $request['nome'];
-        $paciente->genero          = $request['genero'];
-        $paciente->email           = $request['email'];
-        $paciente->data_nascimento = $request['data_nascimento'];
-        $paciente->num_bi          = $request['num_bi'];
-        $paciente->estado_civil    = $request['estado_civil'];
-        $paciente->cidade          = $request['cidade'];
-        $paciente->bairro          = $request['bairro'];
-        $paciente->seguro          = $request['seguro'];
-        $paciente->senha           = $senha;
-        $paciente->save();
-    }
-
-    // Atualiza recepcionista se aplicável
-    if ($recepcionista) {
-        $recepcionista->morada       = $request['morada'];
-        $recepcionista->num_telefone = $request['num_telefone'];
-        $recepcionista->nome         = $request['nome'];
-        $recepcionista->genero       = $request['genero'];
-        $recepcionista->email        = $request['email'];
-        $recepcionista->senha        = $senha;
-        $recepcionista->save();
-    }
-
-    // Atualiza médico se aplicável
-    if ($medico) {
-        $medico->morada          = $request['morada'];
-        $medico->num_telefone    = $request['num_telefone'];
-        $medico->nome            = $request['nome'];
-        $medico->genero          = $request['genero'];
-        $medico->email           = $request['email'];
-        $medico->especialidade   = $request['especialidade'];
-        $medico->ano_experiencia = $request['ano_experiencia'];
-        $medico->senha           = $senha;
-        $medico->save();
-    }
-
-    return redirect('/visualizar-perfil')->with("sucesso", "Perfil atualizado com sucesso.");
-}
-
 
 
    
@@ -475,42 +449,80 @@ $utilizador->foto = $foto;
      */
     public function remover_utilizador_admin($id_util)
     {
-        // Verifica se é administrador
-        if (! $this->verificar_admin()) {
-            return response()->json(['erro' => 'Você não tem permissão para remover usuários. Apenas administradores podem realizar esta ação.'], 401);
-
+        if (!$this->verificar_admin()) {
+            return response()->json(['erro' => 'Sem permissão.'], 401);
         }
-
-        // Impede que admin remova a si mesmo
         if (session('id_utilizador') == $id_util) {
-            return response()->json(['erro' => 'Você não pode remover sua própria conta. Contacte outro administrador para esta ação.'], 401);
+            return response()->json(['erro' => 'Não pode remover a própria conta.'], 401);
         }
-
-        // Busca o utilizador a remover
+ 
         $utilizador = Utilizador::find($id_util);
-        if (! $utilizador) {
-            return response()->json(['erro' => 'Usuário não encontrado. Verifique o ID e tente novamente.'], 404);
-        }
-
-        // Remove entidades relacionadas antes de remover o utilizador
-        if ($utilizador->id_paciente) {
-            Paciente::destroy($utilizador->id_paciente);
-        }
-        if ($utilizador->id_admi) {
-            Admi::destroy($utilizador->id_admi);
-        }
-        if ($utilizador->id_recepcionista) {
-            Recepcionista::destroy($utilizador->id_recepcionista);
-        }
-        if ($utilizador->id_medico) {
-            Medico::destroy($utilizador->id_medico);
-        }
-
-        // Remove o utilizador
+        if (!$utilizador) return response()->json(['erro' => 'Usuário não encontrado.'], 404);
+ 
+        $nomeRemovido = $utilizador->nome;
+ 
+        if ($utilizador->id_paciente)      Paciente::destroy($utilizador->id_paciente);
+        if ($utilizador->id_admi)          Admi::destroy($utilizador->id_admi);
+        if ($utilizador->id_recepcionista) Recepcionista::destroy($utilizador->id_recepcionista);
+        if ($utilizador->id_medico)        Medico::destroy($utilizador->id_medico);
+ 
         Utilizador::destroy($id_util);
-
-        return response()->json(['mensagem' => 'Usuário removido com sucesso do sistema.'], 200);
+ 
+        // ✅ ADICIONADO
+        HistoricoAtividade::registar(
+            'registro',
+            'removeu_usuario',
+            session('nome_utilizador') . ' removeu o utilizador ' . $nomeRemovido . ' do sistema',
+            [
+                'entidade'      => 'Utilizador',
+                'id_entidade'   => $id_util,
+                'nome_entidade' => $nomeRemovido,
+            ]
+        );
+ 
+        return response()->json(['mensagem' => 'Usuário removido com sucesso.'], 200);
     }
+
+    /**
+ * Altera apenas a palavra-passe do utilizador logado.
+ * Valida a senha atual antes de aceitar a nova.
+ */
+public function alterar_senha(Request $request)
+{
+    if (!session('id_utilizador')) return redirect('/login');
+
+    $utilizador = Utilizador::find(session('id_utilizador'));
+    if (!$utilizador) return back()->with('erro', 'Utilizador não encontrado.');
+
+    // Verifica senha atual
+    if (!Hash::check($request->senha_atual, $utilizador->senha)) {
+        return back()->with('erro', 'A palavra-passe atual está incorreta.');
+    }
+
+    // Verifica confirmação
+    if ($request->nova_senha !== $request->confirmar_nova_senha) {
+        return back()->with('erro', 'As novas palavras-passe não coincidem.');
+    }
+
+    $novaSenhaHash = Hash::make($request->nova_senha);
+
+    // Atualiza em todas as tabelas relacionadas
+    $utilizador->senha = $novaSenhaHash;
+    $utilizador->save();
+
+    if ($utilizador->id_paciente)      { $p = Paciente::find($utilizador->id_paciente);      if ($p) { $p->senha = $novaSenhaHash; $p->save(); } }
+    if ($utilizador->id_medico)        { $m = Medico::find($utilizador->id_medico);          if ($m) { $m->senha = $novaSenhaHash; $m->save(); } }
+    if ($utilizador->id_recepcionista) { $r = Recepcionista::find($utilizador->id_recepcionista); if ($r) { $r->senha = $novaSenhaHash; $r->save(); } }
+    if ($utilizador->id_admi)          { $a = Admi::find($utilizador->id_admi);              if ($a) { $a->senha = $novaSenhaHash; $a->save(); } }
+
+    HistoricoAtividade::registar(
+        'atualizacao', 'alterou_senha',
+        session('nome_utilizador') . ' alterou a própria palavra-passe',
+        ['entidade' => 'Utilizador', 'id_entidade' => $utilizador->id_util, 'nome_entidade' => $utilizador->nome]
+    );
+
+    return redirect('/visualizar-perfil')->with('sucesso', 'Palavra-passe alterada com sucesso.');
+}
 
     /**
      * Exibe o formulário para registrar/editar um utilizador (apenas admin)
@@ -576,18 +588,14 @@ $utilizador->foto = $foto;
      * @param  int|null  $id_util  ID do utilizador a editar, null para criar novo
      */
    public function salvar_registro_utilizador_admin(Request $request, $id_util = null)
-{
-    if (!$this->verificar_admin()) {
-        return back()->with('erro', 'Não tem permissão para acessar esta página');
-    }
-    if (session('id_utilizador') == $id_util) {
-        return back()->with('erro', 'Não pode editar o seu próprio usuário');
-    }
-
-    $utilizador = $id_util ? Utilizador::find($id_util) : null;
-    if ($id_util && !$utilizador) {
-        return back()->with('erro', 'Usuário não encontrado.');
-    }
+    {
+        if (!$this->verificar_admin()) return back()->with('erro', 'Não tem permissão.');
+        if (session('id_utilizador') == $id_util) return back()->with('erro', 'Não pode editar o seu próprio usuário.');
+ 
+        $eCriacao   = ($id_util === null);
+        $utilizador = $id_util ? Utilizador::find($id_util) : null;
+        if ($id_util && !$utilizador) return back()->with('erro', 'Usuário não encontrado.');
+    
 
     $paciente      = null;
     $admin         = null;
@@ -717,8 +725,20 @@ $utilizador->foto = $foto;
     $utilizador->nivel_acesso     = $nivel_acesso;
     $utilizador->save();
 
-    return redirect(route('mostrar_cadastros_admin'));
-}
+      // ✅ ADICIONADO
+        HistoricoAtividade::registar(
+            'registro',
+            $eCriacao ? 'cadastrou_usuario' : 'editou_usuario',
+            session('nome_utilizador') . ($eCriacao ? ' cadastrou' : ' editou') . ' o utilizador ' . $request->nome . ' (' . $request->tipo . ')',
+            [
+                'entidade'      => 'Utilizador',
+                'id_entidade'   => $utilizador->id_util ?? null,
+                'nome_entidade' => $request->nome,
+            ]
+        );
+ 
+        return redirect(route('mostrar_cadastros_admin'));
+    }
 
 /**
  * Envia código de verificação para recuperação de senha

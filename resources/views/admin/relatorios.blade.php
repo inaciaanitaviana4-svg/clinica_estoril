@@ -49,7 +49,7 @@
                             <option value="agendada">Agendada</option>
                             <option value="confirmada">Confirmada</option>
                             <option value="cancelada">Cancelada</option>
-                            <option value="concluida">Concluída</option>
+                            <option value="concluido">Concluída</option>
                         </select>
                     </div>
                     <div class="form-group">

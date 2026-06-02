@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Consulta;
+use App\Models\HistoricoAtividade;
 use App\Models\Diagnostico;
 use App\Models\Especialidade;
 use App\Models\ExameSolicitado;
@@ -22,24 +23,24 @@ use Illuminate\Http\Request;
 class ConsultaController extends Controller
 {
     //
-    public function agendarconsulta()
-    {
-        if (! session('id_utilizador')) {
-            return redirect('/login');
-        }
-
-        $horarios = Horario::where('activo', true)
-            ->orderBy('dia_semana')
-            ->orderBy('hora')
-            ->get();
-        $tipos_consultas = TipoConsulta::all();
-        $especialidades = Especialidade::where('activo', true)->get();
-        $servicos_clinicos = ServicoClinico::where('activo', true)->get();
-
-        return view('agendar_consulta', compact(
-            'horarios', 'tipos_consultas', 'especialidades', 'servicos_clinicos'
-        ));
+   public function agendarconsulta()
+{
+    if (!session('id_utilizador')) {
+        return redirect('/login');
     }
+
+    $horarios        = Horario::where('activo', true)
+                        ->orderBy('dia_semana')
+                        ->orderBy('hora')
+                        ->get();
+    $tipos_consultas = TipoConsulta::all();
+    $especialidades  = Especialidade::where('activo', true)->get();
+    $servicos_clinicos = ServicoClinico::where('activo', true)->get();
+
+    return view('agendar_consulta', compact(
+        'horarios', 'tipos_consultas', 'especialidades', 'servicos_clinicos'
+    ));
+}
 
     public function mostrar_consultas_medico(Request $request)
     {
@@ -47,7 +48,7 @@ class ConsultaController extends Controller
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
-        $pesquisar_consultas = $request->query('pesquisar_consultas') ?? '';
+        $pesquisar_consultas = $request->query('pesquisar_consultas')??'';
         $consultas = Consulta::select(
             'consultas.id_consulta',
             'tipos_consultas.nome as tipo_consulta',
@@ -64,18 +65,18 @@ class ConsultaController extends Controller
             ->leftJoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
             ->whereIn('estado', ['agendada', 'concluida', 'em_andamento', 'confirmada'])
             ->where('consultas.id_medico', $utilizador->id_medico)
-            ->where(function ($query) use ($pesquisar_consultas) {
+             ->where(function ($query) use ($pesquisar_consultas) {
                 $query->where('tipos_consultas.nome', 'like', "%$pesquisar_consultas%")
-                    ->orWhere('servicos_clinicos.nome', 'like', "%$pesquisar_consultas%")
-                    ->orWhere('paciente.nome', 'like', "%$pesquisar_consultas%")
-                    ->orWhere('servicos_clinicos.preco', 'like', "%$pesquisar_consultas%")
-                    ->orWhere('consultas.data', 'like', "%$pesquisar_consultas%")
-                    ->orWhere('consultas.hora', 'like', "%$pesquisar_consultas%")
-                    ->orWhere('consultas.estado', 'like', "%$pesquisar_consultas%");
+                ->orWhere('servicos_clinicos.nome', 'like', "%$pesquisar_consultas%")
+                ->orWhere('paciente.nome', 'like', "%$pesquisar_consultas%")
+                ->orWhere('servicos_clinicos.preco', 'like', "%$pesquisar_consultas%")
+                ->orWhere('consultas.data', 'like', "%$pesquisar_consultas%")
+                ->orWhere('consultas.hora', 'like', "%$pesquisar_consultas%")
+                ->orWhere('consultas.estado', 'like', "%$pesquisar_consultas%");
 
             })
-            ->orderByDesc('data')
-            ->orderByDesc('hora')
+           ->orderByDesc('data')
+           ->orderByDesc('hora')
             ->paginate(10);
 
         return view('consultas.medico', compact('consultas'));
@@ -87,7 +88,7 @@ class ConsultaController extends Controller
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
-        $pesquisar_consultas = $request->query('pesquisar_consultas') ?? '';
+          $pesquisar_consultas = $request->query('pesquisar_consultas') ??'';
         $consultas = Consulta::select(
             'consultas.id_consulta',
             'tipos_consultas.nome as tipo_consulta',
@@ -108,22 +109,22 @@ class ConsultaController extends Controller
             ->leftJoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
             ->where(function ($query) use ($utilizador) {
                 $query->where('id_recepcionista', null)
-                    ->orWhere('id_recepcionista', $utilizador->id_recepcionista);
+                    ->orWhere('id_recepcionista', $utilizador->id_recepcionista);  
             })
-            ->where(function ($query) use ($pesquisar_consultas) {
+             ->where(function ($query) use ($pesquisar_consultas) {
                 $query->where('tipos_consultas.nome', 'like', "%$pesquisar_consultas%")
-                    ->orWhere('servicos_clinicos.nome', 'like', "%$pesquisar_consultas%")
-                    ->orWhere('paciente.nome', 'like', "%$pesquisar_consultas%")
-                    ->orWhere('servicos_clinicos.preco', 'like', "%$pesquisar_consultas%")
-                    ->orWhere('consultas.data', 'like', "%$pesquisar_consultas%")
-                    ->orWhere('consultas.hora', 'like', "%$pesquisar_consultas%")
-                    ->orWhere('consultas.estado', 'like', "%$pesquisar_consultas%")
-                    ->orWhere('consultas.modalidade', 'like', "%$pesquisar_consultas%")
-                    ->orWhere('medico.nome', 'like', "%$pesquisar_consultas%");
+                ->orWhere('servicos_clinicos.nome', 'like', "%$pesquisar_consultas%")
+                ->orWhere('paciente.nome', 'like', "%$pesquisar_consultas%")
+                ->orWhere('servicos_clinicos.preco', 'like', "%$pesquisar_consultas%")
+                ->orWhere('consultas.data', 'like', "%$pesquisar_consultas%")
+                ->orWhere('consultas.hora', 'like', "%$pesquisar_consultas%")
+                ->orWhere('consultas.estado', 'like', "%$pesquisar_consultas%")
+                ->orWhere('consultas.modalidade', 'like', "%$pesquisar_consultas%")
+                ->orWhere('medico.nome', 'like', "%$pesquisar_consultas%");
 
             })
-            ->orderByDesc('data')
-            ->orderByDesc('hora')
+           ->orderByDesc('data')
+           ->orderByDesc('hora')
             ->paginate(10);
 
         return view('consultas.recepcionista', compact('consultas'));
@@ -151,55 +152,61 @@ class ConsultaController extends Controller
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
+ 
         $medico = Medico::find($request->id_medico);
-        if (! $medico) {
-            return back()->with('erro', 'Médico não encontrado');
-        }
+        if (! $medico) return back()->with('erro', 'Médico não encontrado');
+ 
         $paciente = Paciente::find($request->id_paciente);
-        if (! $paciente) {
-            return back()->with('erro', 'Paciente não encontrado');
-        }
+        if (! $paciente) return back()->with('erro', 'Paciente não encontrado');
+ 
         $tipo_consulta = TipoConsulta::find($request->id_tipo_consulta);
-        if (! $tipo_consulta) {
-            return back()->with('erro', 'Tipo de consulta não encontrado');
-        }
+        if (! $tipo_consulta) return back()->with('erro', 'Tipo de consulta não encontrado');
+ 
         $servico_clinico = ServicoClinico::find($request->id_servico_clinico);
-        if (! $servico_clinico) {
-            return back()->with('erro', 'Serviço clinico não encontrado');
-        }
-        $dados = validator($request->all(), [
-            'id_medico' => 'requied',
-            'id_paciente' => 'requied',
-            'id_tipo_consulta' => 'requied',
-            'id_servico_clinico' => 'requied',
-            'data' => 'requied',
-            'hora' => 'requied',
-            'modalidade' => 'requied',
-            'observacao' => 'nullable',
-        ]);
+        if (! $servico_clinico) return back()->with('erro', 'Serviço clínico não encontrado');
+ 
+        // ✅ Variáveis definidas ANTES do return para uso no histórico
+        $nomePaciente = $paciente->nome;
+        $data         = $request->data ?? now()->format('d/m/Y');
+ 
         $consulta = Consulta::create([
             ...$request->all(),
             'id_recepcionista' => $utilizador->id_recepcionista,
-            'estado' => $request->modalidade == 'imediata' ? 'em_espera' : 'agendada',
+            'estado'           => $request->modalidade == 'imediata' ? 'em_espera' : 'agendada',
         ]);
+ 
         Notificacao::create([
-            'titulo' => $request->modalidade == 'imediata' ? 'Consulta em espera' : 'Consulta agendada',
-            'mensagem' => $request->modalidade == 'imediata' ? 'Aguarde a sua vez' : 'A sua consulta foi agendada com sucesso, aguardamos a sua confirmação',
+            'titulo'   => $request->modalidade == 'imediata' ? 'Consulta em espera' : 'Consulta agendada',
+            'mensagem' => $request->modalidade == 'imediata'
+                ? 'Aguarde a sua vez'
+                : 'A sua consulta foi agendada com sucesso, aguardamos a sua confirmação',
             'id_util' => Utilizador::where('id_paciente', $request->id_paciente)->first()->id_util ?? 0,
-            'lida' => false,
-            'data' => date('Y-m-d H:i:s'),
+            'lida'    => false,
+            'data'    => date('Y-m-d H:i:s'),
         ]);
         Notificacao::create([
-            'titulo' => 'Nova consulta associada',
-            'mensagem' => 'A consulta '.$consulta->id_consulta.' foi associada ao paciente '.$paciente->nome.' com sucesso',
-            'id_util' => Utilizador::where('id_medico', $request->id_medico)->first()->id_util ?? 0,
-            'lida' => false,
-            'data' => date('Y-m-d H:i:s'),
+            'titulo'   => 'Nova consulta associada',
+            'mensagem' => 'A consulta ' . $consulta->id_consulta . ' foi associada ao paciente ' . $nomePaciente . ' com sucesso',
+            'id_util'  => Utilizador::where('id_medico', $request->id_medico)->first()->id_util ?? 0,
+            'lida'     => false,
+            'data'     => date('Y-m-d H:i:s'),
         ]);
-
-        return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta))->with('sucesso', 'Consulta salva com sucesso. ');
+ 
+        // ✅ CORRIGIDO: registar ANTES do return
+        HistoricoAtividade::registar(
+            'consulta',
+            'agendou_consulta',
+            session('nome_utilizador') . ' agendou consulta para ' . $nomePaciente . ' em ' . $data,
+            [
+                'entidade'      => 'Consulta',
+                'id_entidade'   => $consulta->id_consulta,
+                'nome_entidade' => $nomePaciente,
+            ]
+        );
+ 
+        return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta))
+            ->with('sucesso', 'Consulta salva com sucesso.');
     }
-
     public function detalhes_consulta_admin($id_consulta)
     {
         $utilizador = verificar_admin();
@@ -311,7 +318,7 @@ class ConsultaController extends Controller
         $paciente = Paciente::find($consulta->id_paciente);
         $medico = $consulta->id_medico ? Medico::select('medico.nome', 'medico.email', 'medico.num_telefone', 'medico.especialidade')
             ->where('id_medico', $consulta->id_medico)->first() : null;
-        $medicos_sem_especialidade = Medico::where('especialidade', '=', 'Nenhuma')->select('medico.id_medico', 'medico.nome', 'medico.especialidade')->get();
+            $medicos_sem_especialidade = Medico::where('especialidade', '=', 'Nenhuma')->select('medico.id_medico', 'medico.nome', 'medico.especialidade')->get();
         $medicos_com_especialidade = Medico::join('especialidades', 'medico.especialidade', 'especialidades.nome')
             ->join('servicos_clinicos_especialidades', 'especialidades.id_espec', 'servicos_clinicos_especialidades.id_especialidade')
             ->where('servicos_clinicos_especialidades.id_servico_clinico', $consulta->id_servico_clinico)
@@ -324,6 +331,7 @@ class ConsultaController extends Controller
         $medicos = ! $consulta->id_medico ?
     [...$medicos_sem_especialidade, ...$medicos_com_especialidade]
         : [];
+        $medicos = ! $consulta->id_medico ? Medico::select('id_medico', 'nome', 'especialidade')->get() : [];
         $metodos_pagamento = MetodoPagamento::select('id_metodo_pagamento', 'nome')->get();
         $servicos_clinicos = ServicoClinico::where('activo', true)->get();
         $pagamentos = ItemPagamento::select(
@@ -381,10 +389,10 @@ class ConsultaController extends Controller
             'lida' => false,
             'data' => date('Y-m-d H:i:s'),
         ]);
-        Notificacao::create([
+          Notificacao::create([
             'titulo' => 'Associação de consulta',
             'mensagem' => 'O medico '.$medico->nome.' foi associado a consulta '.$consulta->id_consulta.' com sucesso',
-            'id_util' => Utilizador::where('id_medico', $request->id_medico)->first()->id_util ?? '',
+            'id_util' => Utilizador::where('id_medico',$request->id_medico)->first()->id_util ?? '',
             'lida' => false,
             'data' => date('Y-m-d H:i:s'),
         ]);
@@ -417,10 +425,10 @@ class ConsultaController extends Controller
             'lida' => false,
             'data' => date('Y-m-d H:i:s'),
         ]);
-        Notificacao::create([
+          Notificacao::create([
             'titulo' => 'Desassociação de médico',
             'mensagem' => 'O medico '.$medico->nome.' foi desassociado da consulta '.$consulta->id_consulta.' com sucesso',
-            'id_util' => Utilizador::where('id_medico', $id_medico)->first()->id_util ?? '',
+            'id_util' => Utilizador::where('id_medico',$id_medico)->first()->id_util ?? '',
             'lida' => false,
             'data' => date('Y-m-d H:i:s'),
         ]);
@@ -435,28 +443,42 @@ class ConsultaController extends Controller
     public function mudar_estado_consulta(Request $request, $id_consulta, $view = null)
     {
         $recepcionista = verificar_recepcionista();
-        $admin = verificar_admin();
+        $admin         = verificar_admin();
         if (! $admin && ! $recepcionista) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
+ 
         $consulta = Consulta::find($id_consulta);
-        if (! $consulta) {
-            return back()->with('erro', 'Consulta não encontrada');
-        }
-        $medico = Medico::find($consulta->id_medico);
+        if (! $consulta) return back()->with('erro', 'Consulta não encontrada');
+ 
+        $paciente     = Paciente::find($consulta->id_paciente);
+        $nomePaciente = $paciente ? $paciente->nome : 'Paciente #' . $consulta->id_paciente;
+        $nomeAtor     = $recepcionista ? $recepcionista->nome : ($admin ? $admin->nome : session('nome_utilizador'));
+        $estadoAntigo = $consulta->estado;
+ 
         $consulta->estado = $request->estado;
-        if (! $consulta->id_recepcionista) {
-
-            $consulta->id_recepcionista = $recepcionista->id_recepcionista;
-        }
         $consulta->save();
+ 
         Notificacao::create([
-            'titulo' => 'Mudança de estado de consulta',
-            'mensagem' => 'O recepcionista '.$recepcionista->nome.' mudou o estado de consulta '.$consulta->id_consulta.' para '.$consulta->estado,
-            'id_util' => Utilizador::where('id_paciente', $consulta->id_paciente)->first()->id_util ?? '',
-            'lida' => false,
-            'data' => date('Y-m-d H:i:s'),
+            'titulo'   => 'Mudança de estado de consulta',
+            'mensagem' => 'O recepcionista ' . ($recepcionista ? $recepcionista->nome : '') . ' mudou o estado de consulta ' . $consulta->id_consulta . ' para ' . $consulta->estado,
+            'id_util'  => Utilizador::where('id_paciente', $consulta->id_paciente)->first()->id_util ?? '',
+            'lida'     => false,
+            'data'     => date('Y-m-d H:i:s'),
         ]);
+ 
+        // ✅ ADICIONADO
+        HistoricoAtividade::registar(
+            'consulta',
+            'mudou_estado_consulta',
+            session('nome_utilizador') . ' alterou estado da consulta de ' . $nomePaciente . ' de "' . $estadoAntigo . '" para "' . $request->estado . '"',
+            [
+                'entidade'      => 'Consulta',
+                'id_entidade'   => $id_consulta,
+                'nome_entidade' => $nomePaciente,
+            ]
+        );
+ 
         if ($view == 'recepcionista') {
             return redirect(route('detalhes_consulta_recepcionista', $consulta->id_consulta));
         } elseif ($view == 'admin') {
@@ -464,31 +486,47 @@ class ConsultaController extends Controller
         }
     }
 
-    public function mudar_estado_consulta_medico(Request $request, $id_consulta)
+   public function mudar_estado_consulta_medico(Request $request, $id_consulta)
     {
         $medico = verificar_medico();
-        if (! $medico) {
-            return back()->with('erro', 'Não tem permissão para acessar esta página');
-        }
+        if (! $medico) return back()->with('erro', 'Não tem permissão para acessar esta página');
+ 
         $consulta = Consulta::find($id_consulta);
-        if (! $consulta) {
-            return back()->with('erro', 'Consulta não encontrada');
-        }
+        if (! $consulta) return back()->with('erro', 'Consulta não encontrada');
         if ($consulta->id_medico != $medico->id_medico) {
             return back()->with('erro', 'Não tem permissão para mudar o estado desta consulta');
         }
+ 
+        $paciente     = Paciente::find($consulta->id_paciente);
+        $nomePaciente = $paciente ? $paciente->nome : 'Paciente #' . $consulta->id_paciente;
+        $estadoAntigo = $consulta->estado;
+ 
         $consulta->estado = $request->estado;
         $consulta->save();
+ 
         Notificacao::create([
-            'titulo' => 'Mudança de estado de consulta',
-            'mensagem' => 'O medico '.$medico->nome.' mudou o estado de consulta '.$consulta->id_consulta.' para '.$consulta->estado,
-            'id_util' => Utilizador::where('id_paciente', $consulta->id_paciente)->first()->id_util ?? '',
-            'lida' => false,
-            'data' => date('Y-m-d H:i:s'),
+            'titulo'   => 'Mudança de estado de consulta',
+            'mensagem' => 'O médico ' . $medico->nome . ' mudou o estado de consulta ' . $consulta->id_consulta . ' para ' . $consulta->estado,
+            'id_util'  => Utilizador::where('id_paciente', $consulta->id_paciente)->first()->id_util ?? '',
+            'lida'     => false,
+            'data'     => date('Y-m-d H:i:s'),
         ]);
-
+ 
+        // ✅ ADICIONADO
+        HistoricoAtividade::registar(
+            'consulta',
+            'mudou_estado_consulta',
+            session('nome_utilizador') . ' (médico) alterou estado da consulta de ' . $nomePaciente . ' de "' . $estadoAntigo . '" para "' . $request->estado . '"',
+            [
+                'entidade'      => 'Consulta',
+                'id_entidade'   => $id_consulta,
+                'nome_entidade' => $nomePaciente,
+            ]
+        );
+ 
         return redirect(route('realizar_consulta_medico', $consulta->id_consulta));
     }
+
 
     public function realizar_consulta_medico($id_consulta)
     {
@@ -686,24 +724,24 @@ class ConsultaController extends Controller
     }
 
     public function api_pesquisar_medicos(Request $request)
-    {
-        $utilizador = verificar_recepcionista();
-        if (! $utilizador) {
-            return response()->json(['erro' => 'Não autorizado'], 401);
-        }
-
-        $termo = $request->query('termo', '');
-
-        if (strlen($termo) < 2) {
-            return response()->json([]);
-        }
-
-        $medicos = Medico::where('nome', 'like', "%{$termo}%")
-            ->orWhere('especialidade', 'like', "%{$termo}%")
-            ->select('id_medico', 'nome', 'especialidade', 'num_telefone')
-            ->limit(10)
-            ->get();
-
-        return response()->json($medicos);
+{
+    $utilizador = verificar_recepcionista();
+    if (!$utilizador) {
+        return response()->json(['erro' => 'Não autorizado'], 401);
     }
+
+    $termo = $request->query('termo', '');
+
+    if (strlen($termo) < 2) {
+        return response()->json([]);
+    }
+
+    $medicos = Medico::where('nome', 'like', "%{$termo}%")
+        ->orWhere('especialidade', 'like', "%{$termo}%")
+        ->select('id_medico', 'nome', 'especialidade', 'num_telefone')
+        ->limit(10)
+        ->get();
+
+    return response()->json($medicos);
+}
 }

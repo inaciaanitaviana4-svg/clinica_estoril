@@ -35,7 +35,7 @@
             </div>
 
             <h3>{{ $esp->nome }}</h3>
-           <strong> <p style="font-size:17px;">{{ $esp->descricao }}</p></strong>
+            <p style="font-size:17px;">{{ $esp->descricao }}</p>
 
             <a href="/agendar-consulta-paciente" class="specialty-full-btn">
                 Agendar Consulta

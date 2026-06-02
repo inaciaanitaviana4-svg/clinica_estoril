@@ -9,6 +9,7 @@ if (session('tipo_utilizador') == 'medico') {
         ['href' => route('mostrar_horarios_medico'),     'titulo' => 'Horários',     'icon' => 'fa-solid fa-clock'],
         ['href' => route('mostrar_relatorios_medico'),   'titulo' => 'Relatórios',   'icon' => 'fa-solid fa-file-alt'],
         ['href' => route('listar_minhas_notificacoes'),  'titulo' => 'Notificações', 'icon' => 'fa-solid fa-bell'],
+        ['href' => route('mostrar_mensagens_medico'), 'titulo' => 'Mensagens', 'icon' => 'fa-solid fa-comments'],
     ];
 }
 
@@ -31,6 +32,7 @@ if (session('tipo_utilizador') == 'paciente') {
         ['href' => route('mostrar_prontuario_paciente'),  'titulo' => 'Prontuário',   'icon' => 'fa-solid fa-file-medical'],
         ['href' => route('mostrar_relatorios_paciente'),  'titulo' => 'Relatórios',   'icon' => 'fa-solid fa-file-alt'],
         ['href' => route('listar_minhas_notificacoes'),   'titulo' => 'Notificações', 'icon' => 'fa-solid fa-bell'],
+        ['href' => route('mostrar_mensagens_paciente'), 'titulo' => 'Mensagens', 'icon' => 'fa-solid fa-comments'],
     ];
 }
 ?>
@@ -40,6 +42,7 @@ if (session('tipo_utilizador') == 'paciente') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Clínica Estoril - A sua saude nas melhores mãos">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Clínica Estoril - @yield('titulo')</title>
 
     {{-- Script anti-flash: aplica dark mode ANTES dos estilos carregarem --}}
@@ -293,14 +296,14 @@ if(menuBtn){
     const _userId = "{{ session('id_utilizador', 'guest') }}";
     const DARK_KEY = 'clinica_dark_mode_' + _userId;
 
-    function ativarDark() {
+      function ativarDark() {
         document.body.classList.add('dark-mode');
         document.documentElement.classList.add('pre-dark');
         localStorage.setItem(DARK_KEY, '1');
         const icon  = document.getElementById('darkToggleIcon');
         const label = document.getElementById('darkToggleLabel');
         if (icon)  icon.textContent  = '☀️';
-        if (label) label.textContent = 'Activar Modo Claro';
+        if (label) label.textContent = 'Ativar Modo Claro';
     }
 
     function desativarDark() {
@@ -310,7 +313,7 @@ if(menuBtn){
         const icon  = document.getElementById('darkToggleIcon');
         const label = document.getElementById('darkToggleLabel');
         if (icon)  icon.textContent  = '🌙';
-        if (label) label.textContent = 'Activar Modo Noturno';
+        if (label) label.textContent = 'Ativar Modo Noturno';
     }
 
     (function () {

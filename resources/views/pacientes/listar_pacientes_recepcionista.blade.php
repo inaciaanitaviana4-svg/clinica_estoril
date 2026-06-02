@@ -32,7 +32,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>ID</th>
                                 <th>Nome</th>
                                 <th>Género</th>
                                 <th>Email</th>
@@ -45,7 +45,20 @@
                             @foreach ($pacientes as $paciente)
                                 <tr>
                                     <td>{{ $paciente->id_paciente }}</td>
-                                    <td>{{ $paciente->nome }}</td>
+                                                                   
+<td>
+    <div style="display:flex; align-items:center; gap:10px;">
+       
+            <div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#667eea,#764ba2);
+                        display:flex; align-items:center; justify-content:center;
+                        font-size:13px; font-weight:700; color:#fff; flex-shrink:0;
+                        box-shadow:0 1px 3px rgba(0,0,0,.15);">
+                {{ strtoupper(substr($paciente->nome, 0, 1)) }}
+            </div>
+       
+        <span>{{ $paciente->nome }}</span>
+    </div>
+</td>
                                     <td>{{ $paciente->genero }}</td>
                                     <td>{{ $paciente->email }}</td>
                                     <td>{{ $paciente->num_telefone }}</td>

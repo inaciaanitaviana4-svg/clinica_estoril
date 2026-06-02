@@ -58,7 +58,24 @@
                         <tbody>
                             @foreach ($utilizadores as $utilizador)
                                 <tr>
-                                    <td>{{ $utilizador->nome }}</td>
+<td>
+    <div style="display:flex; align-items:center; gap:10px;">
+        @if($utilizador->foto)
+            <img src="{{ asset('storage/' . $utilizador->foto) }}"
+                 alt="{{ $utilizador->nome }}"
+                 style="width:36px; height:36px; border-radius:50%; object-fit:cover;
+                        border:2px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,.15);">
+        @else
+            <div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#667eea,#764ba2);
+                        display:flex; align-items:center; justify-content:center;
+                        font-size:13px; font-weight:700; color:#fff; flex-shrink:0;
+                        box-shadow:0 1px 3px rgba(0,0,0,.15);">
+                {{ strtoupper(substr($utilizador->nome, 0, 1)) }}
+            </div>
+        @endif
+        <span>{{ $utilizador->nome }}</span>
+    </div>
+</td>
                                     <td>{{ $utilizador->email }}</td>
                                     <td>{{ $utilizador->num_telefone }}</td>
                                     <td>{{ $utilizador->genero }}</td>

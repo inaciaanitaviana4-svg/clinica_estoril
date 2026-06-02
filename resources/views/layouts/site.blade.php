@@ -44,6 +44,7 @@
                 <a href="/equipa" class="nav-link">Equipa</a>
                 <a href="/contacto" class="nav-link">Contacto</a>
                 <a href="/blog" class="nav-link">Blog</a>
+                
             </nav>
 
             <!-- Botão de Login / Avatar (desktop + mobile) -->
@@ -78,6 +79,7 @@
                 <a href="/login" class="btn-login">
                     <i class="fas fa-user"></i>
                     <span>Entrar</span>
+                    
                 </a>
             @endif
 
@@ -99,6 +101,7 @@
         <a href="/equipa" class="mobile-link">Equipa</a>
         <a href="/contacto" class="mobile-link">Contacto</a>
         <a href="/blog" class="mobile-link">Blog</a>
+        
     </div>
 </header>
            

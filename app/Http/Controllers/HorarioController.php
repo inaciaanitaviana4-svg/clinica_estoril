@@ -25,8 +25,14 @@ class HorarioController extends Controller
         if (! $utilizador) {
             return back()->with('erro', 'Não tem permissão para acessar esta página');
         }
-        $horarios = Horario::select('horarios.*', 'medico.nome as nome_medico')
+        $horarios = Horario::select(
+            'horarios.*',
+        'medico.nome as nome_medico',
+            'medico.especialidade as especialidade',
+            'utilizadores.foto as foto'          // <-- foto vem da tabela utilizadores
+        )
             ->join('medico', 'horarios.id_medico', '=', 'medico.id_medico')
+              ->join('utilizadores', 'utilizadores.id_medico', '=', 'medico.id_medico') // <-- join com utilizadores
             ->get();
 
         return view('recepcionistas.horarios', compact('horarios'));

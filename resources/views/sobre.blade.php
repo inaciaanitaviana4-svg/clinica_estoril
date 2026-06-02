@@ -129,42 +129,6 @@
         </div>
     </section>
 
-    <!-- NÚMEROS E ESTATÍSTICAS -->
-    <section class="stats-section">
-        <div class="container">
-            <div class="section-header center">
-                <h2 class="section-title">Números que Inspiram Confiança</h2>
-                <p class="section-subtitle">Resultados que demonstram nosso compromisso com a excelência</p>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-icon-large">
-                        <i class="fas fa-users"></i>
-                    </div>
-                     <span class="badge-number">{{ $totalPacientes }}</span>
-                    <p class="stat-label-large">Pacientes Atendidos Anualmente</p>
-                </div>
-
-                <div class="stat-box">
-                    <div class="stat-icon-large">
-                        <i class="fas fa-stethoscope"></i>
-                    </div>
-                     <span class="badge-number">{{ $totalEspecialidades }}</span>
-                    <p class="stat-label-large">Especialidades Médicas</p>
-
-
-                    <div class="stat-box">
-                        <div class="stat-icon-large">
-                            <i class="fas fa-award"></i>
-                        </div>
-                        <h3 class="stat-number-large">98%</h3>
-                        <p class="stat-label-large">Taxa de Satisfação</p>
-                    </div>
-                </div>
-            </div>
-    </section>
-
     <!-- DIFERENCIAIS -->
     <section class="differentials-section">
         <div class="container">

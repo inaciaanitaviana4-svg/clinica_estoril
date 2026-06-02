@@ -101,6 +101,7 @@ body.dark-mode .form-note {
 }
 }
 
+
 /* ─────────────────────────────────────────────────────
    HEADER E MAIN — classes controladas por JS/CSS
    ───────────────────────────────────────────────────── */
@@ -536,4 +537,378 @@ body *::after {
         background-color 0.3s ease,
         color 0.3s ease,
         border-color 0.3s ease !important;
+}
+
+/* ─────────────────────────────────────────────────────
+   NOTIFICAÇÕES — LISTA E CARDS
+   ───────────────────────────────────────────────────── */
+.notificacoes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.notificacoes-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 16px 18px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Card não lido — barra azul à esquerda */
+.notificacoes-card--unread {
+    border-left: 3px solid #3b82f6;
+    background-color: #eff6ff;
+}
+
+body.dark-mode .notificacoes-card--unread {
+    background-color: #1e3a5f !important;
+    border-left-color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.notificacoes-card-header {
+    margin-bottom: 6px;
+}
+
+.notificacoes-card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-dark) !important;
+    margin: 0;
+}
+
+.notificacoes-card-message {
+    font-size: 14px;
+    color: var(--text-gray) !important;
+    margin: 0 0 12px;
+    line-height: 1.55;
+}
+
+.notificacoes-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.notificacoes-date {
+    font-size: 12px;
+    color: var(--text-light) !important;
+}
+
+/* Botão "Marcar como lida" */
+.notificacoes-btn {
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--input-border);
+    background-color: var(--input-bg);
+    color: var(--text-dark) !important;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+}
+
+.notificacoes-btn:hover {
+    background-color: var(--sidebar-hover-bg);
+    border-color: var(--input-focus);
+    color: var(--input-focus) !important;
+}
+
+/* Botão quando já está lida */
+.notificacoes-btn--read {
+    color: var(--text-light) !important;
+    border-color: var(--border-color);
+    background-color: var(--bg-page);
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* ── DARK MODE específico para notificações ── */
+body.dark-mode .notificacoes-card {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-mode .notificacoes-card-title {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .notificacoes-card-message {
+    color: var(--text-gray) !important;
+}
+
+body.dark-mode .notificacoes-date {
+    color: var(--text-light) !important;
+}
+
+body.dark-mode .notificacoes-btn {
+    background-color: #273549 !important;
+    border-color: #475569 !important;
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .notificacoes-btn--read {
+    background-color: var(--bg-card) !important;
+    color: #475569 !important;
+    border-color: var(--border-color) !important;
+}
+
+/* ── Responsivo mobile ── */
+@media (max-width: 480px) {
+    .notificacoes-card {
+        padding: 12px 14px;
+    }
+
+    .notificacoes-card-title { font-size: 14px; }
+    .notificacoes-card-message { font-size: 13px; }
+
+    .notificacoes-card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* ── Grid de cards ── */
+.horarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.5rem;
+    padding: 1.25rem;
+}
+
+/* ── Card individual do médico ── */
+.medico-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s ease;
+}
+.medico-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+/* ── Cabeçalho ── */
+.medico-card__header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 1.25rem 1.25rem 1rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.medico-card__foto-wrapper {
+    flex-shrink: 0;
+}
+
+.medico-card__foto {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ff7b39;
+}
+
+.medico-card__foto--placeholder {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #ff7b39;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border: 2px solid #ff7b39;
+}
+
+.medico-card__info {
+    flex: 1;
+    min-width: 0;
+}
+
+.medico-card__nome {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0 0 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.medico-card__especialidade {
+    font-size: 0.8125rem;
+    color: #6b7280;
+    margin: 0 0 6px;
+}
+
+.medico-card__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.75rem;
+    color: #16a34a;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 999px;
+    padding: 2px 8px;
+}
+
+.badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #16a34a;
+}
+
+/* ── Tabela de horários por dia ── */
+.medico-card__schedule {
+    padding: 1rem 1.25rem;
+    background: #fafafa;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.medico-card__schedule-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #9ca3af;
+    margin: 0 0 0.75rem;
+}
+
+.schedule-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.schedule-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 56px;
+}
+
+.schedule-day__name {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #6b7280;
+    letter-spacing: 0.04em;
+}
+
+.schedule-day__slots {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.schedule-slot {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #374151;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 3px 8px;
+    text-align: center;
+    white-space: nowrap;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    cursor: default;
+}
+
+.schedule-slot:hover {
+    background: #ff7b39;
+    border-color: #ff7b39;
+    color: #fff;
+}
+
+/* ── Lista de acções / remover ── */
+.medico-card__actions {
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.horario-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.horario-row:last-child {
+    border-bottom: none;
+}
+
+.horario-row__info {
+    font-size: 0.875rem;
+    color: #374151;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+    .horarios-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Dark mode ── */
+body.dark-mode .medico-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+body.dark-mode .medico-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+}
+body.dark-mode .medico-card__header {
+    border-bottom-color: var(--border-color) !important;
+}
+body.dark-mode .medico-card__nome {
+    color: var(--text-dark) !important;
+}
+body.dark-mode .medico-card__especialidade {
+    color: var(--text-gray) !important;
+}
+body.dark-mode .medico-card__schedule {
+    background: var(--bg-page) !important;
+    border-bottom-color: var(--border-color) !important;
+}
+body.dark-mode .medico-card__schedule-label {
+    color: var(--text-light) !important;
+}
+body.dark-mode .medico-card__badge {
+    background: rgba(22, 163, 74, 0.15) !important;
+    border-color: rgba(22, 163, 74, 0.3) !important;
+}
+body.dark-mode .schedule-day__name {
+    color: var(--text-gray) !important;
+}
+body.dark-mode .schedule-slot {
+    background: var(--bg-page) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-dark) !important;
+}
+body.dark-mode .medico-card__actions {
+    background: var(--bg-card) !important;
+}
+body.dark-mode .horario-row {
+    border-bottom-color: var(--border-color) !important;
+}
+body.dark-mode .horario-row__info {
+    color: var(--text-gray) !important;
 }
