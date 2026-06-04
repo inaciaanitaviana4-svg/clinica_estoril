@@ -133,7 +133,7 @@
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0; margin-top: 1px;
         ">
-            <i class="fa-solid fa-xmark" style="font-size: 20px; color: #E24B4A;"></i>
+            <i class="ti ti-alert-circle" style="font-size: 20px; color: #E24B4A;"></i>
         </div>
         <div style="flex: 1; min-width: 0;">
             <p style="margin: 0 0 3px; font-size: 14px; font-weight: 600; color: #111;">
@@ -191,7 +191,7 @@
                     display: flex; align-items: center; justify-content: center;
                     flex-shrink: 0;
                 ">
-                    <i class="ti ti-calendar" style="font-size: 22px; color: #185FA5;"></i>
+                    <i class="ti ti-calendar-check" style="font-size: 22px; color: #185FA5;"></i>
                 </div>
                 <div>
                     <p style="margin: 0; font-size: 16px; font-weight: 600; color: var(--color-text-primary, #111);">
