@@ -24,6 +24,7 @@ class Mensagem extends Model
     ];
 
     // ── Relações ──────────────────────────────────────────────
+
     public function consulta()
     {
         return $this->belongsTo(Consulta::class, 'id_consulta', 'id_consulta');

@@ -428,43 +428,360 @@ function criarModal({
             });
         });
     }
-    
-    // ===================== ABRIR CÂMERA =====================
-    function abrirCamera() {
-        // Verifica se o dispositivo tem câmera
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            // Método moderno para abrir câmera diretamente
-            const videoInput = document.createElement('input');
-            videoInput.type = 'file';
-            videoInput.accept = 'image/*';
-            videoInput.capture = 'environment'; // Tenta usar a câmera traseira
-            
-            // Para mobile, isso pode abrir a câmera diretamente
-            videoInput.click();
-            
-            videoInput.onchange = function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    processarArquivoFoto(file);
-                }
-            };
-        } else {
-            // Fallback: abre com o atributo capture
-            const cameraInput = document.createElement('input');
-            cameraInput.type = 'file';
-            cameraInput.accept = 'image/*';
-            cameraInput.setAttribute('capture', 'environment');
-            
-            cameraInput.onchange = function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    processarArquivoFoto(file);
-                }
-            };
-            
-            cameraInput.click();
-        }
+  // ===================== ABRIR CÂMERA — versão universal =====================
+function abrirCamera() {
+
+    // ── 1. Detecta o dispositivo/browser ──────────────────────────────────
+    const isMobile  = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+    const isIOS     = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const isSafari  = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    const isChrome  = /Chrome/i.test(navigator.userAgent) && !/Edge/i.test(navigator.userAgent);
+    const isFirefox = /Firefox/i.test(navigator.userAgent);
+
+    // ── 2. iOS Safari: usa input[capture] nativo (getUserMedia tem bugs no iOS) ──
+    if (isIOS) {
+        const input = document.createElement('input');
+        input.type    = 'file';
+        input.accept  = 'image/*';
+        input.capture = 'user'; // câmara frontal no iOS
+        input.style.display = 'none';
+        document.body.appendChild(input);
+
+        input.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) processarArquivoFoto(file);
+            document.body.removeChild(input);
+        });
+
+        // iOS requer que o click seja disparado directamente — sem setTimeout
+        input.click();
+        return;
     }
+
+    // ── 3. Verifica suporte getUserMedia ──────────────────────────────────
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        // Fallback: input com capture para Android antigo / browsers legados
+        const input = document.createElement('input');
+        input.type    = 'file';
+        input.accept  = 'image/*';
+        input.capture = 'environment';
+        input.style.display = 'none';
+        document.body.appendChild(input);
+        input.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) processarArquivoFoto(file);
+            document.body.removeChild(input);
+        });
+        input.click();
+        return;
+    }
+
+    // ── 4. Verifica HTTPS ─────────────────────────────────────────────────
+    if (!window.isSecureContext) {
+        criarModal({
+            titulo: 'Página não segura',
+            mensagem: 'O acesso à câmera requer HTTPS. Verifica se estás a aceder via <strong>https://</strong> e não http://',
+            confirmarTexto: 'OK',
+            mostrarCancelar: false
+        });
+        return;
+    }
+
+    // ── 5. Cria o overlay ─────────────────────────────────────────────────
+    const overlay = document.createElement('div');
+    overlay.id = 'camera-overlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.96);
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: ${isMobile ? '12px' : '20px'};
+        font-family: sans-serif;
+        box-sizing: border-box;
+        padding: ${isMobile ? '16px' : '24px'};
+    `;
+
+    const loadingMsg = document.createElement('p');
+    loadingMsg.textContent = 'A aguardar permissão da câmera...';
+    loadingMsg.style.cssText = 'color:rgba(255,255,255,0.7);font-size:14px;margin:0;text-align:center;';
+    overlay.appendChild(loadingMsg);
+    document.body.appendChild(overlay);
+
+    // Bloqueia scroll do body enquanto câmera está aberta
+    document.body.style.overflow = 'hidden';
+
+    let stream       = null;
+    let usandoFrontal = true;
+
+    // ── 6. Lista de constraints — tenta do mais específico ao mais genérico ──
+    const constraints = [
+        { video: { facingMode: 'user',        width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false },
+        { video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false },
+        { video: { width: { ideal: 1280 },    height: { ideal: 720 } }, audio: false },
+        { video: true, audio: false }
+    ];
+
+    function tentarConstraint(index) {
+        if (index >= constraints.length) {
+            fecharCamera();
+            criarModal({
+                titulo: 'Câmera indisponível',
+                mensagem: `
+                    Não foi possível aceder à câmera.<br><br>
+                    <strong>Possíveis causas:</strong><br>
+                    • Permissão negada — clica no 🔒 na barra de endereço e permite a câmera<br>
+                    • Câmera em uso por outra aplicação<br>
+                    • Dispositivo sem câmera
+                `,
+                confirmarTexto: 'OK',
+                mostrarCancelar: false
+            });
+            return;
+        }
+
+        navigator.mediaDevices.getUserMedia(constraints[index])
+            .then(function (mediaStream) {
+                stream = mediaStream;
+                construirUI(mediaStream);
+            })
+            .catch(function (err) {
+                console.warn('[Câmera] Tentativa ' + (index + 1) + ' falhou:', err.name, err.message);
+
+                if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+                    fecharCamera();
+                    // Mensagem adaptada ao browser
+                    let instrucoes = '';
+                    if (isFirefox) {
+                        instrucoes = '1. Clica no ícone 🎥 na barra de endereço<br>2. Selecciona "Permitir" para a câmera<br>3. Recarrega a página';
+                    } else if (isMobile) {
+                        instrucoes = '1. Vai às Definições do teu telemóvel<br>2. Privacidade → Câmera<br>3. Permite o acesso para este browser<br>4. Volta e tenta novamente';
+                    } else {
+                        instrucoes = '1. Clica no ícone 🔒 na barra de endereço<br>2. Em "Câmera", selecciona "Permitir"<br>3. Recarrega a página';
+                    }
+                    criarModal({
+                        titulo: 'Permissão negada',
+                        mensagem: `Bloqueaste o acesso à câmera.<br><br><strong>Para corrigir:</strong><br>${instrucoes}`,
+                        confirmarTexto: 'OK',
+                        mostrarCancelar: false
+                    });
+                } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+                    fecharCamera();
+                    criarModal({
+                        titulo: 'Câmera não encontrada',
+                        mensagem: 'Nenhuma câmera foi detectada neste dispositivo.',
+                        confirmarTexto: 'OK',
+                        mostrarCancelar: false
+                    });
+                } else if (err.name === 'NotReadableError' || err.name === 'AbortError') {
+                    fecharCamera();
+                    criarModal({
+                        titulo: 'Câmera ocupada',
+                        mensagem: 'A câmera está a ser usada por outra aplicação. Fecha outras aplicações que usem a câmera e tenta novamente.',
+                        confirmarTexto: 'OK',
+                        mostrarCancelar: false
+                    });
+                } else {
+                    tentarConstraint(index + 1);
+                }
+            });
+    }
+
+    // ── 7. Constrói a UI da câmera ────────────────────────────────────────
+    function construirUI(mediaStream) {
+        overlay.innerHTML = '';
+
+        const video = document.createElement('video');
+        video.autoplay    = true;
+        video.playsInline = true; // ESSENCIAL para iOS e mobile em geral
+        video.muted       = true; // Necessário para autoplay funcionar em todos os browsers
+        video.srcObject   = mediaStream;
+        video.setAttribute('playsinline', '');       // atributo HTML para Safari
+        video.setAttribute('webkit-playsinline', ''); // Safari antigo
+
+        video.style.cssText = `
+            width: 100%;
+            max-width: ${isMobile ? '100%' : '500px'};
+            max-height: ${isMobile ? '55vh' : '60vh'};
+            border-radius: ${isMobile ? '10px' : '14px'};
+            background: #111;
+            object-fit: cover;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            transform: scaleX(-1);
+        `;
+
+        const canvas = document.createElement('canvas');
+        canvas.style.display = 'none';
+
+        // Instrução
+        const instrucao = document.createElement('p');
+        instrucao.textContent = isMobile
+            ? 'Toca em "Capturar" para tirar a foto'
+            : 'Posiciona o rosto e clica em "Capturar foto"';
+        instrucao.style.cssText = `
+            color: rgba(255,255,255,0.65);
+            font-size: ${isMobile ? '12px' : '13px'};
+            margin: 0;
+            text-align: center;
+        `;
+
+        // ── Botão de trocar câmera (só em mobile com múltiplas câmeras) ──
+        const btnRow = document.createElement('div');
+        btnRow.style.cssText = `
+            display: flex;
+            gap: ${isMobile ? '10px' : '12px'};
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        `;
+
+        // Botão Capturar
+        const btnCapturar = document.createElement('button');
+        btnCapturar.type = 'button';
+        btnCapturar.innerHTML = `<i class="fa-solid fa-camera" style="margin-right:8px;"></i>${isMobile ? 'Capturar' : 'Capturar foto'}`;
+        btnCapturar.style.cssText = `
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: ${isMobile ? '14px 28px' : '13px 30px'};
+            border-radius: 50px;
+            font-size: ${isMobile ? '16px' : '15px'};
+            font-weight: 600;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        `;
+
+        // Botão Trocar câmera (frente/traseira) — útil em mobile
+        const btnTrocar = document.createElement('button');
+        btnTrocar.type = 'button';
+        btnTrocar.innerHTML = '<i class="fa-solid fa-rotate"></i>';
+        btnTrocar.title = 'Trocar câmera';
+        btnTrocar.style.cssText = `
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: none;
+            width: ${isMobile ? '52px' : '48px'};
+            height: ${isMobile ? '52px' : '48px'};
+            border-radius: 50%;
+            font-size: ${isMobile ? '18px' : '16px'};
+            cursor: pointer;
+            display: ${isMobile ? 'flex' : 'none'};
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        `;
+
+        // Botão Cancelar
+        const btnCancelar = document.createElement('button');
+        btnCancelar.type = 'button';
+        btnCancelar.innerHTML = `<i class="fa-solid fa-xmark" style="margin-right:8px;"></i>${isMobile ? 'Cancelar' : 'Cancelar'}`;
+        btnCancelar.style.cssText = `
+            background: rgba(255,255,255,0.12);
+            color: white;
+            border: none;
+            padding: ${isMobile ? '14px 22px' : '13px 24px'};
+            border-radius: 50px;
+            font-size: ${isMobile ? '16px' : '15px'};
+            font-weight: 600;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        `;
+
+        btnRow.appendChild(btnCapturar);
+        if (isMobile) btnRow.appendChild(btnTrocar);
+        btnRow.appendChild(btnCancelar);
+
+        overlay.appendChild(video);
+        overlay.appendChild(canvas);
+        overlay.appendChild(instrucao);
+        overlay.appendChild(btnRow);
+
+        // Garante que o vídeo arranca (Edge, Safari e Firefox às vezes precisam)
+        video.addEventListener('loadedmetadata', () => {
+            video.play().catch(e => console.warn('[Câmera] play() falhou:', e));
+        });
+
+        // ── Capturar foto ──
+        btnCapturar.addEventListener('click', function () {
+            const largura = video.videoWidth  || 640;
+            const altura  = video.videoHeight || 480;
+
+            canvas.width  = largura;
+            canvas.height = altura;
+
+            const ctx = canvas.getContext('2d');
+            // Espelha para corrigir o mirror do vídeo
+            ctx.translate(largura, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(video, 0, 0, largura, altura);
+
+            canvas.toBlob(function (blob) {
+                if (!blob) { console.error('[Câmera] toBlob falhou'); return; }
+                const file = new File([blob], 'foto-perfil.jpg', { type: 'image/jpeg' });
+                fecharCamera();
+                processarArquivoFoto(file);
+            }, 'image/jpeg', 0.92);
+        });
+
+        // ── Trocar câmera (frente ↔ traseira) ──
+        btnTrocar.addEventListener('click', function () {
+            usandoFrontal = !usandoFrontal;
+            // Para o stream actual
+            if (stream) stream.getTracks().forEach(t => t.stop());
+            overlay.innerHTML = '';
+            const msg = document.createElement('p');
+            msg.textContent = 'A trocar câmera...';
+            msg.style.cssText = 'color:rgba(255,255,255,0.7);font-size:14px;margin:0;';
+            overlay.appendChild(msg);
+
+            navigator.mediaDevices.getUserMedia({
+                video: { facingMode: usandoFrontal ? 'user' : 'environment' },
+                audio: false
+            }).then(function (novoStream) {
+                stream = novoStream;
+                construirUI(novoStream);
+            }).catch(function () {
+                // Se falhar, tenta o genérico
+                navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+                    .then(function (novoStream) { stream = novoStream; construirUI(novoStream); })
+                    .catch(fecharCamera);
+            });
+        });
+
+        // ── Cancelar ──
+        btnCancelar.addEventListener('click', fecharCamera);
+    }
+
+    // ── 8. Fecha e limpa tudo ─────────────────────────────────────────────
+    function fecharCamera() {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+        }
+        document.body.style.overflow = '';
+        const el = document.getElementById('camera-overlay');
+        if (el) el.remove();
+    }
+
+    // Fecha com ESC (desktop)
+    const fecharEsc = function (e) {
+        if (e.key === 'Escape') {
+            fecharCamera();
+            document.removeEventListener('keydown', fecharEsc);
+        }
+    };
+    document.addEventListener('keydown', fecharEsc);
+
+    // ── 9. Arranca ────────────────────────────────────────────────────────
+    tentarConstraint(0);
+}
     
     // ===================== ABRIR FICHEIROS =====================
     function abrirFicheiros() {
@@ -617,15 +934,15 @@ closeBtn.style.cssText = `
             </div>
             <div class="foto-menu-item" data-editar="camera">
                 <i class="fa-solid fa-camera"></i>
-                <span>Tirar nova foto</span>
+                <span style="color:black;">Tirar nova foto</span>
             </div>
             <div class="foto-menu-item" data-editar="ficheiros">
                 <i class="fa-regular fa-folder-open"></i>
-                <span>Escolher da galeria</span>
+                <span style="color:black;">Escolher da galeria</span>
             </div>
             <div class="foto-menu-item" data-editar="cancelar" style="border-top: 1px solid #e2e8f0;">
                 <i class="fa-solid fa-xmark"></i>
-                <span>Cancelar</span>
+                <span style="color:black;">Cancelar</span>
             </div>
         `;
         

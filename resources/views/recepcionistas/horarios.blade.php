@@ -60,7 +60,7 @@
                                         @if (isset($horariosPorDia[$diaNumero]))
                                             <div class="schedule-day">
                                                 <div class="schedule-day__name">
-                                                    {{ dia_semana($diaNumero) }}
+                                                    {{ abrev_dia_semana($diaNumero) }}
                                                 </div>
                                                 <div class="schedule-day__slots">
                                                     @foreach ($horariosPorDia[$diaNumero] as $horario)
@@ -84,6 +84,8 @@
                                         <span class="horario-row__info">
                                             {{ dia_semana($horario->dia_semana) }} — {{ $horario->hora }}
                                         </span>
+                                        
+                                    </div>
                                 @endforeach
                             </div>
                         </div>
@@ -98,7 +100,7 @@
 
 @section('script')
     <script>
-       
+        const url = "{{ route('remover_horario_medico_recepcionista', ['id_horario' => ':id']) }}";
         const csrfToken = "{{ csrf_token() }}";
 
         function remover_horario(id_horario) {

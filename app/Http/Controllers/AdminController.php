@@ -400,9 +400,10 @@ class AdminController extends Controller
         )
             ->join('paciente', 'consultas.id_paciente', '=', 'paciente.id_paciente')
             ->leftJoin('medico', 'consultas.id_medico', '=', 'medico.id_medico')
-            ->LeftJoin('recepcionista', 'consultas.id_recepcionista', '=', 'recepcionista.id_recepcionista')
+            ->leftJoin('recepcionista', 'consultas.id_recepcionista', '=', 'recepcionista.id_recepcionista')
             ->leftJoin('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
             ->leftJoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
+
             ->where(function ($query) use ($pesquisar_consultas) {
                 $query->where('tipos_consultas.nome', 'like', "%$pesquisar_consultas%")
                     ->orWhere('servicos_clinicos.nome', 'like', "%$pesquisar_consultas%")

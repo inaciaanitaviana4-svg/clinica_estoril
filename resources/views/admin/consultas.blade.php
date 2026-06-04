@@ -30,6 +30,7 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>N˚ da consulta</th>
                                 <th>Tipo de Consulta</th>
                                 <th>Modalidade</th>
                                 <th>Serviço clinico</th>
@@ -47,6 +48,7 @@
                         <tbody>
                             @foreach ($consultas as $consulta)
                                 <tr>
+                                    <td>{{ $consulta->id_consulta }}</td>
                                     <td>{{ $consulta->tipo_consulta }}</td>
                                     <td>{{ $consulta->modalidade }}</td>
                                     <td>{{ $consulta->nome_servico_clinico }}</td>

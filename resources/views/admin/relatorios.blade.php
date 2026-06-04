@@ -49,7 +49,7 @@
                             <option value="agendada">Agendada</option>
                             <option value="confirmada">Confirmada</option>
                             <option value="cancelada">Cancelada</option>
-                            <option value="concluido">Concluída</option>
+                            <option value="concluida">Concluída</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -176,8 +176,8 @@
                         </label>
                         <select name="estado_pagamento" id="estado_pagamento">
                             <option value="">Todos</option>
-                            <option value="cancelado">Cancelado</option>
-                            <option value="sucesso">Sucesso</option>
+                            <option value="cancelado">cancelada</option>
+                            <option value="sucesso">sucesso</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -405,7 +405,11 @@
                         dados?.erro || "Erro ao gerar relatório de consultas",
                     );
                 }
-                const descricao = `${data_inicio} - ${data_fim} - ${estado}`
+                const descricao = [
+                    estado ? `Estado: ${estado}` : null,
+                    data_inicio ? `De: ${data_inicio}` : null,
+                    data_fim ? `Até: ${data_fim}` : null,
+                ].filter(Boolean).join(' | ') || 'Todos os registos'
 
                 const logotipo = await obterImagemBase64(logo_url)
                 gerarRelatorioConsultasTabela(dados, {
@@ -452,7 +456,7 @@
                 const dados = await resultado.json();
                 if (!resultado.ok) {
                     throw new Error(
-                        dados?.erro || "Erro ao gerar relatório de consultas",
+                        dados?.erro || "Erro ao gerar relatório de pagamentos",
                     );
                 }
                 const descricao = ` `
@@ -463,9 +467,9 @@
                     descricao
                 })
             } catch (error) {
-                console.error("Erro ao gerar relatório de consultas :", error);
+                console.error("Erro ao gerar relatório de pagamentos :", error);
                 mostrarMensagemErro(
-                    "Ocorreu um erro ao gerar relatório de consultas. Por favor, tente novamente.\n" +
+                    "Ocorreu um erro ao gerar relatório de pagamentos. Por favor, tente novamente.\n" +
                     error?.message || "",
                 );
             }
@@ -508,8 +512,7 @@
             } catch (error) {
                 console.error("Erro ao gerar relatório de prontuario :", error);
                 mostrarMensagemErro(
-                    "Ocorreu um erro ao gerar relatório de prontuario. Por favor, tente novamente.\n" +
-                    error?.message || "",
+                    "Ocorreu um erro ao gerar relatório de prontuario. Por favor, tente novamente.",
                 );
             }
         })

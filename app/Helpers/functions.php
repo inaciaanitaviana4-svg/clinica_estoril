@@ -18,6 +18,20 @@ if (! function_exists('label_detalhes')) {
         echo '</div>';
     }
 }
+if (! function_exists('abrev_dia_semana')) {
+    function abrev_dia_semana($numero) {
+        $dias = [
+            1 => 'seg',
+            2 => 'ter',
+            3 => 'qua',
+            4 => 'qui',
+            5 => 'sex',
+            6 => 'sáb',
+            7 => 'dom',
+        ];
+        return $dias[$numero] ?? '—';
+    }
+}
 
 if (!function_exists('dia_semana')) {
     function dia_semana($numero) {
@@ -170,7 +184,7 @@ if (! function_exists('badge_estados')) {
     function badge_estados($estado)
     {
         $cor = '#000000'; // Cor padrão
-        $estado_nome = ucfirst(str_replace('_', ' ', $estado)); // Formata o nome do estado
+        $estado_nome = '';
         switch ($estado) {
             case 'pendente':
                 $cor = '#f59e0b';
@@ -207,9 +221,14 @@ if (! function_exists('badge_estados')) {
                 $estado_nome = 'Concluida';
                 break;
 
-            case 'realizado':
+            case 'PENDENTE':
+                $cor = '#f59e0b';
+                $estado_nome = 'Pendente';
+                break;
+
+            case 'REALIZADO':
                 $cor = '#10b981';
-                $estado_nome = 'realizado';
+                $estado_nome = 'Realizado';
                 break;
         }
 

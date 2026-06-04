@@ -163,7 +163,7 @@ $nome_eu = session('nome_utilizador') ?? 'Eu';
                 <div class="msg-item-data">
                     <i class="fa-regular fa-calendar"></i>
                     {{ \Carbon\Carbon::parse($c->data)->format('d/m/Y') }}
-                    <span class="msg-item-consulta-tag">#{{ $c->id_consulta }}</span>
+                    <span class="msg-item-consulta-tag">N˚{{ $c->id_consulta }}</span>
                 </div>
             </a>
             @empty
@@ -185,7 +185,7 @@ $nome_eu = session('nome_utilizador') ?? 'Eu';
                 {!! avatarHtml('Dr. ' . $consulta_sel->nome_medico, $consulta_sel->foto_medico ?? null, 44, 'azul') !!}
                 <div class="msg-chat-header-info">
                     <p class="msg-chat-nome">Dr. {{ $consulta_sel->nome_medico }}</p>
-                    <p class="msg-chat-sub">{{ $consulta_sel->especialidade ?? 'Médico' }} · Consulta #{{ $consulta_sel->id_consulta }}</p>
+                    <p class="msg-chat-sub">{{ $consulta_sel->especialidade ?? 'Médico' }} · Consulta N˚{{ $consulta_sel->id_consulta }}</p>
                 </div>
                 <span style="font-size:12px;color:var(--msg-sub);background:var(--msg-muted);padding:4px 12px;border-radius:99px;border:1px solid var(--msg-border);">
                     <i class="fa-solid fa-shield-halved" style="color:var(--msg-green);margin-right:4px;"></i> Conversa segura
@@ -260,7 +260,7 @@ $nome_eu = session('nome_utilizador') ?? 'Eu';
                         <i class="fa-solid fa-paper-plane"></i>
                     </button>
                 </div>
-                <p style="font-size:11px;color:var(--msg-sub);margin:5px 0 0;text-align:right;">
+                <p style="font-size:11px;color:var(--msg-sub);margin:5px 0 0;text-align:center;">
                     <i class="fa-solid fa-lock" style="margin-right:4px;"></i>
                     Mensagens visíveis apenas entre si e o médico
                 </p>

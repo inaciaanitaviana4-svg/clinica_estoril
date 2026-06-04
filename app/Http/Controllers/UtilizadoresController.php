@@ -79,65 +79,123 @@ class UtilizadoresController extends Controller
      *
      * @param  Request  $request  Contém 'email' e 'password' do formulário
      */
-    public function login(Request $request)
-{
-    $request->validate([
-        'email'    => ['required'],
-        'password' => ['required'],
-    ]);
-
-    $input = trim($request->email);
-
-    // Tenta encontrar por email ou por número de telefone
-    $utilizador = Utilizador::where('email', $input)
-                            ->orWhere('num_telefone', $input)
-                            ->first();
-
-    if ($utilizador) {
-        $senhValida = Hash::check($request->password, $utilizador->senha);
-
-        if ($senhValida) {
-            session(['id_utilizador'   => $utilizador->id_util]);
-            session(['nome_utilizador' => $utilizador->nome]);
-            session(['foto_utilizador' => $utilizador->foto]);
-
-            if ($utilizador->nivel_acesso == 0) {
-                session(['tipo_utilizador' => 'admi']);
-                return redirect('/admin/dashboard')->with('sucesso', 'Login bem sucedido! Bem-vindo,'.$utilizador->nome);
+   public function login(Request $request)
+    {
+        $request->validate([
+            'email'    => ['required'],
+            'password' => ['required'],
+        ]);
+ 
+        $input      = trim($request->email);
+        $utilizador = Utilizador::where('email', $input)
+                                ->orWhere('num_telefone', $input)
+                                ->first();
+ 
+        if ($utilizador) {
+            $senhaValida = Hash::check($request->password, $utilizador->senha);
+ 
+            if ($senhaValida) {
+                session(['id_utilizador'   => $utilizador->id_util]);
+                session(['nome_utilizador' => $utilizador->nome]);
+                session(['foto_utilizador' => $utilizador->foto]);
+ 
+                // ── Regista início de sessão bem-sucedido ─────────
+                try {
+                    HistoricoAtividade::registar(
+                        'sessao',
+                        'inicio_sessao',
+                        $utilizador->nome . ' iniciou sessão no sistema',
+                        [
+                            'entidade'      => 'Utilizador',
+                            'id_entidade'   => $utilizador->id_util,
+                            'nome_entidade' => $utilizador->nome,
+                        ]
+                    );
+                } catch (\Exception $e) {}
+ 
+                if ($utilizador->nivel_acesso == 0) {
+                    session(['tipo_utilizador' => 'admi']);
+                    return redirect('/admin/dashboard')->with('sucesso', 'Login bem sucedido! Bem-vindo, ' . $utilizador->nome);
+                }
+                if ($utilizador->nivel_acesso == 1) {
+                    session(['tipo_utilizador' => 'recepcionista']);
+                    return redirect(route('mostrar_dashboard_recepcionista'))->with('sucesso', 'Login bem sucedido! Bem-vindo, ' . $utilizador->nome);
+                }
+                if ($utilizador->nivel_acesso == 2) {
+                    session(['tipo_utilizador' => 'medico']);
+                    return redirect(route('mostrar_dashboard_medico'))->with('sucesso', 'Login bem sucedido! Bem-vindo, ' . $utilizador->nome);
+                }
+ 
+                session(['tipo_utilizador' => 'paciente']);
+                return redirect(route('mostrar_dashboard_paciente'))->with('sucesso', 'Login bem sucedido! Bem-vindo, ' . $utilizador->nome);
             }
-            if ($utilizador->nivel_acesso == 1) {
-                session(['tipo_utilizador' => 'recepcionista']);
-                return redirect(route('mostrar_dashboard_recepcionista'))->with("sucesso", "Login bem sucedido! Bem-vindo, ".$utilizador->nome);
-            }
-            if ($utilizador->nivel_acesso == 2) {
-                session(['tipo_utilizador' => 'medico']);
-                return redirect(route('mostrar_dashboard_medico'))->with("sucesso", "Login bem sucedido! Bem-vindo, ".$utilizador->nome);
-            }
-
-            session(['tipo_utilizador' => 'paciente']);
-            return redirect(route('mostrar_dashboard_paciente'))->with("sucesso", "Login bem sucedido! Bem-vindo, ".$utilizador->nome);
+ 
+            // ── Regista tentativa de sessão falhada (utilizador existe mas senha errada) ──
+            try {
+                HistoricoAtividade::registar(
+                    'sessao_falhada',
+                    'tentativa_sessao_falhada',
+                    'Tentativa de início de sessão falhada para a conta: ' . $utilizador->nome . ' (' . $input . ')',
+                    [
+                        'entidade'      => 'Utilizador',
+                        'id_entidade'   => $utilizador->id_util,
+                        'nome_entidade' => $utilizador->nome,
+                    ]
+                );
+            } catch (\Exception $e) {}
+ 
+        } else {
+            // ── Regista tentativa com utilizador inexistente ───────
+            try {
+                HistoricoAtividade::registar(
+                    'sessao_falhada',
+                    'tentativa_sessao_utilizador_inexistente',
+                    'Tentativa de início de sessão com credenciais desconhecidas: ' . $input,
+                    [
+                        'entidade'      => 'Segurança',
+                        'id_entidade'   => null,
+                        'nome_entidade' => $input,
+                    ]
+                );
+            } catch (\Exception $e) {}
         }
+ 
+        return back()->with('erro', 'Credenciais incorretas. Verifique o email/telefone e a senha.');
     }
-
-    return back()->with('erro', 'Credenciais incorretas. Verifique o email/telefone e a senha.');
-}
+ 
+    public function sair(Request $request)
+    {
+        // ── Regista logout ANTES de destruir a sessão ─────────────
+        $idUtil   = session('id_utilizador');
+        $nomeUtil = session('nome_utilizador', 'Desconhecido');
+ 
+        if ($idUtil) {
+            try {
+                HistoricoAtividade::registar(
+                    'logout',
+                    'terminou_sessao',
+                    $nomeUtil . ' terminou a sessão no sistema',
+                    [
+                        'entidade'      => 'Utilizador',
+                        'id_entidade'   => $idUtil,
+                        'nome_entidade' => $nomeUtil,
+                    ]
+                );
+            } catch (\Exception $e) {}
+        }
+ 
+        $request->session()->invalidate();
+        $request->session()->forget(['id_utilizador', 'tipo_utilizador']);
+        $request->session()->regenerateToken();
+ 
+        return redirect('/');
+    }
 
     /**
      * Faz logout do utilizador, destruindo a sessão
      *
      * @param  Request  $request  Requisição HTTP
      */
-    public function sair(Request $request)
-    {
-        // Invalida toda a sessão do utilizador
-        $request->session()->invalidate();
-        // Remove dados da sessão
-        $request->session()->forget(['id_utilizador', 'tipo_utilizador']);
-        // Regenera token CSRF para segurança
-        $request->session()->regenerateToken();
-
-        return redirect('/');
-    }
 
     /**
      * Registra um novo paciente no sistema

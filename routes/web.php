@@ -70,8 +70,6 @@ Route::get('/recuperar-senha', function () {
     Route::get('/painel-paciente/prontuario', [ProntuarioController::class, 'mostrar_prontuario_paciente'])->name('mostrar_prontuario_paciente');
     Route::get('/painel-paciente/prontuario/{id_consulta}', [ProntuarioController::class, 'mostrar_detalhes_consulta_paciente'])->name('mostrar_detalhes_consulta_paciente');
    Route::get('/api/horarios-por-especialidade', [ConsultaController::class, 'api_horarios_por_especialidade']);
-   // ── Mensagens — Paciente ──────────────────────────────────────
-Route::get('/painel-paciente/mensagens',  [MensagemController::class, 'mostrar_mensagens_paciente'])->name('mostrar_mensagens_paciente');
 
   
     
@@ -139,8 +137,6 @@ Route::get('/painel-paciente/mensagens',  [MensagemController::class, 'mostrar_m
     Route::get('/api/prontuarios/consultas/{id_consulta}', [ProntuarioController::class, 'api_buscar_consultas_prontuario_medico'])->name('api_buscar_consultas_prontuario_medico');
     Route::get('/api/servicos-clinicos/medicos', [ServicoClinicoController::class, 'api_listar_medicos_servico_clinico'])->name('api_listar_medicos_servico_clinico');
     Route::get('/api/medicos/horarios', [HorarioController::class, 'api_listar_horarios_medico'])->name('api_listar_horarios_medico');
-    // ── Mensagens — Médico ────────────────────────────────────────
-Route::get('/painel-medico/mensagens',    [MensagemController::class, 'mostrar_mensagens_medico'])->name('mostrar_mensagens_medico');
 
 
     // ===== ROTAS DO ADMINISTRADOR =====
@@ -215,13 +211,18 @@ Route::delete('/api/admin/historico-atividade/limpar', [HistoricoAtividadeContro
     Route::get('/api/dashboard/recepcionista', [DashboardController::class, 'api_obter_dados_dashboard_recepcionista'])->name('api_obter_dados_dashboard_recepcionista');
     Route::get('/api/dashboard/medico', [DashboardController::class, 'api_obter_dados_dashboard_medico'])->name('api_obter_dados_dashboard_medico');
 
+// ── Mensagens — Paciente ──────────────────────────────────────
+Route::get('/painel-paciente/mensagens',  [MensagemController::class, 'mostrar_mensagens_paciente'])->name('mostrar_mensagens_paciente');
+ 
+// ── Mensagens — Médico ────────────────────────────────────────
+Route::get('/painel-medico/mensagens',    [MensagemController::class, 'mostrar_mensagens_medico'])->name('mostrar_mensagens_medico');
+ 
+// ── API partilhada ────────────────────────────────────────────
+Route::post('/api/mensagens/enviar',       [MensagemController::class, 'api_enviar_mensagem'])->name('api_enviar_mensagem');
+Route::get('/api/mensagens/novas',         [MensagemController::class, 'api_mensagens_novas'])->name('api_mensagens_novas');
+Route::get('/api/mensagens/nao-lidas',     [MensagemController::class, 'api_total_nao_lidas'])->name('api_mensagens_nao_lidas');
 
-    // ── API de mensagens (partilhada) ─────────────────────────────
-Route::post('/api/mensagens/enviar',      [MensagemController::class, 'api_enviar_mensagem'])->name('api_enviar_mensagem');
-Route::get('/api/mensagens/novas',        [MensagemController::class, 'api_mensagens_novas'])->name('api_mensagens_novas');
-Route::get('/api/mensagens/nao-lidas',    [MensagemController::class, 'api_total_nao_lidas'])->name('api_mensagens_nao_lidas');
-
-
+ 
     // erros
     Route::get('/', [SiteController::class, 'inicio']);
 

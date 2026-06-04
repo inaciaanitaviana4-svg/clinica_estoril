@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Consulta;
+use App\Models\HistoricoAtividade;
 use App\Models\Medico;
 use App\Models\Mensagem;
 use App\Models\Notificacao;
 use App\Models\Paciente;
 use App\Models\Utilizador;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class MensagemController extends Controller
 {
@@ -17,10 +17,6 @@ class MensagemController extends Controller
     //  PAINEL DO PACIENTE
     // ═══════════════════════════════════════════════════════════
 
-    /**
-     * Lista as consultas concluídas do paciente e permite seleccionar uma
-     * para ver/enviar mensagens ao médico responsável.
-     */
     public function mostrar_mensagens_paciente(Request $request)
     {
         $utilizador = verificar_paciente();
@@ -28,18 +24,11 @@ class MensagemController extends Controller
 
         $paciente = Paciente::find($utilizador->id_paciente);
 
-        // Consultas concluídas com médico associado (podem ter mensagens)
         $consultas = Consulta::select(
-                'consultas.id_consulta',
-                'consultas.data',
-                'consultas.hora',
-                'consultas.estado',
-                'medico.id_medico',
-                'medico.nome as nome_medico',
-                'medico.especialidade',
-                'tipos_consultas.nome as tipo_consulta',
-                'servicos_clinicos.nome as servico',
-                'util_medico.foto as foto_medico',
+                'consultas.id_consulta', 'consultas.data', 'consultas.hora',
+                'consultas.estado', 'medico.id_medico', 'medico.nome as nome_medico',
+                'medico.especialidade', 'tipos_consultas.nome as tipo_consulta',
+                'servicos_clinicos.nome as servico', 'util_medico.foto as foto_medico',
             )
             ->join('medico', 'consultas.id_medico', '=', 'medico.id_medico')
             ->leftJoin('utilizadores as util_medico', 'util_medico.id_medico', '=', 'medico.id_medico')
@@ -51,62 +40,39 @@ class MensagemController extends Controller
             ->orderByDesc('consultas.data')
             ->get();
 
-        // Para cada consulta, conta mensagens não lidas
-        $id_util = $utilizador->id_util;
+        $id_util   = $utilizador->id_util;
         $consultas = $consultas->map(function ($c) use ($id_util) {
             $c->nao_lidas = Mensagem::where('id_consulta', $c->id_consulta)
-                ->where('id_destinatario', $id_util)
-                ->where('lida', false)
-                ->count();
+                ->where('id_destinatario', $id_util)->where('lida', false)->count();
             return $c;
         });
 
-        $total_nao_lidas = $consultas->sum('nao_lidas');
-
-        // Consulta seleccionada
-        $id_consulta_sel = $request->query('consulta');
-        $consulta_sel    = null;
-        $mensagens       = collect();
-        $medico_sel      = null;
-        $id_util_medico  = null;
+        $total_nao_lidas  = $consultas->sum('nao_lidas');
+        $id_consulta_sel  = $request->query('consulta');
+        $consulta_sel     = null;
+        $mensagens        = collect();
+        $id_util_medico   = null;
 
         if ($id_consulta_sel) {
             $consulta_sel = $consultas->firstWhere('id_consulta', (int) $id_consulta_sel);
-
             if ($consulta_sel) {
-                // Utilizador do médico desta consulta
-                $util_medico   = Utilizador::where('id_medico', $consulta_sel->id_medico)->first();
+                $util_medico    = Utilizador::where('id_medico', $consulta_sel->id_medico)->first();
                 $id_util_medico = $util_medico?->id_util;
-
                 if ($id_util_medico) {
-                    // Foto do médico (pelo utilizador)
                     $consulta_sel->foto_medico = $util_medico?->foto ?? $consulta_sel->foto_medico ?? null;
-
-                    // Carrega conversa
                     $mensagens = Mensagem::conversa($id_consulta_sel, $id_util, $id_util_medico)
-                        ->orderBy('created_at')
-                        ->get();
-
-                    // Marca como lidas
+                        ->orderBy('created_at')->get();
                     Mensagem::where('id_consulta', $id_consulta_sel)
-                        ->where('id_destinatario', $id_util)
-                        ->where('lida', false)
+                        ->where('id_destinatario', $id_util)->where('lida', false)
                         ->update(['lida' => true, 'lida_em' => now()]);
-
-                    // Recalcula badge desta consulta
                     $consulta_sel->nao_lidas = 0;
                 }
             }
         }
 
-        // Fotos para os avatares
-        $foto_eu    = session('foto_utilizador'); // foto do paciente logado
-        $foto_outro = isset($util_medico) ? $util_medico->foto : null; // foto do médico
-
-        return view('mensagens.pacientes_mensagens', compact(
+        return view('mensagens.paciente', compact(
             'consultas', 'consulta_sel', 'mensagens',
-            'id_util', 'id_util_medico', 'total_nao_lidas', 'paciente',
-            'foto_eu', 'foto_outro'
+            'id_util', 'id_util_medico', 'total_nao_lidas', 'paciente'
         ));
     }
 
@@ -114,9 +80,6 @@ class MensagemController extends Controller
     //  PAINEL DO MÉDICO
     // ═══════════════════════════════════════════════════════════
 
-    /**
-     * Lista os pacientes/consultas do médico com quem pode trocar mensagens.
-     */
     public function mostrar_mensagens_medico(Request $request)
     {
         $utilizador = verificar_medico();
@@ -125,16 +88,10 @@ class MensagemController extends Controller
         $id_util = $utilizador->id_util;
         $medico  = Medico::find($utilizador->id_medico);
 
-        // Consultas concluídas/em andamento deste médico
         $consultas = Consulta::select(
-                'consultas.id_consulta',
-                'consultas.data',
-                'consultas.hora',
-                'consultas.estado',
-                'paciente.id_paciente',
-                'paciente.nome as nome_paciente',
-                'tipos_consultas.nome as tipo_consulta',
-                'servicos_clinicos.nome as servico',
+                'consultas.id_consulta', 'consultas.data', 'consultas.hora',
+                'consultas.estado', 'paciente.id_paciente', 'paciente.nome as nome_paciente',
+                'tipos_consultas.nome as tipo_consulta', 'servicos_clinicos.nome as servico',
                 'util_paciente.foto as foto_paciente',
             )
             ->join('paciente', 'consultas.id_paciente', '=', 'paciente.id_paciente')
@@ -148,14 +105,11 @@ class MensagemController extends Controller
 
         $consultas = $consultas->map(function ($c) use ($id_util) {
             $c->nao_lidas = Mensagem::where('id_consulta', $c->id_consulta)
-                ->where('id_destinatario', $id_util)
-                ->where('lida', false)
-                ->count();
+                ->where('id_destinatario', $id_util)->where('lida', false)->count();
             return $c;
         });
 
-        $total_nao_lidas = $consultas->sum('nao_lidas');
-
+        $total_nao_lidas  = $consultas->sum('nao_lidas');
         $id_consulta_sel  = $request->query('consulta');
         $consulta_sel     = null;
         $mensagens        = collect();
@@ -163,41 +117,29 @@ class MensagemController extends Controller
 
         if ($id_consulta_sel) {
             $consulta_sel = $consultas->firstWhere('id_consulta', (int) $id_consulta_sel);
-
             if ($consulta_sel) {
                 $util_paciente    = Utilizador::where('id_paciente', $consulta_sel->id_paciente)->first();
                 $id_util_paciente = $util_paciente?->id_util;
-
                 if ($id_util_paciente) {
                     $consulta_sel->foto_paciente = $util_paciente?->foto ?? $consulta_sel->foto_paciente ?? null;
-
                     $mensagens = Mensagem::conversa($id_consulta_sel, $id_util, $id_util_paciente)
-                        ->orderBy('created_at')
-                        ->get();
-
+                        ->orderBy('created_at')->get();
                     Mensagem::where('id_consulta', $id_consulta_sel)
-                        ->where('id_destinatario', $id_util)
-                        ->where('lida', false)
+                        ->where('id_destinatario', $id_util)->where('lida', false)
                         ->update(['lida' => true, 'lida_em' => now()]);
-
                     $consulta_sel->nao_lidas = 0;
                 }
             }
         }
 
-        // Fotos para os avatares
-        $foto_eu    = session('foto_utilizador'); // foto do médico logado
-        $foto_outro = isset($util_paciente) ? $util_paciente->foto : null; // foto do paciente
-
-        return view('mensagens.medicos_mensagens', compact(
+        return view('mensagens.medico', compact(
             'consultas', 'consulta_sel', 'mensagens',
-            'id_util', 'id_util_paciente', 'total_nao_lidas', 'medico',
-            'foto_eu', 'foto_outro'
+            'id_util', 'id_util_paciente', 'total_nao_lidas', 'medico'
         ));
     }
 
     // ═══════════════════════════════════════════════════════════
-    //  API — ENVIAR MENSAGEM
+    //  API — ENVIAR MENSAGEM DE TEXTO
     // ═══════════════════════════════════════════════════════════
 
     public function api_enviar_mensagem(Request $request)
@@ -215,10 +157,8 @@ class MensagemController extends Controller
         $id_destinatario = (int) $request->id_destinatario;
         $id_remetente    = $utilizador->id_util;
 
-        // ── Segurança: valida que o par utilizador/consulta é legítimo ──
-        if (! $this->par_autorizado($id_remetente, $id_destinatario, $id_consulta)) {
-            return response()->json(['erro' => 'Não tem permissão para enviar mensagens nesta consulta.'], 403);
-        }
+        if (! $this->par_autorizado($id_remetente, $id_destinatario, $id_consulta))
+            return response()->json(['erro' => 'Sem permissão.'], 403);
 
         $mensagem = Mensagem::create([
             'id_consulta'     => $id_consulta,
@@ -228,26 +168,18 @@ class MensagemController extends Controller
             'lida'            => false,
         ]);
 
-        // ── Notificação ───────────────────────────────────────
-        $tipoRemetente = $utilizador->nivel_acesso == 2 ? 'médico' : 'paciente';
-        Notificacao::create([
-            'titulo'   => ucfirst($tipoRemetente) . ' enviou uma mensagem',
-            'mensagem' => 'O ' . $tipoRemetente . ' ' . $utilizador->nome . ' enviou uma mensagem referente à consulta #' . $id_consulta . '.',
-            'id_util'  => $id_destinatario,
-            'lida'     => false,
-            'data'     => now()->format('Y-m-d H:i:s'),
-        ]);
+        $this->notificar_e_registar($utilizador, $id_destinatario, $id_consulta, $mensagem->id_mensagem);
 
         return response()->json([
-            'ok'         => true,
-            'id_mensagem'=> $mensagem->id_mensagem,
-            'created_at' => $mensagem->created_at->format('H:i'),
-            'conteudo'   => $mensagem->conteudo,
+            'ok'          => true,
+            'id_mensagem' => $mensagem->id_mensagem,
+            'created_at'  => $mensagem->created_at->format('H:i'),
+            'conteudo'    => $mensagem->conteudo,
         ]);
     }
 
     // ═══════════════════════════════════════════════════════════
-    //  API — POLLING: mensagens novas (para auto-refresh do chat)
+    //  API — POLLING: mensagens novas
     // ═══════════════════════════════════════════════════════════
 
     public function api_mensagens_novas(Request $request)
@@ -260,9 +192,8 @@ class MensagemController extends Controller
         $ultima_id       = (int) $request->query('ultima_id', 0);
         $id_util         = $utilizador->id_util;
 
-        if (! $this->par_autorizado($id_util, $id_interlocutor, $id_consulta)) {
+        if (! $this->par_autorizado($id_util, $id_interlocutor, $id_consulta))
             return response()->json(['erro' => 'Sem permissão.'], 403);
-        }
 
         $novas = Mensagem::conversa($id_consulta, $id_util, $id_interlocutor)
             ->where('id_mensagem', '>', $ultima_id)
@@ -276,7 +207,7 @@ class MensagemController extends Controller
                 'minha'        => $m->id_remetente === $id_util,
             ]);
 
-        // Marca como lidas as que vieram do interlocutor
+        // Marca como lidas
         Mensagem::where('id_consulta', $id_consulta)
             ->where('id_remetente', $id_interlocutor)
             ->where('id_destinatario', $id_util)
@@ -287,7 +218,7 @@ class MensagemController extends Controller
     }
 
     // ═══════════════════════════════════════════════════════════
-    //  API — Total de não lidas (badge global)
+    //  API — Total de não lidas
     // ═══════════════════════════════════════════════════════════
 
     public function api_total_nao_lidas()
@@ -296,8 +227,7 @@ class MensagemController extends Controller
         if (! $utilizador) return response()->json(['total' => 0]);
 
         $total = Mensagem::where('id_destinatario', $utilizador->id_util)
-            ->where('lida', false)
-            ->count();
+            ->where('lida', false)->count();
 
         return response()->json(['total' => $total]);
     }
@@ -312,10 +242,6 @@ class MensagemController extends Controller
         return Utilizador::find(session('id_utilizador'));
     }
 
-    /**
-     * Garante que os dois utilizadores (remetente e destinatário) estão
-     * ligados à mesma consulta — um como médico, outro como paciente.
-     */
     private function par_autorizado(int $idA, int $idB, int $idConsulta): bool
     {
         $consulta = Consulta::find($idConsulta);
@@ -325,17 +251,48 @@ class MensagemController extends Controller
         $utilB = Utilizador::find($idB);
         if (! $utilA || ! $utilB) return false;
 
-        // idA é o paciente desta consulta e idB é o médico, ou vice-versa
         $pacienteOk = (
             ($utilA->id_paciente && $consulta->id_paciente == $utilA->id_paciente) ||
             ($utilB->id_paciente && $consulta->id_paciente == $utilB->id_paciente)
         );
-
         $medicoOk = (
             ($utilA->id_medico && $consulta->id_medico == $utilA->id_medico) ||
             ($utilB->id_medico && $consulta->id_medico == $utilB->id_medico)
         );
 
         return $pacienteOk && $medicoOk;
+    }
+
+    private function notificar_e_registar(
+        Utilizador $remetente,
+        int $idDestinatario,
+        int $idConsulta,
+        int $idMensagem
+    ): void {
+        $tipoRemetente = $remetente->nivel_acesso == 2 ? 'médico' : 'paciente';
+
+        try {
+            Notificacao::create([
+                'titulo'   => ucfirst($tipoRemetente) . ' enviou uma mensagem',
+                'mensagem' => 'O ' . $tipoRemetente . ' ' . $remetente->nome
+                    . ' enviou uma mensagem referente à consulta Nº ' . $idConsulta . '.',
+                'id_util'  => $idDestinatario,
+                'lida'     => false,
+                'data'     => now()->format('Y-m-d H:i:s'),
+            ]);
+        } catch (\Exception $e) {}
+
+        try {
+            HistoricoAtividade::registar(
+                'mensagem',
+                'enviou_mensagem',
+                $remetente->nome . ' (' . $tipoRemetente . ') enviou uma mensagem na consulta Nº ' . $idConsulta,
+                [
+                    'entidade'      => 'Mensagem',
+                    'id_entidade'   => $idMensagem,
+                    'nome_entidade' => 'Consulta Nº ' . $idConsulta,
+                ]
+            );
+        } catch (\Exception $e) {}
     }
 }
