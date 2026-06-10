@@ -171,7 +171,7 @@ class RelatorioController extends Controller
         $recepcionista= verificar_recepcionista();
         $admin = verificar_admin();
         if (! $recepcionista && ! $admin) {
-                  //   return response()->json(['erro' => 'Não tem permissão para acessar este relatório'], status: 403);
+            return response()->json(['erro' => 'Não tem permissão para acessar este relatório'], status: 403);
         }
 
         $query = Consulta::select('consultas.*',
