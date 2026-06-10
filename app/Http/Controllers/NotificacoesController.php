@@ -33,8 +33,14 @@ class NotificacoesController extends Controller
             return redirect('/login');
         }
 
-        Notificacao::where('id_util', session('id_utilizador'))->update(['lida' => 1]);
-
+        $utilizador = Utilizador::find(session('id_utilizador'));
+        if ($utilizador->id_recepcionista) {
+            Notificacao::where(function ($query) use ($utilizador) {
+                $query->where('id_util', $utilizador->id_util)->orWhere('id_util', null);
+            })->update(['lida' => 1]);
+        } else {
+            Notificacao::where('id_util', session('id_utilizador'))->update(['lida' => 1]);
+        }
         return redirect('/listar-minhas-notificacoes');
     }
 
@@ -43,8 +49,18 @@ class NotificacoesController extends Controller
         if (! session('id_utilizador')) {
             return redirect('/login');
         }
-        Notificacao::where('id_util', session('id_utilizador'))
-            ->where('id_notificacao', $id_notificacao)->update(['lida' => 1]);
+
+        $utilizador = Utilizador::find(session('id_utilizador'));
+        if ($utilizador->id_recepcionista) {
+            Notificacao::where(function ($query) use ($id_notificacao) {
+                $query->where('id_notificacao', $id_notificacao)
+                    ->where('id_util', session('id_utilizador'))
+                    ->orWhere('id_util', null);
+            })->update(['lida' => 1]);
+        } else {
+            Notificacao::where('id_util', session('id_utilizador'))
+                ->where('id_notificacao', $id_notificacao)->update(['lida' => 1]);
+        }
 
         return redirect('/listar-minhas-notificacoes');
     }
