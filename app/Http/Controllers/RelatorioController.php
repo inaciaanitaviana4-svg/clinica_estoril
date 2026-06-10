@@ -111,8 +111,6 @@ class RelatorioController extends Controller
         return view('admin.relatorios', compact('pacientes', 'recepcionistas', 'tipos_consultas', 'servicos_clinicos', 'clinica', 'metodos_pagamentos'));
     }
 
-
-
     public function api_relatorio_consultas(Request $request)
     {
         $medico = verificar_medico();

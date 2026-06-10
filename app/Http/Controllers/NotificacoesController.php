@@ -46,22 +46,18 @@ class NotificacoesController extends Controller
 
     public function ler_notificacao(Request $request, $id_notificacao)
     {
-        if (! session('id_utilizador')) {
+        $id_utilizador = session('id_utilizador');
+        if (! $id_utilizador) {
             return redirect('/login');
         }
 
-        $utilizador = Utilizador::find(session('id_utilizador'));
-        if ($utilizador->id_recepcionista) {
-            Notificacao::where(function ($query) use ($id_notificacao) {
-                $query->where('id_notificacao', $id_notificacao)
-                    ->where('id_util', session('id_utilizador'))
-                    ->orWhere('id_util', null);
-            })->update(['lida' => 1]);
-        } else {
-            Notificacao::where('id_util', session('id_utilizador'))
-                ->where('id_notificacao', $id_notificacao)->update(['lida' => 1]);
+        $notificacao = Notificacao::find('id_notificacao', $id_notificacao);
+
+        if ($notificacao->id_util && $notificacao->id_util != $id_utilizador) {
+            return redirect('/listar-minhas-notificacoes');
         }
 
+        Notificacao::find('id_notificacao', $id_notificacao)->update(['lida' => 1]);
         return redirect('/listar-minhas-notificacoes');
     }
 }
