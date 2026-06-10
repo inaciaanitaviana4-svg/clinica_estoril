@@ -14,7 +14,7 @@ class NotificacoesController extends Controller
         if (! session('id_utilizador')) {
             return redirect('/login');
         }
-        $utilizador = Utilizador::find(session('id_utilizador'));
+         $utilizador = Utilizador::find(session('id_utilizador'));
         $notificacoes = [];
         if ($utilizador->id_recepcionista) {
             $notificacoes = Notificacao::where(function ($query) use ($utilizador) {
@@ -31,11 +31,11 @@ class NotificacoesController extends Controller
 
     public function ler_todas_notificacoes()
     {
-        if (! session('id_utilizador')) {
+          if (! session('id_utilizador')) {
             return redirect('/login');
         }
 
-        Notificacao::where('id_util', session('id_utilizador'))->update(['lida' => 1]);
+         Notificacao::where('id_util', session('id_utilizador'))->update(['lida' => 1]);
 
         return redirect('/listar-minhas-notificacoes');
     }
@@ -45,9 +45,9 @@ class NotificacoesController extends Controller
         if (! session('id_utilizador')) {
             return redirect('/login');
         }
-        Notificacao::where('id_util', session('id_utilizador'))
+         Notificacao::where('id_util', session('id_utilizador'))
             ->where('id_notificacao', $id_notificacao)->update(['lida' => 1]);
 
-        return redirect('/listar-minhas-notificacoes');
+       return redirect('/listar-minhas-notificacoes');
     }
 }

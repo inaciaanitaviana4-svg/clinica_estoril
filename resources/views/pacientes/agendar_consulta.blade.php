@@ -43,7 +43,7 @@
 
                     <div class="col form-group">
                         <label for="hora">Horário Preferencial</label>
-                        <select class="w-100 horario_auto_select" id="hora" name="hora">
+                          <select class="w-100 horario_auto_select" id="hora" name="hora">
                             <option value="">Selecione um horário</option>
                         </select>
                     </div>
@@ -95,7 +95,7 @@
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0; margin-top: 1px;
         ">
-            <i class="fa-solid fa-xmark" style="font-size: 20px; color: #E24B4A;"></i>
+            <i class="bi-clipboard-check-fill" style="font-size: 20px; color: #E24B4A;"></i>
         </div>
         <div style="flex: 1; min-width: 0;">
             <p style="margin: 0 0 3px; font-size: 14px; font-weight: 600; color: #111;">

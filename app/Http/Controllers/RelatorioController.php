@@ -46,7 +46,7 @@ class RelatorioController extends Controller
 
         return view('medicos.relatorios', compact('pacientes', 'recepcionistas', 'tipos_consultas', 'servicos_clinicos', 'clinica'));
     }
-    public function mostrar_relatorios_recepcionista()
+     public function mostrar_relatorios_recepcionista()
     {
         $utilizador = verificar_recepcionista();
         if (! $utilizador) {
@@ -171,7 +171,7 @@ class RelatorioController extends Controller
         $recepcionista= verificar_recepcionista();
         $admin = verificar_admin();
         if (! $recepcionista && ! $admin) {
-            return response()->json(['erro' => 'Não tem permissão para acessar este relatório'], status: 403);
+                  //   return response()->json(['erro' => 'Não tem permissão para acessar este relatório'], status: 403);
         }
 
         $query = Consulta::select('consultas.*',

@@ -295,7 +295,7 @@ class ConsultaController extends Controller
         return view('consultas.detalhes_consulta_admin', compact('consulta', 'paciente', 'medico', 'pagamentos', 'medicos', 'metodos_pagamento', 'servicos_clinicos', 'resumo', 'diagnosticos', 'exames', 'receitas'));
     }
 
-    public function detalhes_consulta_recepcionista($id_consulta)
+     public function detalhes_consulta_recepcionista($id_consulta)
     {
         $utilizador = verificar_recepcionista();
         if (! $utilizador) {
@@ -318,7 +318,7 @@ class ConsultaController extends Controller
         $paciente = Paciente::find($consulta->id_paciente);
         $medico = $consulta->id_medico ? Medico::select('medico.nome', 'medico.email', 'medico.num_telefone', 'medico.especialidade')
             ->where('id_medico', $consulta->id_medico)->first() : null;
-            $medicos_sem_especialidade = Medico::where('especialidade', '=', 'Nenhuma')->select('medico.id_medico', 'medico.nome', 'medico.especialidade')->get();
+        $medicos_sem_especialidade = Medico::where('especialidade', '=', 'Nenhuma')->select('medico.id_medico', 'medico.nome', 'medico.especialidade')->get();
         $medicos_com_especialidade = Medico::join('especialidades', 'medico.especialidade', 'especialidades.nome')
             ->join('servicos_clinicos_especialidades', 'especialidades.id_espec', 'servicos_clinicos_especialidades.id_especialidade')
             ->where('servicos_clinicos_especialidades.id_servico_clinico', $consulta->id_servico_clinico)
@@ -331,7 +331,6 @@ class ConsultaController extends Controller
         $medicos = ! $consulta->id_medico ?
     [...$medicos_sem_especialidade, ...$medicos_com_especialidade]
         : [];
-        $medicos = ! $consulta->id_medico ? Medico::select('id_medico', 'nome', 'especialidade')->get() : [];
         $metodos_pagamento = MetodoPagamento::select('id_metodo_pagamento', 'nome')->get();
         $servicos_clinicos = ServicoClinico::where('activo', true)->get();
         $pagamentos = ItemPagamento::select(
@@ -389,10 +388,10 @@ class ConsultaController extends Controller
             'lida' => false,
             'data' => date('Y-m-d H:i:s'),
         ]);
-          Notificacao::create([
+        Notificacao::create([
             'titulo' => 'Associação de consulta',
             'mensagem' => 'O medico '.$medico->nome.' foi associado a consulta '.$consulta->id_consulta.' com sucesso',
-            'id_util' => Utilizador::where('id_medico',$request->id_medico)->first()->id_util ?? '',
+            'id_util' => Utilizador::where('id_medico', $request->id_medico)->first()->id_util ?? '',
             'lida' => false,
             'data' => date('Y-m-d H:i:s'),
         ]);
@@ -425,10 +424,10 @@ class ConsultaController extends Controller
             'lida' => false,
             'data' => date('Y-m-d H:i:s'),
         ]);
-          Notificacao::create([
+        Notificacao::create([
             'titulo' => 'Desassociação de médico',
             'mensagem' => 'O medico '.$medico->nome.' foi desassociado da consulta '.$consulta->id_consulta.' com sucesso',
-            'id_util' => Utilizador::where('id_medico',$id_medico)->first()->id_util ?? '',
+            'id_util' => Utilizador::where('id_medico', $id_medico)->first()->id_util ?? '',
             'lida' => false,
             'data' => date('Y-m-d H:i:s'),
         ]);

@@ -191,7 +191,7 @@
                     display: flex; align-items: center; justify-content: center;
                     flex-shrink: 0;
                 ">
-                    <i class="ti ti-calendar-check" style="font-size: 22px; color: #185FA5;"></i>
+                    <i class="bi-clipboard-check-fill" style="font-size: 22px; color: #185FA5;"></i>
                 </div>
                 <div>
                     <p style="margin: 0; font-size: 16px; font-weight: 600; color: var(--color-text-primary, #111);">
