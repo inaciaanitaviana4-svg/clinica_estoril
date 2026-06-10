@@ -46,7 +46,8 @@ class RelatorioController extends Controller
 
         return view('medicos.relatorios', compact('pacientes', 'recepcionistas', 'tipos_consultas', 'servicos_clinicos', 'clinica'));
     }
-     public function mostrar_relatorios_recepcionista()
+
+    public function mostrar_relatorios_recepcionista()
     {
         $utilizador = verificar_recepcionista();
         if (! $utilizador) {
@@ -110,6 +111,8 @@ class RelatorioController extends Controller
         return view('admin.relatorios', compact('pacientes', 'recepcionistas', 'tipos_consultas', 'servicos_clinicos', 'clinica', 'metodos_pagamentos'));
     }
 
+
+
     public function api_relatorio_consultas(Request $request)
     {
         $medico = verificar_medico();
@@ -118,20 +121,24 @@ class RelatorioController extends Controller
             return response()->json(['erro' => 'Não tem permissão para acessar este relatório'], status: 403);
         }
 
-        $query = Consulta::select('consultas.*',
+        $query = Consulta::select(
+            'consultas.*',
             'paciente.nome as paciente',
             'medico.nome as medico',
             'tipos_consultas.nome as tipo_consulta',
             'servicos_clinicos.nome as servico_clinico',
-            'recepcionista.nome as recepcionista')
+            'recepcionista.nome as recepcionista'
+        )
             ->leftJoin('medico', 'consultas.id_medico', '=', 'medico.id_medico')
             ->Leftjoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
             ->Leftjoin('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
             ->leftJoin('recepcionista', 'consultas.id_recepcionista', '=', 'recepcionista.id_recepcionista')
-            ->join('paciente',
+            ->join(
+                'paciente',
                 'consultas.id_paciente',
                 '=',
-                'paciente.id_paciente');
+                'paciente.id_paciente'
+            );
 
         // Filtros dinâmicos
         if ($medico || $request->id_medico) {
@@ -166,28 +173,33 @@ class RelatorioController extends Controller
 
         return response()->json($consultas);
     }
+
     public function api_relatorio_consultas_recepcionista(Request $request)
     {
-        $recepcionista= verificar_recepcionista();
+        $recepcionista = verificar_recepcionista();
         $admin = verificar_admin();
         if (! $recepcionista && ! $admin) {
             return response()->json(['erro' => 'Não tem permissão para acessar este relatório'], status: 403);
         }
 
-        $query = Consulta::select('consultas.*',
+        $query = Consulta::select(
+            'consultas.*',
             'paciente.nome as paciente',
             'medico.nome as medico',
             'tipos_consultas.nome as tipo_consulta',
             'servicos_clinicos.nome as servico_clinico',
-            'recepcionista.nome as recepcionista')
+            'recepcionista.nome as recepcionista'
+        )
             ->leftJoin('medico', 'consultas.id_medico', '=', 'medico.id_medico')
             ->join('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
             ->join('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
             ->leftJoin('recepcionista', 'consultas.id_recepcionista', '=', 'recepcionista.id_recepcionista')
-            ->join('paciente',
+            ->join(
+                'paciente',
                 'consultas.id_paciente',
                 '=',
-                'paciente.id_paciente');
+                'paciente.id_paciente'
+            );
 
         // Filtros dinâmicos
         if ($recepcionista || $request->id_recepcionista) {
@@ -223,34 +235,6 @@ class RelatorioController extends Controller
         return response()->json($consultas);
     }
 
-    public function api_relatorio_consultas_paciente($id_consulta)
-    {
-        $paciente = verificar_paciente();
-        if (! $paciente) {
-            return response()->json(['erro' => 'Não tem permissão para acessar este relatório'], status: 403);
-        }
-
-        $query = Consulta::select('consultas.*',
-            'paciente.nome as paciente',
-            'medico.nome as medico',
-            'tipos_consultas.nome as tipo_consulta',
-            'servicos_clinicos.nome as servico_clinico',
-            'recepcionista.nome as recepcionista')
-            ->join('medico', 'consultas.id_medico', '=', 'medico.id_medico')
-            ->join('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
-            ->join('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
-            ->join('recepcionista', 'consultas.id_recepcionista', '=', 'recepcionista.id_recepcionista')
-            ->join('paciente',
-                'consultas.id_paciente',
-                '=',
-                'paciente.id_paciente')->where('consultas.id_consulta', $id_consulta);
-
-        $consultas = $query->orderBy('consultas.data', 'desc')->get();
-        
-
-        return response()->json($consultas);
-    }
-
     public function api_relatorio_pagamentos(Request $request)
     {
         $admin = verificar_admin();
@@ -258,21 +242,25 @@ class RelatorioController extends Controller
             return response()->json(['erro' => 'Não tem permissão para acessar este relatório'], status: 403);
         }
 
-        $query = Pagamento::select('pagamentos.*',
+        $query = Pagamento::select(
+            'pagamentos.*',
             'paciente.nome as paciente',
             'recepcionista.nome as recepcionista',
             'metodos_pagamentos.nome as metodo_pagamento',
             'tipos_consultas.nome as tipo_consulta',
-            'servicos_clinicos.nome as servico_clinico', )
+            'servicos_clinicos.nome as servico_clinico',
+        )
             ->leftJoin('consultas', 'pagamentos.id_consulta', '=', 'consultas.id_consulta')
             ->LeftJoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
             ->leftJoin('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
             ->join('recepcionista', 'pagamentos.id_recepcionista', '=', 'recepcionista.id_recepcionista')
             ->join('metodos_pagamentos', 'pagamentos.id_metodo_pagamento', '=', 'metodos_pagamentos.id_metodo_pagamento')
-            ->join('paciente',
+            ->join(
+                'paciente',
                 'pagamentos.id_paciente',
                 '=',
-                'paciente.id_paciente');
+                'paciente.id_paciente'
+            );
 
         // Filtros dinâmicos
 
@@ -308,7 +296,6 @@ class RelatorioController extends Controller
                 ->get()->toArray();
 
             return $pagamento;
-
         }, $pagamentos);
 
         return response()->json($pagamentos);
@@ -388,6 +375,37 @@ class RelatorioController extends Controller
         ];
 
         return response()->json($resultado);
+    }
 
+    public function api_relatorio_consultas_paciente($id_consulta)
+    {
+        $paciente = verificar_paciente();
+        if (! $paciente) {
+            return response()->json(['erro' => 'Não tem permissão para acessar este relatório'], status: 403);
+        }
+
+        $query = Consulta::select(
+            'consultas.*',
+            'paciente.nome as paciente',
+            'medico.nome as medico',
+            'tipos_consultas.nome as tipo_consulta',
+            'servicos_clinicos.nome as servico_clinico',
+            'recepcionista.nome as recepcionista'
+        )
+            ->join('medico', 'consultas.id_medico', '=', 'medico.id_medico')
+            ->join('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
+            ->join('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+            ->join('recepcionista', 'consultas.id_recepcionista', '=', 'recepcionista.id_recepcionista')
+            ->join(
+                'paciente',
+                'consultas.id_paciente',
+                '=',
+                'paciente.id_paciente'
+            )->where('consultas.id_consulta', $id_consulta);
+
+        $consultas = $query->orderBy('consultas.data', 'desc')->get();
+
+
+        return response()->json($consultas);
     }
 }
