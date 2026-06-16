@@ -49,7 +49,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="observacao">Observação</label>
+                        <label for="observacao">Observação (<b style="color:red;font-family:'Times New Roman', Times, serif;">opcional</b>) </label>
                         <textarea id="observacao" name="observacao" rows="5"
                             placeholder="Descreva brevemente o motivo da consulta ou dúvidas"></textarea>
                     </div>

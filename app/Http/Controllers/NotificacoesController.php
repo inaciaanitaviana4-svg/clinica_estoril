@@ -51,13 +51,13 @@ class NotificacoesController extends Controller
             return redirect('/login');
         }
 
-        $notificacao = Notificacao::find('id_notificacao', $id_notificacao);
+        $notificacao = Notificacao::find($id_notificacao);
 
         if ($notificacao->id_util && $notificacao->id_util != $id_utilizador) {
             return redirect('/listar-minhas-notificacoes');
         }
 
-        Notificacao::find('id_notificacao', $id_notificacao)->update(['lida' => 1]);
+       Notificacao::find($id_notificacao)->update(['lida' => 1]);
         return redirect('/listar-minhas-notificacoes');
     }
 }

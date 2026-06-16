@@ -48,7 +48,7 @@
                         <select name="estado" id="estado">
                             <option value="">Todos</option>
                             <option value="confirmada">Confirmada</option>
-                            <option value="concluido">Concluída</option>
+                            <option value="concluida">Concluída</option>
                         </select>
                     </div>
                     <div class="form-group">

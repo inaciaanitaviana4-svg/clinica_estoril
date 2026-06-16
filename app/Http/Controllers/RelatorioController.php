@@ -390,11 +390,11 @@ class RelatorioController extends Controller
             'servicos_clinicos.nome as servico_clinico',
             'recepcionista.nome as recepcionista'
         )
-            ->join('medico', 'consultas.id_medico', '=', 'medico.id_medico')
-            ->join('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
-            ->join('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
-            ->join('recepcionista', 'consultas.id_recepcionista', '=', 'recepcionista.id_recepcionista')
-            ->join(
+            ->leftjoin('medico', 'consultas.id_medico', '=', 'medico.id_medico')
+            ->leftjoin('tipos_consultas', 'consultas.id_tipo_consulta', '=', 'tipos_consultas.id_tipo_consulta')
+            ->leftjoin('servicos_clinicos', 'consultas.id_servico_clinico', '=', 'servicos_clinicos.id_servico_clinico')
+            ->leftjoin('recepcionista', 'consultas.id_recepcionista', '=', 'recepcionista.id_recepcionista')
+            ->leftjoin(
                 'paciente',
                 'consultas.id_paciente',
                 '=',
